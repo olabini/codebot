@@ -1,0 +1,24 @@
+sudo: false
+cache: bundler
+language: ruby
+dist: trusty
+rvm:
+  - 2.4.3
+  - 2.5.0
+  - ruby-head
+  - jruby-9.1.15.0
+  - jruby-head
+env:
+  global:
+    - JRUBY_OPTS='--debug -J-Xmx1000M'
+matrix:
+  allow_failures:
+    - rvm: ruby-head
+    - rvm: jruby-head
+before_install:
+  - gem update --system
+  - gem update --remote bundler
+install:
+  - bundle install --retry=3
+script:
+  - rake check
