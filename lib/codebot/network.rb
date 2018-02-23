@@ -28,6 +28,14 @@ module Codebot
     #                      attributes of this network. The keys +:name+ and
     #                      +:host+ are required.
     def initialize(params)
+      update!(params)
+    end
+
+    # Updates the network from the supplied hash.
+    #
+    # @param params [Hash] A hash with symbolic keys representing the instance
+    #                      attributes of this network.
+    def update!(params)
       self.name   = params[:name]
       self.host   = params[:host]
       self.port   = params[:port]
@@ -56,6 +64,14 @@ module Codebot
     def secure=(secure)
       @secure = valid!(secure, valid_boolean(secure), @secure,
                        invalid_error: 'secure must be a boolean') { false }
+    end
+
+    # Checks whether the name of this network is equal to another name
+    #
+    # @param name [String] the name of another network
+    # @return [Boolean] +true+ if the names are equal, +false+ otherwise
+    def name_eql?(name)
+      @name.casecmp(name).zero?
     end
 
     private_class_method def self.serial_key
