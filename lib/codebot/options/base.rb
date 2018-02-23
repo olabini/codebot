@@ -2,6 +2,8 @@
 
 require 'thor'
 
+require 'codebot/options/network'
+
 module Codebot
   module Options
     # A class that handles the +codebot+ command. This class delegates handling
@@ -18,6 +20,9 @@ module Codebot
                    default: false,
                    aliases: '-q',
                    desc: 'Hide status information'
+
+      desc 'network [OPTIONS]', 'Manage IRC networks'
+      subcommand 'network', Network
 
       def self.exit_on_failure?
         true
