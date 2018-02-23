@@ -1,2 +1,11 @@
 AllCops:
   TargetRubyVersion: 2.4
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always
+
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+Layout/IndentHeredoc:
+  EnforcedStyle: squiggly
