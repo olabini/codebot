@@ -62,7 +62,7 @@ module Codebot
     # Deletes the specified channels from this integration. This method is not
     # thread-safe and should not be called outside a transaction.
     #
-    # @param channels [Array<String>] the channel identifiers to remove
+    # @param identifiers [Array<String>] the channel identifiers to remove
     # @raise [CommandError] if one of the channel identifiers does not exist
     def delete_channels!(identifiers)
       identifiers.each do |identifier|
