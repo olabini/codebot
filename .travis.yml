@@ -3,10 +3,13 @@ cache: bundler
 language: ruby
 dist: trusty
 rvm:
+  - 2.1.10
+  - 2.2.9
+  - 2.3.6
   - 2.4.3
   - 2.5.0
   - ruby-head
-  - jruby-9.1.15.0
+  - jruby-9.1.16.0
   - jruby-head
 env:
   global:
@@ -15,6 +18,7 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head
+  fast_finish: true
 before_install:
   - gem update --system
   - gem update --remote bundler
