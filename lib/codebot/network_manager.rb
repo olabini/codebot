@@ -20,7 +20,7 @@ module Codebot
     def create(params)
       network = Network.new(params)
       @config.transaction do |conf|
-        check_name_missing!(conf, network.name)
+        check_name_available!(conf, network.name)
         conf.networks << network
       end
     end
@@ -33,7 +33,7 @@ module Codebot
       @config.transaction do |conf|
         network = find_network!(conf, name)
         if !params[:name].nil? && !network.name_eql?(params[:name])
-          check_name_missing!(conf, params[:name])
+          check_name_available!(conf, params[:name])
         end
         network.update!(params)
       end
@@ -62,7 +62,7 @@ module Codebot
                           'does not exist'
     end
 
-    def check_name_missing!(conf, name)
+    def check_name_available!(conf, name)
       return unless find_network(conf, name)
       raise CommandError, "a network with the name #{name.inspect} " \
                           'already exists'
