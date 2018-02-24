@@ -7,7 +7,7 @@ require 'codebot/web_server'
 module Codebot
   # This class represents a {Codebot} bot.
   class Core
-    # The configuration associated with this bot
+    # @return [Config] the configuration used by this bot
     attr_reader :config
 
     # Creates a new bot from the supplied hash.

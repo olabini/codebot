@@ -7,6 +7,9 @@ module Codebot
   # invalid configuration file, for example when an entry has the wrong data
   # type.
   class ConfigurationError < UserError
+    # Constructs a new configuration error.
+    #
+    # @param message [String] the error message
     def initialize(message)
       super
     end

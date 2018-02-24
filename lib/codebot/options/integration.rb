@@ -73,6 +73,12 @@ module Codebot
 
       private
 
+      # Destructively converts an array of channel identifiers contained in a
+      # hash into the serialized form of the channels contained in the array.
+      # If the value +hash[key]+ is +nil+, no action is taken.
+      #
+      # @param hash [Hash] the hash containing the array of identifiers
+      # @param key [Object] the key corresponding to the array of identifiers
       def map_channels!(hash, key)
         hash[key] = hash[key].map { |id| [id, {}] }.to_h unless hash[key].nil?
       end

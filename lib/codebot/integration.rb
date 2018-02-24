@@ -44,9 +44,10 @@ module Codebot
       self.channels = params[:channels]
     end
 
-    # Adds the specified channels to this integration. This method is not
-    # thread-safe and should not be called outside a transaction.
+    # Adds the specified channels to this integration.
     #
+    # @note This method is not thread-safe and should only be called from an
+    #       active transaction.
     # @param channels [Hash] the channel data to add
     # @raise [CommandError] if one of the channel identifiers already exists
     def add_channels!(channels)
@@ -59,9 +60,10 @@ module Codebot
       @channels.push(*new_channels)
     end
 
-    # Deletes the specified channels from this integration. This method is not
-    # thread-safe and should not be called outside a transaction.
+    # Deletes the specified channels from this integration.
     #
+    # @note This method is not thread-safe and should only be called from an
+    #       active transaction.
     # @param identifiers [Array<String>] the channel identifiers to remove
     # @raise [CommandError] if one of the channel identifiers does not exist
     def delete_channels!(identifiers)

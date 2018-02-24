@@ -7,6 +7,9 @@ module Codebot
   # failed validation, for example when a network with an invalid name is
   # created.
   class ValidationError < UserError
+    # Constructs a new validation error.
+    #
+    # @param message [String] the error message
     def initialize(message)
       super
     end

@@ -5,6 +5,7 @@ require 'codebot/command_error'
 module Codebot
   # This class manages the networks associated with a configuration.
   class NetworkManager
+    # @return [Config] the configuration managed by this class
     attr_reader :config
 
     # Constructs a new network manager for a specified configuration.
@@ -51,10 +52,23 @@ module Codebot
 
     private
 
+    # Finds a network given its name.
+    #
+    # @param conf [Configuration] the configuration containing the networks
+    #                             to search
+    # @param name [String] the name to search for
+    # @return [Network, nil] the network, or +nil+ if none was found
     def find_network(conf, name)
       conf.networks.find { |net| net.name_eql? name }
     end
 
+    # Finds a network given its name.
+    #
+    # @param conf [Configuration] the configuration containing the networks
+    #                             to search
+    # @param name [String] the name to search for
+    # @raise [CommandError] if no network with the given name exists
+    # @return [Network] the network
     def find_network!(conf, name)
       network = find_network(conf, name)
       return network unless network.nil?
@@ -62,6 +76,12 @@ module Codebot
                           'does not exist'
     end
 
+    # Checks that the specified name is available for use.
+    #
+    # @param conf [Configuration] the configuration containing the networks
+    #                             to search
+    # @params name [String] the name to check for
+    # @raise [CommandError] if the name is already taken
     def check_name_available!(conf, name)
       return unless find_network(conf, name)
       raise CommandError, "a network with the name #{name.inspect} " \

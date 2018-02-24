@@ -60,11 +60,18 @@ module Codebot
 
     private
 
+    # Loads the configuration from the associated file. If the file does not
+    # exist, it is created.
     def load!
       @conf = load_from_file! @file
       save! unless File.file? @file
     end
 
+    # Loads the configuration from the specified file.
+    #
+    # @param file [String] the path to the configuration file
+    # @return [Hash] the loaded configuration, or the default configuration if
+    #                the file did not exist
     def load_from_file!(file)
       data = Psych.safe_load(File.read(file)) if File.file? file
       data = {} unless data.is_a? Hash
@@ -74,6 +81,9 @@ module Codebot
       conf
     end
 
+    # Saves the configuration to the specified file.
+    #
+    # @param file [String] the path to the configuration file
     def save_to_file!(file)
       data = {}
       data['integrations'] = Integration.save_all! @conf[:integrations]
@@ -81,6 +91,9 @@ module Codebot
       File.write file, Psych.dump(data)
     end
 
+    # Returns the path to the default configuration file for the current user.
+    #
+    # @return [String] the path to the configuration file
     def default_file
       File.join Dir.home, '.codebot.yml'
     end
