@@ -32,7 +32,8 @@ module Codebot
     def update(name, params)
       @config.transaction do |conf|
         integration = find_integration!(conf, name)
-        check_available!(conf, params[:name], params[:endpoint], integration)
+        check_available_except!(conf, params[:name], params[:endpoint],
+                                integration)
         update_channels!(integration, params)
         integration.update!(params)
       end
@@ -77,11 +78,32 @@ module Codebot
                           "#{endpoint.inspect} already exists"
     end
 
-    def check_available!(conf, name, endpoint, integration = nil)
-      unless name.nil? || (!integration.nil? && integration.name_eql?(name))
+    # Checks that the specified name and endpoint are available for use.
+    #
+    # @param conf [Configuration] the configuration containing the integrations
+    #                             to search
+    # @param name [String] the name to check for
+    # @param endpoint [String] the endpoint to check for
+    # @raise [CommandError] if name or endpoint are already taken
+    def check_available!(conf, name, endpoint)
+      check_name_available!(conf, name) unless name.nil?
+      check_endpoint_available!(conf, endpoint) unless endpoint.nil?
+    end
+
+    # Checks that the specified name and endpoint are available for use by an
+    # integration other than the specified one.
+    #
+    # @param conf [Configuration] the configuration containing the integrations
+    #                             to search
+    # @param name [String] the name to check for
+    # @param endpoint [String] the endpoint to check for
+    # @raise [CommandError] if name or endpoint are already taken
+    def check_available_except!(conf, name, endpoint, integration)
+      unless name.nil? || integration.name_eql?(name)
         check_name_available!(conf, name)
       end
-      check_endpoint_available!(conf, endpoint) unless endpoint.nil?
+      return if endpoint.nil? || integration.endpoint_eql?(endpoint)
+      check_endpoint_available!(conf, endpoint)
     end
 
     def update_channels!(integration, params)
