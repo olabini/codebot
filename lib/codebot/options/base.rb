@@ -3,6 +3,7 @@
 require 'thor'
 
 require 'codebot/options/network'
+require 'codebot/options/integration'
 
 module Codebot
   module Options
@@ -23,6 +24,9 @@ module Codebot
 
       desc 'network [OPTIONS]', 'Manage IRC networks'
       subcommand 'network', Network
+
+      desc 'integration [OPTIONS]', 'Manage integrations'
+      subcommand 'integration', Integration
 
       def self.exit_on_failure?
         true

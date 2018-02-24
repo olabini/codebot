@@ -32,7 +32,7 @@ module Codebot
     def update(name, params)
       @config.transaction do |conf|
         network = find_network!(conf, name)
-        unless network.name_eql? params[:name]
+        if !params[:name].nil? && !network.name_eql?(params[:name])
           check_name_missing!(conf, params[:name])
         end
         network.update!(params)

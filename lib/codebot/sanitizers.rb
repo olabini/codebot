@@ -82,8 +82,9 @@ module Codebot
     #
     # @param original [Object] the original value
     # @param sanitized [Object] the sanitized value
-    # @param fallback [Object] an optional fallback returned when the original
-    #                          value is +nil+
+    # @param fallback [Object] an optional symbol representing an instance
+    #                          variable to be returned when the original value
+    #                          is +nil+
     # @raise [ValidationError] if the sanitization failed. The error message may
     #                          be set using the +:invalid_error+ option.
     # @raise [ValidationError] if the +:required+ option is set, but neither an
@@ -96,9 +97,13 @@ module Codebot
       unless original.nil?
         raise ValidationError, options[:invalid_error] % original.inspect
       end
-      return fallback unless fallback.nil?
+      return instance_variable_get(fallback) if fallback_exist?(fallback)
       return yield if block_given?
       raise ValidationError, options[:required_error] if options[:required]
+    end
+
+    private def fallback_exist?(fallback)
+      !fallback.nil? && instance_variable_defined?(fallback)
     end
   end
 end
