@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'codebot/configuration_error'
+
 module Codebot
   # This class provides shared methods for classes that can be serialized
   # into YAML documents.
@@ -17,12 +19,15 @@ module Codebot
     # Deserialized parameters are passed to the class constructor.
     #
     # @param data [Array, Hash] the array or hash to be deserialized
+    # @raise [ConfigurationError] if the data has an unexpected type
     # @return [Array] the deserialized array
     def self.load_all!(data)
-      return [] unless data.is_a?(hash_format? ? Hash : Array)
-      data.map do |entry|
-        load_entry entry
+      return if data.nil?
+      unless data.is_a?(hash_format? ? Hash : Array)
+        raise ConfigurationError, "invalid data #{data.inspect} for " \
+                                  "#{name}"
       end
+      data.map { |entry| load_entry entry }
     end
 
     # Serializes an array of objects into an array or a hash, depending on
@@ -31,9 +36,7 @@ module Codebot
     # @param data [Array] the array to be serialized
     # @return [Array, Hash] the serialized array or hash
     def self.save_all!(data)
-      result = data.map do |entry|
-        save_entry entry
-      end
+      result = data.map { |entry| save_entry entry }
       hash_format? ? result.to_h : result
     end
 
@@ -47,13 +50,26 @@ module Codebot
     end
 
     private_class_method def self.save_entry(entry)
-      params = serial_values.map { |sym| [sym.to_s, entry.send(sym)] }.to_h
-      params = [entry.send(serial_key), params] if hash_format?
+      params = serial_values.map do |sym|
+        [sym.to_s, serial_value_for(entry, sym)]
+      end.to_h
+      params = [serial_value_for(entry, serial_key), params] if hash_format?
       params
     end
 
     private_class_method def self.hash_format?
       respond_to?(:serial_key, true)
+    end
+
+    private_class_method def self.serial_value_for(entry, sym)
+      type = serial_value_types[sym]
+      data = entry.send(sym)
+      data = type.save_all!(data) unless type.nil?
+      data
+    end
+
+    private_class_method def self.serial_value_types
+      {}
     end
   end
 end

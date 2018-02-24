@@ -43,32 +43,32 @@ module Codebot
     end
 
     def name=(name)
-      @name = valid! name, valid_identifier(name), @name,
+      @name = valid! name, valid_identifier(name), :@name,
                      required: true,
                      required_error: 'networks must have a name',
                      invalid_error: 'invalid network name %s'
     end
 
     def host=(host)
-      @host = valid! host, valid_host(host), @host,
+      @host = valid! host, valid_host(host), :@host,
                      required: true,
                      required_error: 'networks must have a hostname',
                      invalid_error: 'invalid hostname %s'
     end
 
     def port=(port)
-      @port = valid! port, valid_port(port), @port,
+      @port = valid! port, valid_port(port), :@port,
                      invalid_error: 'invalid port number %s'
     end
 
     def secure=(secure)
-      @secure = valid!(secure, valid_boolean(secure), @secure,
+      @secure = valid!(secure, valid_boolean(secure), :@secure,
                        invalid_error: 'secure must be a boolean') { false }
     end
 
-    # Checks whether the name of this network is equal to another name
+    # Checks whether the name of this network is equal to another name.
     #
-    # @param name [String] the name of another network
+    # @param name [String] the other name
     # @return [Boolean] +true+ if the names are equal, +false+ otherwise
     def name_eql?(name)
       @name.casecmp(name).zero?

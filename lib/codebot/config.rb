@@ -69,7 +69,6 @@ module Codebot
       data = Psych.safe_load(File.read(file)) if File.file? file
       data = {} unless data.is_a? Hash
       conf = {}
-      conf[:channels]     = Channel.load_all!     data['channels']
       conf[:integrations] = Integration.load_all! data['integrations']
       conf[:networks]     = Network.load_all!     data['networks']
       conf
@@ -77,7 +76,6 @@ module Codebot
 
     def save_to_file!(file)
       data = {}
-      data['channels']     = Channel.save_all!     @conf[:channels]
       data['integrations'] = Integration.save_all! @conf[:integrations]
       data['networks']     = Network.save_all!     @conf[:networks]
       File.write file, Psych.dump(data)
