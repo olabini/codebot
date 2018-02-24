@@ -5,6 +5,7 @@ require 'codebot/command_error'
 module Codebot
   # This class manages the integrations associated with a configuration.
   class IntegrationManager
+    # @return [Config] the configuration managed by this class
     attr_reader :config
 
     # Constructs a new integration manager for a specified configuration.
@@ -51,14 +52,33 @@ module Codebot
 
     private
 
+    # Finds an integration given its name.
+    #
+    # @param conf [Configuration] the configuration containing the integrations
+    #                             to search
+    # @param name [String] the name to search for
+    # @return [Integration, nil] the integration, or +nil+ if none was found
     def find_integration(conf, name)
       conf.integrations.find { |intg| intg.name_eql? name }
     end
 
+    # Finds an integration given its endpoint.
+    #
+    # @param conf [Configuration] the configuration containing the integrations
+    #                             to search
+    # @param endpoint [String] the endpoint to search for
+    # @return [Integration, nil] the integration, or +nil+ if none was found
     def find_integration_by_endpoint(conf, endpoint)
       conf.integrations.find { |intg| intg.endpoint_eql? endpoint }
     end
 
+    # Finds an integration given its name.
+    #
+    # @param conf [Configuration] the configuration containing the integrations
+    #                             to search
+    # @param name [String] the name to search for
+    # @raise [CommandError] if no integration with the given name exists
+    # @return [Integration] the integration
     def find_integration!(conf, name)
       integration = find_integration(conf, name)
       return integration unless integration.nil?
@@ -66,12 +86,24 @@ module Codebot
                           'does not exist'
     end
 
+    # Checks that the specified name is available for use.
+    #
+    # @param conf [Configuration] the configuration containing the integrations
+    #                             to search
+    # @params name [String] the name to check for
+    # @raise [CommandError] if the name is already taken
     def check_name_available!(conf, name)
       return unless find_integration(conf, name)
       raise CommandError, "an integration with the name #{name.inspect} " \
                           'already exists'
     end
 
+    # Checks that the specified endpoint is available for use.
+    #
+    # @param conf [Configuration] the configuration containing the integrations
+    #                             to search
+    # @params endpoint [String] the endpoint to check for
+    # @raise [CommandError] if the endpoint is already taken
     def check_endpoint_available!(conf, endpoint)
       return unless find_integration_by_endpoint(conf, endpoint)
       raise CommandError, 'an integration with the endpoint ' \
@@ -106,6 +138,19 @@ module Codebot
       check_endpoint_available!(conf, endpoint)
     end
 
+    # Updates the channels associated with an integration from the specified
+    # parameters.
+    #
+    # @param integration [Integration] the integration
+    # @param params [Hash] the parameters to update the integration with. Valid
+    #                      keys are +:clear_channels+ to clear the channel list
+    #                      before proceeding, +:add_channels+ to add the given
+    #                      channels, and +:delete_channels+ to delete the given
+    #                      channels from the integration. All keys are optional.
+    #                      The value of +:clear_channels+ should be a boolean.
+    #                      The value of +:add_channels+ should be a hash of the
+    #                      form +identifier => params+, and +:remove_channels+
+    #                      should be an array of channel identifiers to remove.
     def update_channels!(integration, params)
       integration.channels.clear if params[:clear_channels]
       if params[:delete_channels]
