@@ -11,6 +11,8 @@ module Codebot
       # Sets shared options for specifying properties belonging to the
       # {::Codebot::Network} class.
       def self.shared_propery_options
+        option :host, aliases: '-H',
+                      desc: 'Set the server hostname or address'
         option :port, type: :numeric, aliases: '-p',
                       desc: 'Set the port to connect to'
         option :secure, type: :boolean, aliases: '-s',
@@ -18,8 +20,6 @@ module Codebot
       end
 
       desc 'create NAME', 'Add a new IRC network'
-      option :host, aliases: '-H', required: true,
-                    desc: 'Set the server hostname or address'
       shared_propery_options
 
       # Creates a new network with the specified name.
@@ -40,8 +40,6 @@ module Codebot
       option :rename, aliases: '-n',
                       banner: 'NEW-NAME',
                       desc: 'Rename this network'
-      option :host, aliases: '-H',
-                    desc: 'Set the server hostname or address'
       shared_propery_options
 
       # Updates the network with the specified name.
