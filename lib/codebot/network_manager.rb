@@ -86,7 +86,7 @@ module Codebot
 
     # Checks that the specified name is available for use.
     #
-    # @params name [String] the name to check for
+    # @param name [String] the name to check for
     # @raise [CommandError] if the name is already taken
     def check_name_available!(name)
       return if name.nil? || !find_network(name)
@@ -97,7 +97,7 @@ module Codebot
     # Checks that the specified name is available for use by the specified
     # network.
     #
-    # @params name [String] the name to check for
+    # @param name [String] the name to check for
     # @param network [Network] the network to ignore
     # @raise [CommandError] if the name is already taken
     def check_name_available_except!(name, network)
