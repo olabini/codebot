@@ -20,9 +20,9 @@ module Codebot
     # @param params [Hash] the parameters to initialize the network with
     def create(params)
       network = Network.new(params)
-      @config.transaction do |conf|
-        check_name_available!(conf, network.name)
-        conf.networks << network
+      @config.transaction do
+        check_name_available!(network.name)
+        @config.networks << network
       end
     end
 
@@ -31,12 +31,12 @@ module Codebot
     # @param name [String] the current name of the network to update
     # @param params [Hash] the parameters to update the network with
     def update(name, params)
-      @config.transaction do |conf|
-        network = find_network!(conf, name)
-        if !params[:name].nil? && !network.name_eql?(params[:name])
-          check_name_available!(conf, params[:name])
-          IntegrationManager.new(conf).rename_network!(conf, network,
-                                                       params[:name])
+      @config.transaction do
+        network = find_network!(name)
+        if !params[:name].nil?
+          check_name_available_except!(params[:name], network)
+          IntegrationManager.new(@config).rename_network!(network,
+                                                          params[:name])
         end
         network.update!(params)
       end
@@ -46,31 +46,27 @@ module Codebot
     #
     # @param name [String] the name of the network to destroy
     def destroy(name)
-      @config.transaction do |conf|
-        network = find_network!(conf, name)
-        conf.networks.delete network
+      @config.transaction do
+        network = find_network!(name)
+        @config.networks.delete network
       end
     end
 
     # Finds a network given its name.
     #
-    # @param conf [Configuration] the configuration containing the networks
-    #                             to search
     # @param name [String] the name to search for
     # @return [Network, nil] the network, or +nil+ if none was found
-    def find_network(conf, name)
-      conf.networks.find { |net| net.name_eql? name }
+    def find_network(name)
+      @config.networks.find { |net| net.name_eql? name }
     end
 
     # Finds a network given its name.
     #
-    # @param conf [Configuration] the configuration containing the networks
-    #                             to search
     # @param name [String] the name to search for
     # @raise [CommandError] if no network with the given name exists
     # @return [Network] the network
-    def find_network!(conf, name)
-      network = find_network(conf, name)
+    def find_network!(name)
+      network = find_network(name)
       return network unless network.nil?
       raise CommandError, "a network with the name #{name.inspect} " \
                           'does not exist'
@@ -79,11 +75,10 @@ module Codebot
     # Checks that all channels associated with an integration belong to a valid
     # network.
     #
-    # @param conf [Config] the configuration to use
     # @param integration [Integration] the integration to check
-    def check_channels!(conf, integration)
+    def check_channels!(integration)
       integration.channels.map(&:network).each do |network_name|
-        find_network!(conf, network_name)
+        find_network!(network_name)
       end
     end
 
@@ -91,12 +86,22 @@ module Codebot
 
     # Checks that the specified name is available for use.
     #
-    # @param conf [Configuration] the configuration containing the networks
-    #                             to search
     # @params name [String] the name to check for
     # @raise [CommandError] if the name is already taken
-    def check_name_available!(conf, name)
-      return unless find_network(conf, name)
+    def check_name_available!(name)
+      return if name.nil? || !find_network(name)
+      raise CommandError, "a network with the name #{name.inspect} " \
+                          'already exists'
+    end
+
+    # Checks that the specified name is available for use by the specified
+    # network.
+    #
+    # @params name [String] the name to check for
+    # @param network [Network] the network to ignore
+    # @raise [CommandError] if the name is already taken
+    def check_name_available_except!(name, network)
+      return if name.nil? || network.name_eql?(name) || !find_network(name)
       raise CommandError, "a network with the name #{name.inspect} " \
                           'already exists'
     end

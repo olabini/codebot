@@ -32,14 +32,14 @@ module Codebot
     # If a +StandardError+ occurs during the transaction, the configuration
     # is rolled back to the previous state.
     #
-    # @yield [Config] Passes +self+ to the block
+    # @yield invokes the given block during the transaction
     # @raise [StandardError] the error that occurred during modification
     # @return [true] if the transaction completes successfully
     def transaction
       @semaphore.synchronize do
         state = @conf
         begin
-          yield self
+          yield
           true if save!
         rescue StandardError
           @conf = state
