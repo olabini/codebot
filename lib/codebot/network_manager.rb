@@ -35,6 +35,8 @@ module Codebot
         network = find_network!(conf, name)
         if !params[:name].nil? && !network.name_eql?(params[:name])
           check_name_available!(conf, params[:name])
+          IntegrationManager.new(conf).rename_network!(conf, network,
+                                                       params[:name])
         end
         network.update!(params)
       end
@@ -49,8 +51,6 @@ module Codebot
         conf.networks.delete network
       end
     end
-
-    private
 
     # Finds a network given its name.
     #
@@ -75,6 +75,19 @@ module Codebot
       raise CommandError, "a network with the name #{name.inspect} " \
                           'does not exist'
     end
+
+    # Checks that all channels associated with an integration belong to a valid
+    # network.
+    #
+    # @param conf [Config] the configuration to use
+    # @param integration [Integration] the integration to check
+    def check_channels!(conf, integration)
+      integration.channels.map(&:network).each do |network_name|
+        find_network!(conf, network_name)
+      end
+    end
+
+    private
 
     # Checks that the specified name is available for use.
     #

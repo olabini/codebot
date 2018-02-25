@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'codebot/network_manager'
 require 'codebot/command_error'
 
 module Codebot
@@ -22,6 +23,7 @@ module Codebot
       integration = Integration.new(params)
       @config.transaction do |conf|
         check_available!(conf, integration.name, integration.endpoint)
+        NetworkManager.new(conf).check_channels!(conf, integration)
         conf.integrations << integration
       end
     end
@@ -36,6 +38,7 @@ module Codebot
         check_available_except!(conf, params[:name], params[:endpoint],
                                 integration)
         update_channels!(integration, params)
+        NetworkManager.new(conf).check_channels!(conf, integration)
         integration.update!(params)
       end
     end
@@ -49,8 +52,6 @@ module Codebot
         conf.integrations.delete integration
       end
     end
-
-    private
 
     # Finds an integration given its name.
     #
@@ -85,6 +86,21 @@ module Codebot
       raise CommandError, "an integration with the name #{name.inspect} " \
                           'does not exist'
     end
+
+    # Updates all integrations to account for a network name change.
+    #
+    # @param conf [Config] the configuration to use
+    # @param old_name [String] the old name of the network
+    # @param new_name [String] the new name of the network
+    def rename_network!(conf, network, new_name)
+      conf.integrations.each do |integration|
+        integration.channels.each do |channel|
+          channel.network = new_name if network.name_eql? channel.network
+        end
+      end
+    end
+
+    private
 
     # Checks that the specified name is available for use.
     #
