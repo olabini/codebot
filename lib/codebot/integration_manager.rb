@@ -82,7 +82,7 @@ module Codebot
 
     # Updates all integrations to account for a network name change.
     #
-    # @param old_name [String] the old name of the network
+    # @param network [Network] the network to rename
     # @param new_name [String] the new name of the network
     def rename_network!(network, new_name)
       @config.integrations.each do |integration|
@@ -96,7 +96,7 @@ module Codebot
 
     # Checks that the specified name is available for use.
     #
-    # @params name [String] the name to check for
+    # @param name [String] the name to check for
     # @raise [CommandError] if the name is already taken
     def check_name_available!(name)
       return unless find_integration(name)
@@ -106,7 +106,7 @@ module Codebot
 
     # Checks that the specified endpoint is available for use.
     #
-    # @params endpoint [String] the endpoint to check for
+    # @param endpoint [String] the endpoint to check for
     # @raise [CommandError] if the endpoint is already taken
     def check_endpoint_available!(endpoint)
       return unless find_integration_by_endpoint(endpoint)

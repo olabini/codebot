@@ -68,6 +68,9 @@ module Codebot
         end
       end
 
+      # Ensure that thor uses the correct exit code.
+      #
+      # @return true
       def self.exit_on_failure?
         true
       end

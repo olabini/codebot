@@ -28,6 +28,9 @@ module Codebot
       desc 'integration [OPTIONS]', 'Manage integrations'
       subcommand 'integration', Integration
 
+      # Ensure that thor uses the correct exit code.
+      #
+      # @return true
       def self.exit_on_failure?
         true
       end
