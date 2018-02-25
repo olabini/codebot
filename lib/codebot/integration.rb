@@ -56,7 +56,7 @@ module Codebot
           raise CommandError, "channel #{identifier.inspect} already exists"
         end
       end
-      new_channels = Channel.load_all!(channels)
+      new_channels = Channel.deserialize_all(channels)
       @channels.push(*new_channels)
     end
 
@@ -98,7 +98,8 @@ module Codebot
     end
 
     def channels=(channels)
-      @channels = valid!(channels, Channel.load_all!(channels), :@channels,
+      @channels = valid!(channels, Channel.deserialize_all(channels),
+                         :@channels,
                          invalid_error: 'invalid channel list %s') { [] }
     end
 
@@ -119,16 +120,34 @@ module Codebot
       @endpoint.eql? endpoint
     end
 
-    private_class_method def self.serial_key
-      :name
+    # Serializes this integration.
+    #
+    # @return [Array, Hash] the serialized object
+    def serialize
+      [name, {
+        'endpoint' => endpoint,
+        'secret'   => secret,
+        'channels' => Channel.serialize_all(channels)
+      }]
     end
 
-    private_class_method def self.serial_values
-      %i[endpoint secret channels]
+    # Deserializes an integration.
+    #
+    # @param name [String] the name of the integration
+    # @param data [Hash] the serialized data
+    # @return [Hash] the parameters to pass to the initializer
+    def self.deserialize(name, data)
+      {
+        name:     name,
+        endpoint: data['endpoint'],
+        secret:   data['secret'],
+        channels: data['channels']
+      }
     end
 
-    private_class_method def self.serial_value_types
-      { channels: Channel }
+    # @return [true] to indicate that data is serialized into a hash
+    def self.serialize_as_hash?
+      true
     end
   end
 end

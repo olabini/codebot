@@ -74,12 +74,34 @@ module Codebot
       @name.casecmp(name).zero?
     end
 
-    private_class_method def self.serial_key
-      :name
+    # Serializes this network.
+    #
+    # @return [Array, Hash] the serialized object
+    def serialize
+      [name, {
+        'host'   => host,
+        'port'   => port,
+        'secure' => secure
+      }]
     end
 
-    private_class_method def self.serial_values
-      %i[host port secure]
+    # Deserializes a network.
+    #
+    # @param name [String] the name of the network
+    # @param data [Hash] the serialized data
+    # @return [Hash] the parameters to pass to the initializer
+    def self.deserialize(name, data)
+      {
+        name:   name,
+        host:   data['host'],
+        port:   data['port'],
+        secure: data['secure']
+      }
+    end
+
+    # @return [true] to indicate that data is serialized into a hash
+    def self.serialize_as_hash?
+      true
     end
   end
 end

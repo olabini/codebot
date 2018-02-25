@@ -11,7 +11,7 @@ module Codebot
     # @return [String] the name of this channel
     attr_reader :name
 
-    # @return [String] the name of the network this channel belongs to
+    # @return [Network] the network this channel belongs to
     attr_reader :network
 
     # @return [String, nil] the key required for joining this channel
@@ -96,6 +96,34 @@ module Codebot
 
     private_class_method def self.serial_values
       %i[key send_external]
+    end
+
+    # Serializes this channel.
+    #
+    # @return [Array, Hash] the serialized object
+    def serialize
+      [identifier, {
+        'key'           => key,
+        'send_external' => send_external
+      }]
+    end
+
+    # Deserializes a channel.
+    #
+    # @param identifier [String] the channel identifier
+    # @param data [Hash] the serialized data
+    # @return [Hash] the parameters to pass to the initializer
+    def self.deserialize(identifier, data)
+      {
+        identifier:    identifier,
+        key:           data['key'],
+        send_external: data['send_external']
+      }
+    end
+
+    # @return [true] to indicate that data is serialized into a hash
+    def self.serialize_as_hash?
+      true
     end
   end
 end

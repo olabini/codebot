@@ -3,73 +3,89 @@
 require 'codebot/configuration_error'
 
 module Codebot
-  # This class provides shared methods for classes that can be serialized
-  # into YAML documents.
-  #
-  # Arrays of objects are serialized into either arrays or hashes, depending
-  # on whether the +::serial_key+ method exists. If it does exist, it must
-  # return a symbol identifying the property the values of which are to be
-  # used as hash keys.
+  # A class that can be serialized. Child classes should override the
+  # {#serialize} and {::deserialize} methods, and change {::serialize_as_hash?}
+  # to return +true+ if the {#serialize} method returns an +Array+ containing
+  # two elements representing key and value of a +Hash+.
   class Serializable
-    # Deserializes multiple objects into an array. The parameter must be either
-    # an array or a hash, depending on whether the +::serial_key+ method exists.
+    # Serializes an array into an array or a hash.
     #
-    # Only the keys contained in the array returned by the +::serial_values+
-    # method are converted to symbols. Any other keys are discarded.
-    # Deserialized parameters are passed to the class constructor.
-    #
-    # @param data [Array, Hash] the array or hash to be deserialized
-    # @raise [ConfigurationError] if the data has an unexpected type
-    # @return [Array] the deserialized array
-    def self.load_all!(data)
-      return if data.nil?
-      unless data.is_a?(hash_format? ? Hash : Array)
-        raise ConfigurationError, "invalid data #{data.inspect} for " \
-                                  "#{name}"
-      end
-      data.map { |entry| load_entry entry }
-    end
-
-    # Serializes an array of objects into an array or a hash, depending on
-    # whether the +::serial_key+ method exists.
-    #
-    # @param data [Array] the array to be serialized
-    # @return [Array, Hash] the serialized array or hash
-    def self.save_all!(data)
-      result = data.map { |entry| save_entry entry }
-      hash_format? ? result.to_h : result
-    end
-
-    private_class_method def self.load_entry(entry)
-      params = {}
-      params[serial_key], entry = entry if hash_format?
-      values = entry.map do |key, val|
-        [key.to_sym, val] if serial_values.map(&:to_s).include? key
-      end
-      new(params.merge(values.to_h.compact))
-    end
-
-    private_class_method def self.save_entry(entry)
-      params = serial_values.map do |sym|
-        [sym.to_s, serial_value_for(entry, sym)]
-      end.to_h
-      params = [serial_value_for(entry, serial_key), params] if hash_format?
-      params
-    end
-
-    private_class_method def self.hash_format?
-      respond_to?(:serial_key, true)
-    end
-
-    private_class_method def self.serial_value_for(entry, sym)
-      type = serial_value_types[sym]
-      data = entry.send(sym)
-      data = type.save_all!(data) unless type.nil?
+    # @param ary [Array] the data to serialize
+    # @return [Array, Hash] the serialized data
+    def self.serialize_all(ary)
+      data = ary.map(&:serialize)
+      return data.to_h if serialize_as_hash?
       data
     end
 
-    private_class_method def self.serial_value_types
+    # Deserializes an array or a hash into an array.
+    #
+    # @param data [Array, Hash] the data to deserialize
+    # @return [Array] the deserialized data
+    def self.deserialize_all(data)
+      return [] if data.nil?
+      if serialize_as_hash?
+        deserialize_all_from_hash(data)
+      else
+        deserialize_all_from_array(data)
+      end
+    end
+
+    # Serializes this object.
+    #
+    # @note Child classes should override this method.
+    # @return [Array, Hash] the serialized object
+    def serialize
+      []
+    end
+
+    # Deserializes an object.
+    #
+    # @note Child classes should override this method.
+    # @param _key [Object] the hash key if the value was serialized into a hash
+    # @param _val [Hash] the serialized data
+    # @return [Hash] the parameters to pass to the initializer
+    def self.deserialize(_key = nil, _val)
       {}
     end
+
+    # Returns whether data is serialized into a hash rather than an array.
+    #
+    # @note Child classes might want to override this method.
+    # @return [Boolean] whether data is serialized into an array containing two
+    #                   elements representing key and value of a +Hash+.
+    def self.serialize_as_hash?
+      false
+    end
+
+    # Deserializes an array into an array.
+    #
+    # @param data [Array] the data to deserialize
+    # @return [Array] the deserialized data
+    def self.deserialize_all_from_array(data)
+      unless data.is_a? Array
+        raise ConfigurationError, "#{name}: invalid array #{data.inspect}"
+      end
+      data.map { |item| new(deserialize(item)) }
+    end
+
+    # Deserializes a hash into an array.
+    #
+    # @param data [Hash] the data to deserialize
+    # @return [Array] the deserialized data
+    def self.deserialize_all_from_hash(data)
+      unless data.is_a? Hash
+        raise ConfigurationError, "#{name}: invalid hash #{data.inspect}"
+      end
+      data.map do |item|
+        unless item.length == 2
+          raise ConfigurationError, "#{name}: invalid member #{item.inspect}"
+        end
+        new(deserialize(*item))
+      end
+    end
+
+    private_class_method :deserialize_all_from_array
+    private_class_method :deserialize_all_from_hash
   end
 end
