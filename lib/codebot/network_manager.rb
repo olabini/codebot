@@ -33,7 +33,7 @@ module Codebot
     def update(name, params)
       @config.transaction do
         network = find_network!(name)
-        if !params[:name].nil?
+        unless params[:name].nil?
           check_name_available_except!(params[:name], network)
           IntegrationManager.new(@config).rename_network!(network,
                                                           params[:name])
