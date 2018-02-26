@@ -26,7 +26,7 @@ module Codebot
       #
       # @param name [String] the name of the new network
       def create(name)
-        Options.with_core(parent_options) do |core|
+        Options.with_core(parent_options, true) do |core|
           NetworkManager.new(core.config).create(
             name:   name,
             host:   options[:host],
@@ -46,7 +46,7 @@ module Codebot
       #
       # @param name [String] the name of the network
       def update(name)
-        Options.with_core(parent_options) do |core|
+        Options.with_core(parent_options, true) do |core|
           NetworkManager.new(core.config).update(
             name,
             name:   options[:rename],
@@ -63,12 +63,12 @@ module Codebot
       #
       # @param name [String] the name of the network
       def destroy(name)
-        Options.with_core(parent_options) do |core|
+        Options.with_core(parent_options, true) do |core|
           NetworkManager.new(core.config).destroy(name)
         end
       end
 
-      # Ensure that thor uses the correct exit code.
+      # Ensures that thor uses the correct exit code.
       #
       # @return true
       def self.exit_on_failure?

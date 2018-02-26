@@ -4,12 +4,11 @@ require 'codebot/thread_controller'
 
 module Codebot
   # This class manages an IRC client that runs in a separate thread.
-  class IRCClient
-    include ThreadController
-
+  class IRCClient < ThreadController
     private
 
-    def run
+    # Starts this IRC client.
+    def run(*)
       # TODO: Not yet implemented
     end
   end

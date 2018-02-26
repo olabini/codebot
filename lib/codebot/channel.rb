@@ -90,14 +90,6 @@ module Codebot
       self.network, self.name = identifier.split('/', 2) if identifier
     end
 
-    private_class_method def self.serial_key
-      :identifier
-    end
-
-    private_class_method def self.serial_values
-      %i[key send_external]
-    end
-
     # Serializes this channel.
     #
     # @return [Array, Hash] the serialized object

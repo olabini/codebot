@@ -14,12 +14,19 @@ module Codebot
 
     # Creates a new instance of the class and loads the configuration file.
     #
-    # @param file [String] The path to the configuration file, or +nil+ to
-    #                      use the default configuration file for this user.
+    # @param file [String] the path to the configuration file, or +nil+ to
+    #                      use the default configuration file for this user
     def initialize(file = nil)
-      @file = file || default_file
+      @file = file || self.class.default_file
       @semaphore = Mutex.new
       load!
+    end
+
+    # Loads the configuration from the associated file. If the file does not
+    # exist, it is created.
+    def load!
+      @conf = load_from_file! @file
+      save! unless File.file? @file
     end
 
     # Saves the current configuration to the configuration file.
@@ -58,14 +65,14 @@ module Codebot
       @conf[:networks]
     end
 
-    private
-
-    # Loads the configuration from the associated file. If the file does not
-    # exist, it is created.
-    def load!
-      @conf = load_from_file! @file
-      save! unless File.file? @file
+    # Returns the path to the default configuration file for the current user.
+    #
+    # @return [String] the path to the configuration file
+    def self.default_file
+      File.join Dir.home, '.codebot.yml'
     end
+
+    private
 
     # Loads the configuration from the specified file.
     #
@@ -89,13 +96,6 @@ module Codebot
       data['integrations'] = Integration.serialize_all @conf[:integrations]
       data['networks']     = Network.serialize_all     @conf[:networks]
       File.write file, Psych.dump(data)
-    end
-
-    # Returns the path to the default configuration file for the current user.
-    #
-    # @return [String] the path to the configuration file
-    def default_file
-      File.join Dir.home, '.codebot.yml'
     end
   end
 end
