@@ -60,9 +60,9 @@ module Codebot
 
       def check_not_running!(opts)
         Options.with_ipc_client(opts) do |ipc|
-          return unless ipc.pipe_exist?
+          break unless ipc.pipe_exist?
           raise CommandError, "named pipe #{ipc.pipe.inspect} already " \
-                              "exists; is there already a running instance?"
+                              'exists; is there already a running instance?'
         end
       end
     end

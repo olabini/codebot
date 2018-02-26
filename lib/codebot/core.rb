@@ -11,6 +11,15 @@ module Codebot
     # @return [Config] the configuration used by this bot
     attr_reader :config
 
+    # @return [IRCClient] the IRC client
+    attr_reader :irc_client
+
+    # @return [IRCClient] the web server
+    attr_reader :web_server
+
+    # @return [IRCClient] the IPC server
+    attr_reader :ipc_server
+
     # Creates a new bot from the supplied hash.
     #
     # @param params [Hash] A hash with symbolic keys for initializing this
@@ -19,7 +28,7 @@ module Codebot
     def initialize(params = {})
       @config     = Config.new(params[:config_file])
       @irc_client = IRCClient.new
-      @web_server = WebServer.new
+      @web_server = WebServer.new(self)
       @ipc_server = IPCServer.new(self, params[:ipc_pipe])
     end
 

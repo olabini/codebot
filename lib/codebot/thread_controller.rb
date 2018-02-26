@@ -31,6 +31,7 @@ module Codebot
     # @return [Thread, nil] the newly created thread, or +nil+ if
     #                       there was already a running thread
     def start(arg = nil)
+      Thread.abort_on_exception = true
       @thread = Thread.new { run(arg) } unless running?
     end
 
