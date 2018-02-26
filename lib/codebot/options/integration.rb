@@ -26,7 +26,7 @@ module Codebot
       #
       # @param name [String] the name of the new integration
       def create(name)
-        Options.with_core(parent_options) do |core|
+        Options.with_core(parent_options, true) do |core|
           options[:name] = name
           map_channels!(options, :channels)
           IntegrationManager.new(core.config).create(options)
@@ -50,7 +50,7 @@ module Codebot
       #
       # @param name [String] the name of the integration
       def update(name)
-        Options.with_core(parent_options) do |core|
+        Options.with_core(parent_options, true) do |core|
           map_channels!(options, :add_channels)
           IntegrationManager.new(core.config).update(name, options)
         end
@@ -62,12 +62,12 @@ module Codebot
       #
       # @param name [String] the name of the integration
       def destroy(name)
-        Options.with_core(parent_options) do |core|
+        Options.with_core(parent_options, true) do |core|
           IntegrationManager.new(core.config).destroy(name)
         end
       end
 
-      # Ensure that thor uses the correct exit code.
+      # Ensures that thor uses the correct exit code.
       #
       # @return true
       def self.exit_on_failure?

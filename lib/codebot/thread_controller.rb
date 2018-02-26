@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
 module Codebot
-  # This module provides a consistent interface for classes that manage a
+  # This class provides a consistent interface for subclasses that manage a
   # thread.
-  module ThreadController
+  class ThreadController
+    # Creates a new thread controller.
+    def initialize
+      @thread = nil
+    end
+
     # Suspends execution of the calling thread until the managed thread exits.
     #
     # @return [Thread, nil] the dead thead, or +nil+ if no thread was active
