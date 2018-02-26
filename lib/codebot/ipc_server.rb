@@ -69,7 +69,7 @@ module Codebot
     # @param command [String] the command
     def handle_command(command)
       case command
-      when 'REHASH'  then @core.config.transaction { @core.config.load! }
+      when 'REHASH'  then @core.config.load!
       when 'STOP'    then Thread.new { @core.stop }
       else STDERR.puts "Unknown IPC command: #{command.inspect}"
       end

@@ -74,6 +74,27 @@ module Codebot
       @name.casecmp(name).zero?
     end
 
+    # Checks whether this network is equal to another network.
+    #
+    # @param other [Object] the other network
+    # @return [Boolean] +true+ if the networks are equal, +false+ otherwise
+    def ==(other)
+      other.is_a?(Network) &&
+        name_eql?(other.name) &&
+        host.eql?(other.host) &&
+        port.eql?(other.port) &&
+        secure.eql?(other.secure)
+    end
+
+    # Generates a hash for this network.
+    #
+    # @return [Integer] the hash
+    def hash
+      [name, host, port, secure].hash
+    end
+
+    alias eql? ==
+
     # Serializes this network.
     #
     # @return [Array, Hash] the serialized object

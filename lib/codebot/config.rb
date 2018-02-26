@@ -9,14 +9,19 @@ require 'codebot/network'
 module Codebot
   # This class manages a Codebot configuration file.
   class Config
+    # @return [Core] the bot this configuration belongs to
+    attr_reader :core
+
     # @return [String] the path to the managed configuration file
     attr_reader :file
 
     # Creates a new instance of the class and loads the configuration file.
     #
+    # @param core [Core] the bot this configuration belongs to
     # @param file [String] the path to the configuration file, or +nil+ to
     #                      use the default configuration file for this user
-    def initialize(file = nil)
+    def initialize(core, file = nil)
+      @core = core
       @file = file || self.class.default_file
       @semaphore = Mutex.new
       load!
@@ -25,17 +30,14 @@ module Codebot
     # Loads the configuration from the associated file. If the file does not
     # exist, it is created.
     def load!
-      @conf = load_from_file! @file
-      save! unless File.file? @file
-    end
-
-    # Saves the current configuration to the configuration file.
-    def save!
-      save_to_file!(@file)
+      transaction do
+        @conf = load_from_file! @file
+        save! unless File.file? @file
+      end
     end
 
     # A thread-safe method for making changes to the configuration. If another
-    # transaction is active, the calling thread blocks until it completes.
+    # transaction is active, the calling thread waits for it to complete.
     # If a +StandardError+ occurs during the transaction, the configuration
     # is rolled back to the previous state.
     #
@@ -46,8 +48,7 @@ module Codebot
       @semaphore.synchronize do
         state = @conf
         begin
-          yield
-          true if save!
+          run_transaction(&Proc.new)
         rescue StandardError
           @conf = state
           raise
@@ -73,6 +74,23 @@ module Codebot
     end
 
     private
+
+    # Saves the current configuration to the configuration file.
+    def save!
+      save_to_file! @file
+    end
+
+    # Makes changes to the configuration, saves the file and requests that the
+    # bot migrate to the new version.
+    #
+    # @note This method should only be called by the {#transaction} method.
+    # @return [Boolean] +true+ if the transaction succeeded, +false+ otherwise
+    def run_transaction
+      yield
+      return false unless save!
+      @core.migrate!
+      true
+    end
 
     # Loads the configuration from the specified file.
     #
