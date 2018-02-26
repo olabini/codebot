@@ -26,8 +26,8 @@ module Codebot
     #                      instance. The only accepted keys are +:config_file+
     #                      and +:ipc_pipe+. Any other keys are ignored.
     def initialize(params = {})
-      @config     = Config.new(params[:config_file])
-      @irc_client = IRCClient.new
+      @config     = Config.new(self, params[:config_file])
+      @irc_client = IRCClient.new(self)
       @web_server = WebServer.new(self)
       @ipc_server = IPCServer.new(self, params[:ipc_pipe])
     end
@@ -50,13 +50,17 @@ module Codebot
     def join
       @ipc_server.join
       @web_server.join
-      @irc_client.join
+    end
+
+    # Requests that the running threads migrate to an updated configuration.
+    def migrate!
+      @irc_client.migrate! unless @irc_client.nil?
     end
 
     # Sets traps for SIGINT and SIGTERM so Codebot can shut down gracefully.
     def trap_signals
       shutdown = proc do |signal|
-        puts "\nReceived #{signal}, shutting down..."
+        STDERR.puts "\nReceived #{signal}, shutting down..."
         stop
         join
         exit 1

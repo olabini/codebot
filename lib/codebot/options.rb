@@ -20,7 +20,11 @@ module Codebot
         ipc_pipe:    opts[:pipe]
       )
       with_errors { yield core }
-      with_ipc_client(opts) { |ipc| ipc.send_rehash(false) } if rehash
+      return unless rehash
+      with_ipc_client(opts) do |ipc|
+        ipc.send_rehash(!opts[:pipe].nil?)
+        puts 'Rehashing the running instance...' unless opts[:quiet]
+      end
     end
 
     # Invokes the given block, handling {UserError} errors.
