@@ -27,14 +27,13 @@ module Codebot
       # @param name [String] the name of the new integration
       def create(name)
         Options.with_core(parent_options, true) do |core|
-          options[:name] = name
           map_channels!(options, :channels)
-          IntegrationManager.new(core.config).create(options)
+          IntegrationManager.new(core.config).create(options.merge(name: name))
         end
       end
 
       desc 'update NAME', 'Edit an integration'
-      option :rename, aliases: '-n',
+      option :rename, aliases: '-r',
                       banner: 'NEW-NAME',
                       desc: 'Rename this integration'
       shared_propery_options

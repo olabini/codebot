@@ -3,6 +3,6 @@
 # This is the main module for Codebot.
 module Codebot end
 
-require 'codebot/version'
+require 'codebot/metadata'
 require 'codebot/options'
 require 'codebot/core'
