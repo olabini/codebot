@@ -56,6 +56,14 @@ module Codebot
       bool if [true, false].include? bool
     end
 
+    # Sanitizes a string.
+    #
+    # @param str [String, nil] the string to sanitize
+    # @return [String, nil] the sanitized value or +nil+ on error
+    def valid_string(str)
+      str if str.is_a? String
+    end
+
     # Sanitizes a channel name.
     #
     # @param channel [String, nil] the channel name to sanitize

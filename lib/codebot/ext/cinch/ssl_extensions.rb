@@ -11,9 +11,11 @@ module Codebot
       module SSLExtensions
         # Patch the OpenSSL::SSL::SSLContext#ca_path= method to set cert_store
         # to the default certificate store, which Cinch does not currently do.
+        #
+        # @param path [String] the path to the CA certificate directory
         def ca_path=(path)
           if caller(1..1).first.include?('/lib/cinch/')
-            puts "Codebot: patching Cinch to use the default certificate store"
+            puts 'Codebot: patching Cinch to use the default certificate store'
             self.cert_store = OpenSSL::X509::Store.new.tap(&:set_default_paths)
           end
           super
@@ -23,7 +25,9 @@ module Codebot
   end
 end
 
+# Patch module OpenSSL
 module OpenSSL
+  # Patch module OpenSSL::SSL
   module SSL
     # Patch class OpenSSL::SSL::SSLContext
     class SSLContext

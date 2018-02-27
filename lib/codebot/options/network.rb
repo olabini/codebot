@@ -8,15 +8,36 @@ module Codebot
     class Network < Thor
       check_unknown_options!
 
-      # Sets shared options for specifying properties belonging to the
-      # {::Codebot::Network} class.
-      def self.shared_propery_options
+      # Sets shared options for connecting to the IRC network.
+      def self.shared_connection_options
         option :host, aliases: '-H',
                       desc: 'Set the server hostname or address'
         option :port, type: :numeric, aliases: '-p',
                       desc: 'Set the port to connect to'
         option :secure, type: :boolean, aliases: '-s',
                         desc: 'Connect securely using TLS'
+        option :server_password, desc: 'Set the server password'
+        option :nick, aliases: '-n',
+                      desc: 'Set the nickname'
+      end
+
+      # Sets shared options for authenticating to the IRC network.
+      def self.shared_authentication_options
+        option :no_sasl, type: :boolean,
+                         desc: 'Disable SASL authentication'
+        option :sasl_username, desc: 'Set the username for SASL authentication'
+        option :sasl_password, desc: 'Set the password for SASL authentication'
+      end
+
+      # Sets shared options for specifying properties belonging to the
+      # {::Codebot::Network} class.
+      def self.shared_propery_options
+        shared_connection_options
+        shared_authentication_options
+        option :bind, aliases: '-b',
+                      desc: 'Bind to the specified IP address or host'
+        option :modes, aliases: '-m',
+                       desc: 'Set user modes'
       end
 
       desc 'create NAME', 'Add a new IRC network'
@@ -27,17 +48,12 @@ module Codebot
       # @param name [String] the name of the new network
       def create(name)
         Options.with_core(parent_options, true) do |core|
-          NetworkManager.new(core.config).create(
-            name:   name,
-            host:   options[:host],
-            port:   options[:port],
-            secure: options[:secure]
-          )
+          NetworkManager.new(core.config).create(options.merge(name: name))
         end
       end
 
       desc 'update NAME', 'Edit an IRC network'
-      option :rename, aliases: '-n',
+      option :rename, aliases: '-r',
                       banner: 'NEW-NAME',
                       desc: 'Rename this network'
       shared_propery_options
@@ -47,13 +63,7 @@ module Codebot
       # @param name [String] the name of the network
       def update(name)
         Options.with_core(parent_options, true) do |core|
-          NetworkManager.new(core.config).update(
-            name,
-            name:   options[:rename],
-            host:   options[:host],
-            port:   options[:port],
-            secure: options[:secure]
-          )
+          NetworkManager.new(core.config).update(name, options)
         end
       end
 

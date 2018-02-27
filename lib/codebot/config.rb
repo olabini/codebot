@@ -24,16 +24,13 @@ module Codebot
       @core = core
       @file = file || self.class.default_file
       @semaphore = Mutex.new
-      load!
+      unsafe_load
     end
 
     # Loads the configuration from the associated file. If the file does not
     # exist, it is created.
     def load!
-      transaction do
-        @conf = load_from_file! @file
-        save! unless File.file? @file
-      end
+      transaction { unsafe_load }
     end
 
     # A thread-safe method for making changes to the configuration. If another
@@ -78,6 +75,12 @@ module Codebot
     # Saves the current configuration to the configuration file.
     def save!
       save_to_file! @file
+    end
+
+    # Loads the configuration file without starting a transaction.
+    def unsafe_load
+      @conf = load_from_file! @file
+      save! unless File.file? @file
     end
 
     # Makes changes to the configuration, saves the file and requests that the

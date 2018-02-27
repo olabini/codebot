@@ -73,7 +73,7 @@ module Codebot
     # @param network [Network] the network to connect to
     def connect_to(network)
       return if connected_to? network
-      @connections << IRCConnection.new(network).tap(&:start)
+      @connections << IRCConnection.new(network).tap { |c| c.start(network) }
     end
 
     # Disconnects from a given network if the network is currently connected.

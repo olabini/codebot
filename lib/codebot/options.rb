@@ -22,7 +22,7 @@ module Codebot
       with_errors { yield core }
       return unless rehash
       with_ipc_client(opts) do |ipc|
-        ipc.send_rehash(!opts[:pipe].nil?)
+        break unless ipc.send_rehash(!opts[:pipe].nil?)
         puts 'Rehashing the running instance...' unless opts[:quiet]
       end
     end

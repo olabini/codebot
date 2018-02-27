@@ -22,6 +22,24 @@ module Codebot
     #                   network
     attr_reader :secure
 
+    # @return [String] the server password
+    attr_reader :server_password
+
+    # @return [String] the primary nickname for this network
+    attr_reader :nick
+
+    # @return [String] the username for SASL authentication
+    attr_reader :sasl_username
+
+    # @return [String] the password for SASL authentication
+    attr_reader :sasl_password
+
+    # @return [String] the address to bind to
+    attr_reader :bind
+
+    # @return [String] user modes to set
+    attr_reader :modes
+
     # Creates a new network from the supplied hash.
     #
     # @param params [Hash] A hash with symbolic keys representing the instance
@@ -36,10 +54,14 @@ module Codebot
     # @param params [Hash] A hash with symbolic keys representing the instance
     #                      attributes of this network.
     def update!(params)
-      self.name   = params[:name]
-      self.host   = params[:host]
-      self.port   = params[:port]
-      self.secure = params[:secure]
+      self.name            = params[:name]
+      self.server_password = params[:server_password]
+      self.nick            = params[:nick]
+      self.bind            = params[:bind]
+      self.modes           = params[:modes]
+      update_connection(params[:host], params[:port], params[:secure])
+      update_sasl(params[:no_sasl],
+                  params[:sasl_username], params[:sasl_password])
     end
 
     def name=(name)
@@ -49,21 +71,57 @@ module Codebot
                      invalid_error: 'invalid network name %s'
     end
 
-    def host=(host)
+    # Updates the connection details of this network.
+    #
+    # @param host [String] the new hostname, or +nil+ to keep the current value
+    # @param port [Integer] the new port, or +nil+ to keep the current value
+    # @param secure [Boolean] whether to connect over TLS, or +nil+ to keep the
+    #                         current value
+    def update_connection(host, port, secure)
       @host = valid! host, valid_host(host), :@host,
                      required: true,
                      required_error: 'networks must have a hostname',
                      invalid_error: 'invalid hostname %s'
-    end
-
-    def port=(port)
       @port = valid! port, valid_port(port), :@port,
                      invalid_error: 'invalid port number %s'
-    end
-
-    def secure=(secure)
       @secure = valid!(secure, valid_boolean(secure), :@secure,
                        invalid_error: 'secure must be a boolean') { false }
+    end
+
+    def server_password=(pass)
+      @server_password = valid! pass, valid_string(pass), :@server_password,
+                                invalid_error: 'invalid server password %s'
+    end
+
+    def nick=(nick)
+      @nick = valid! nick, valid_string(nick), :@nick,
+                     invalid_error: 'invalid nickname %s'
+    end
+
+    # Updates the SASL authentication details of this network.
+    #
+    # @param disable [Boolean] whether to disable SASL, or +nil+ to keep the
+    #                          current value.
+    # @param user [String] the SASL username, or +nil+ to keep the current value
+    # @param pass [String] the SASL password, or +nil+ to keep the current value
+    def update_sasl(disable, user, pass)
+      @sasl_username = valid! user, valid_string(user), :@sasl_username,
+                              invalid_error: 'invalid SASL username %s'
+      @sasl_password = valid! pass, valid_string(pass), :@sasl_password,
+                              invalid_error: 'invalid SASL password %s'
+      return unless disable
+      @sasl_username = nil
+      @sasl_password = nil
+    end
+
+    def bind=(bind)
+      @bind = valid! bind, valid_string(bind), :@bind,
+                     invalid_error: 'invalid bind host %s'
+    end
+
+    def modes=(modes)
+      @modes = valid! modes, valid_string(modes), :@modes,
+                      invalid_error: 'invalid user modes %s'
     end
 
     # Checks whether the name of this network is equal to another name.
@@ -99,11 +157,7 @@ module Codebot
     #
     # @return [Array, Hash] the serialized object
     def serialize
-      [name, {
-        'host'   => host,
-        'port'   => port,
-        'secure' => secure
-      }]
+      [name, Network.fields.map { |sym| [sym.to_s, send(sym)] }.to_h]
     end
 
     # Deserializes a network.
@@ -112,17 +166,18 @@ module Codebot
     # @param data [Hash] the serialized data
     # @return [Hash] the parameters to pass to the initializer
     def self.deserialize(name, data)
-      {
-        name:   name,
-        host:   data['host'],
-        port:   data['port'],
-        secure: data['secure']
-      }
+      fields.map { |sym| [sym, data[sym.to_s]] }.to_h.merge(name: name)
     end
 
     # @return [true] to indicate that data is serialized into a hash
     def self.serialize_as_hash?
       true
+    end
+
+    # @return [Array<Symbol>] the fields used for serializing this network
+    def self.fields
+      %i[host port secure server_password nick sasl_username sasl_password
+         bind modes]
     end
   end
 end
