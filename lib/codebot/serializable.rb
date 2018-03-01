@@ -11,9 +11,10 @@ module Codebot
     # Serializes an array into an array or a hash.
     #
     # @param ary [Array] the data to serialize
+    # @param conf [Hash] the deserialized configuration
     # @return [Array, Hash] the serialized data
-    def self.serialize_all(ary)
-      data = ary.map(&:serialize)
+    def self.serialize_all(ary, conf)
+      data = ary.map { |entry| entry.serialize(conf) }
       return data.to_h if serialize_as_hash?
       data
     end
@@ -21,21 +22,23 @@ module Codebot
     # Deserializes an array or a hash into an array.
     #
     # @param data [Array, Hash] the data to deserialize
+    # @param conf [Hash] the previously deserialized configuration
     # @return [Array] the deserialized data
-    def self.deserialize_all(data)
+    def self.deserialize_all(data, conf)
       return [] if data.nil?
       if serialize_as_hash?
-        deserialize_all_from_hash(data)
+        deserialize_all_from_hash(data, conf)
       else
-        deserialize_all_from_array(data)
+        deserialize_all_from_array(data, conf)
       end
     end
 
     # Serializes this object.
     #
     # @note Child classes should override this method.
+    # @param _conf [Hash] the deserialized configuration
     # @return [Array, Hash] the serialized object
-    def serialize
+    def serialize(_conf)
       []
     end
 
@@ -61,19 +64,21 @@ module Codebot
     # Deserializes an array into an array.
     #
     # @param data [Array] the data to deserialize
+    # @param conf [Hash] the previously deserialized configuration
     # @return [Array] the deserialized data
-    def self.deserialize_all_from_array(data)
+    def self.deserialize_all_from_array(data, conf)
       unless data.is_a? Array
         raise ConfigurationError, "#{name}: invalid array #{data.inspect}"
       end
-      data.map { |item| new(deserialize(item)) }
+      data.map { |item| new(deserialize(item).merge(config: conf)) }
     end
 
     # Deserializes a hash into an array.
     #
     # @param data [Hash] the data to deserialize
+    # @param conf [Hash] the previously deserialized configuration
     # @return [Array] the deserialized data
-    def self.deserialize_all_from_hash(data)
+    def self.deserialize_all_from_hash(data, conf)
       unless data.is_a? Hash
         raise ConfigurationError, "#{name}: invalid hash #{data.inspect}"
       end
@@ -81,7 +86,7 @@ module Codebot
         unless item.length == 2
           raise ConfigurationError, "#{name}: invalid member #{item.inspect}"
         end
-        new(deserialize(*item))
+        new(deserialize(*item).merge(config: conf))
       end
     end
 

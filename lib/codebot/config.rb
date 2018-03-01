@@ -104,8 +104,9 @@ module Codebot
       data = Psych.safe_load(File.read(file)) if File.file? file
       data = {} unless data.is_a? Hash
       conf = {}
-      conf[:integrations] = Integration.deserialize_all data['integrations']
-      conf[:networks]     = Network.deserialize_all     data['networks']
+      conf[:networks]     = Network.deserialize_all data['networks'], conf
+      conf[:integrations] = Integration.deserialize_all data['integrations'],
+                                                        conf
       conf
     end
 
@@ -114,8 +115,9 @@ module Codebot
     # @param file [String] the path to the configuration file
     def save_to_file!(file)
       data = {}
-      data['integrations'] = Integration.serialize_all @conf[:integrations]
-      data['networks']     = Network.serialize_all     @conf[:networks]
+      data['networks']     = Network.serialize_all     @conf[:networks], @conf
+      data['integrations'] = Integration.serialize_all @conf[:integrations],
+                                                       @conf
       File.write file, Psych.dump(data)
     end
   end

@@ -33,24 +33,24 @@ module Codebot
       end
 
       desc 'update NAME', 'Edit an integration'
-      option :rename, aliases: '-r',
-                      banner: 'NEW-NAME',
-                      desc: 'Rename this integration'
+      option :name, aliases: '-n',
+                    banner: 'NEW-NAME',
+                    desc: 'Rename this integration'
       shared_propery_options
-      option :add_channels, aliases: '-a', type: :array,
-                            desc: 'Add channels to this integration'
+      option :add_channel, aliases: '-a', type: :array,
+                            desc: 'Add a channel to this integration'
       option :clear_channels, aliases: '-c', type: :boolean,
                               desc: 'Clear the channel list ' \
                                     '(default: false)'
-      option :delete_channels, aliases: '-d', type: :array,
-                               desc: 'Delete channels from this integration'
+      option :delete_channel, aliases: '-d', type: :array,
+                               desc: 'Delete a channel from this integration'
 
       # Updates the integration with the specified name.
       #
       # @param name [String] the name of the integration
       def update(name)
         Options.with_core(parent_options, true) do |core|
-          map_channels!(options, :add_channels)
+          map_channels!(options, :add_channel)
           IntegrationManager.new(core.config).update(name, options)
         end
       end

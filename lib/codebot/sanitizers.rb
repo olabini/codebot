@@ -82,6 +82,16 @@ module Codebot
       key if /\A[[:graph:]&&[^,]]*\z/.match? key
     end
 
+    # Sanitizes a network name.
+    #
+    # @param name [String] the name of the network
+    # @param networks [Array<Network>] all networks
+    # @return [Network, nil] the corresponding network or +nil+ on error
+    def valid_network(name, conf)
+      return if name.nil?
+      conf[:networks].find { |net| net.name_eql? name }
+    end
+
     # This method requires a validation to succeed, raising an exception if it
     # does not. If no original value was provided, it returns, in this order,
     # the given fallback, the return value of any block passed to this method,

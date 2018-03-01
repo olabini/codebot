@@ -20,7 +20,9 @@ module Codebot
     #
     # @param params [Hash] the parameters to initialize the integration with
     def create(params)
-      integration = Integration.new(params)
+      integration = Integration.new(
+        params.merge(config: { networks: @config.networks })
+      )
       @config.transaction do
         check_available!(integration.name, integration.endpoint)
         NetworkManager.new(@config).check_channels!(integration)
@@ -80,18 +82,6 @@ module Codebot
                           'does not exist'
     end
 
-    # Updates all integrations to account for a network name change.
-    #
-    # @param network [Network] the network to rename
-    # @param new_name [String] the new name of the network
-    def rename_network!(network, new_name)
-      @config.integrations.each do |integration|
-        integration.channels.each do |channel|
-          channel.network = new_name if network.name_eql? channel.network
-        end
-      end
-    end
-
     private
 
     # Checks that the specified name is available for use.
@@ -145,19 +135,21 @@ module Codebot
     # @param integration [Integration] the integration
     # @param params [Hash] the parameters to update the integration with. Valid
     #                      keys are +:clear_channels+ to clear the channel list
-    #                      before proceeding, +:add_channels+ to add the given
-    #                      channels, and +:delete_channels+ to delete the given
+    #                      before proceeding, +:add_channel+ to add the given
+    #                      channels, and +:delete_channel+ to delete the given
     #                      channels from the integration. All keys are optional.
     #                      The value of +:clear_channels+ should be a boolean.
-    #                      The value of +:add_channels+ should be a hash of the
-    #                      form +identifier => params+, and +:remove_channels+
+    #                      The value of +:add_channel+ should be a hash of the
+    #                      form +identifier => params+, and +:remove_channel+
     #                      should be an array of channel identifiers to remove.
     def update_channels!(integration, params)
       integration.channels.clear if params[:clear_channels]
-      if params[:delete_channels]
-        integration.delete_channels!(params[:delete_channels])
+      if params[:delete_channel]
+        integration.delete_channels!(params[:delete_channel])
       end
-      integration.add_channels!(params[:add_channels]) if params[:add_channels]
+      return unless params[:add_channel]
+      integration.add_channels!(params[:add_channel],
+                                networks: @config.networks)
     end
   end
 end

@@ -19,7 +19,7 @@ module Codebot
     #
     # @param params [Hash] the parameters to initialize the network with
     def create(params)
-      network = Network.new(params)
+      network = Network.new(params.merge(config: {}))
       @config.transaction do
         check_name_available!(network.name)
         @config.networks << network
@@ -35,8 +35,6 @@ module Codebot
         network = find_network!(name)
         unless params[:name].nil?
           check_name_available_except!(params[:name], network)
-          IntegrationManager.new(@config).rename_network!(network,
-                                                          params[:name])
         end
         network.update!(params)
       end
@@ -77,8 +75,8 @@ module Codebot
     #
     # @param integration [Integration] the integration to check
     def check_channels!(integration)
-      integration.channels.map(&:network).each do |network_name|
-        find_network!(network_name)
+      integration.channels.map(&:network).map(&:name).each do |network|
+        find_network!(network)
       end
     end
 
