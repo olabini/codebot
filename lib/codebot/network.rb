@@ -155,8 +155,9 @@ module Codebot
 
     # Serializes this network.
     #
+    # @param _conf [Hash] the deserialized configuration
     # @return [Array, Hash] the serialized object
-    def serialize
+    def serialize(_conf)
       [name, Network.fields.map { |sym| [sym.to_s, send(sym)] }.to_h]
     end
 

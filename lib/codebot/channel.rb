@@ -24,7 +24,9 @@ module Codebot
     #
     # @param params [Hash] A hash with symbolic keys representing the instance
     #                      attributes of this channel. The keys +:name+ and
-    #                      +:network+ are required.
+    #                      +:network+ are required. Alternatively, the key
+    #                      +:identifier+, which should use the format
+    #                      +network/name+, can be specified.
     def initialize(params)
       update!(params)
     end
@@ -34,11 +36,11 @@ module Codebot
     # @param params [Hash] A hash with symbolic keys representing the instance
     #                      attributes of this channel.
     def update!(params)
-      self.identifier    = params[:identifier] unless params[:identifier].nil?
+      set_identifier params[:identifier], params[:config] if params[:identifier]
       self.name          = params[:name]
-      self.network       = params[:network]
       self.key           = params[:key]
       self.send_external = params[:send_external]
+      set_network params[:network], params[:config]
     end
 
     def name=(name)
@@ -48,8 +50,12 @@ module Codebot
                      invalid_error: 'invalid channel name %s'
     end
 
-    def network=(network)
-      @network = valid! network, valid_identifier(network), :@network,
+    # Sets the network for this channel.
+    #
+    # @param network [String] the name of the network
+    # @param conf [Hash] the configuration containing all networks
+    def set_network(network, conf)
+      @network = valid! network, valid_network(network, conf), :@network,
                         required: true,
                         required_error: 'channels must have a network',
                         invalid_error: 'invalid channel network %s'
@@ -80,20 +86,23 @@ module Codebot
     #
     # @return [String] the identifier
     def identifier
-      "#{@network}/#{@name}"
+      "#{@network.name}/#{@name}"
     end
 
     # Sets network and channel name based on the given identifier.
     #
     # @param identifier [String] the identifier
-    def identifier=(identifier)
-      self.network, self.name = identifier.split('/', 2) if identifier
+    # @param conf [Hash] the configuration containing all networks
+    def set_identifier(identifier, conf)
+      network_name, self.name = identifier.split('/', 2) if identifier
+      set_network(network_name, conf)
     end
 
     # Serializes this channel.
     #
+    # @param _conf [Hash] the deserialized configuration
     # @return [Array, Hash] the serialized object
-    def serialize
+    def serialize(_conf)
       [identifier, {
         'key'           => key,
         'send_external' => send_external

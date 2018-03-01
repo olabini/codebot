@@ -41,7 +41,7 @@ module Codebot
       self.name     = params[:name]
       self.endpoint = params[:endpoint]
       self.secret   = params[:secret]
-      self.channels = params[:channels]
+      set_channels params[:channels], params[:config]
     end
 
     # Adds the specified channels to this integration.
@@ -49,14 +49,15 @@ module Codebot
     # @note This method is not thread-safe and should only be called from an
     #       active transaction.
     # @param channels [Hash] the channel data to add
+    # @param conf [Hash] the previously deserialized configuration
     # @raise [CommandError] if one of the channel identifiers already exists
-    def add_channels!(channels)
+    def add_channels!(channels, conf)
       channels.each_key do |identifier|
         if @channels.any? { |chan| chan.identifier_eql?(identifier) }
           raise CommandError, "channel #{identifier.inspect} already exists"
         end
       end
-      new_channels = Channel.deserialize_all(channels)
+      new_channels = Channel.deserialize_all(channels, conf)
       @channels.push(*new_channels)
     end
 
@@ -97,8 +98,16 @@ module Codebot
       end
     end
 
-    def channels=(channels)
-      @channels = valid!(channels, Channel.deserialize_all(channels),
+    # Sets the list of channels.
+    #
+    # @param channels [Array<Channel>] the list of channels
+    # @param conf [Hash] the previously deserialized configuration
+    def set_channels(channels, conf)
+      if channels.nil?
+        @channels = [] if @channels.nil?
+        return
+      end
+      @channels = valid!(channels, Channel.deserialize_all(channels, conf),
                          :@channels,
                          invalid_error: 'invalid channel list %s') { [] }
     end
@@ -122,13 +131,25 @@ module Codebot
 
     # Serializes this integration.
     #
+    # @param conf [Hash] the deserialized configuration
     # @return [Array, Hash] the serialized object
-    def serialize
+    def serialize(conf)
+      check_channel_networks!(conf)
       [name, {
         'endpoint' => endpoint,
         'secret'   => secret,
-        'channels' => Channel.serialize_all(channels)
+        'channels' => Channel.serialize_all(channels, conf)
       }]
+    end
+
+    # Compares the channels against the specified configuration, dropping any
+    # channels belonging to networks that no longer exist.
+    #
+    # @param conf [Config] the configuration
+    def check_channel_networks!(conf)
+      @channels.select! do |channel|
+        conf[:networks].include? channel.network
+      end
     end
 
     # Deserializes an integration.

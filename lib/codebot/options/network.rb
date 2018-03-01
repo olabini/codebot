@@ -17,7 +17,7 @@ module Codebot
         option :secure, type: :boolean, aliases: '-s',
                         desc: 'Connect securely using TLS'
         option :server_password, desc: 'Set the server password'
-        option :nick, aliases: '-n',
+        option :nick, aliases: '-N',
                       desc: 'Set the nickname'
       end
 
@@ -53,9 +53,9 @@ module Codebot
       end
 
       desc 'update NAME', 'Edit an IRC network'
-      option :rename, aliases: '-r',
-                      banner: 'NEW-NAME',
-                      desc: 'Rename this network'
+      option :name, aliases: '-n',
+                    banner: 'NEW-NAME',
+                    desc: 'Rename this network'
       shared_propery_options
 
       # Updates the network with the specified name.
