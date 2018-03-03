@@ -38,12 +38,12 @@ module Codebot
                     desc: 'Rename this integration'
       shared_propery_options
       option :add_channel, aliases: '-a', type: :array,
-                            desc: 'Add a channel to this integration'
+                           desc: 'Add a channel to this integration'
       option :clear_channels, aliases: '-c', type: :boolean,
                               desc: 'Clear the channel list ' \
                                     '(default: false)'
       option :delete_channel, aliases: '-d', type: :array,
-                               desc: 'Delete a channel from this integration'
+                              desc: 'Delete a channel from this integration'
 
       # Updates the integration with the specified name.
       #

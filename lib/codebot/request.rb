@@ -21,5 +21,17 @@ module Codebot
       @integration = integration
       @payload     = Payload.new payload
     end
+
+    # Invokes the given block for each network this request needs to be
+    # delivered to.
+    #
+    # @yieldparam [Network] the network
+    # @yieldparam [Array<Channels>] channels that belong to the network and
+    #                               that a notification should be delivered to
+    def each_network
+      integration.channels.group_by(&:network).each do |network, channels|
+        yield network, channels
+      end
+    end
   end
 end

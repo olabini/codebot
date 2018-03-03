@@ -85,7 +85,7 @@ module Codebot
     # Sanitizes a network name.
     #
     # @param name [String] the name of the network
-    # @param networks [Array<Network>] all networks
+    # @param conf [Hash] the configuration containing all networks
     # @return [Network, nil] the corresponding network or +nil+ on error
     def valid_network(name, conf)
       return if name.nil?
