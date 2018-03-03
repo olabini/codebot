@@ -20,16 +20,22 @@ module Codebot
     #
     # @param request [Request] the request to dispatch
     def dispatch(request)
-      @requests << request
+      request.each_network do |network, channels|
+        connection = connection_to(network)
+        next if connection.nil?
+        channels.each do |channel|
+          connection.dispatch(Message.new(channel, request.payload))
+        end
+      end
     end
 
-    # Starts this IRC client.
+    # Starts the IRC client.
     def start
       @active = true
       migrate!
     end
 
-    # Stops this IRC client.
+    # Stops the IRC client.
     def stop
       @active = false
       @checkpoint.clear
@@ -56,7 +62,7 @@ module Codebot
     #
     # @param network [Network] the network
     # @return [IRCConnection, nil] the connection, or +nil+ if none was found
-    def connection_for(network)
+    def connection_to(network)
       @connections.find { |con| con.network.eql? network }
     end
 
@@ -65,7 +71,7 @@ module Codebot
     # @param network [Network] the network
     # @return [Boolean] +true+ if the client is connected, +false+ otherwise
     def connected_to?(network)
-      !connection_for(network).nil?
+      !connection_to(network).nil?
     end
 
     # Connects to a given network if the same network is not already connected.
@@ -80,7 +86,7 @@ module Codebot
     #
     # @param network [Network] the network to disconnected from
     def disconnect_from(network)
-      connection = @connections.delete connection_for(network)
+      connection = @connections.delete connection_to(network)
       connection.tap(&:stop).tap(&:join) unless connection.nil?
     end
   end
