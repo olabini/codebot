@@ -58,11 +58,20 @@ module Codebot
 
       private
 
+      # Ensures that a Codebot instance using the same pipe is not already
+      # running.
+      #
+      # @param opts [Hash] a hash containing the options that would be used for
+      #                    initializing a new core; specifically, a hash
+      #                    containing the +:pipe+ key to indicate the path to
+      #                    the named pipe used by the IPC server.
+      # @raise [CommandError] if the named pipe already exists
       def check_not_running!(opts)
         Options.with_ipc_client(opts) do |ipc|
           break unless ipc.pipe_exist?
-          raise CommandError, "named pipe #{ipc.pipe.inspect} already " \
-                              'exists; is there already a running instance?'
+          raise CommandError, 'named pipe already exists; if you are sure a ' \
+                              'Codebot instance is not already running, you ' \
+                              "can delete #{ipc.pipe.inspect}"
         end
       end
     end
