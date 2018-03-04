@@ -8,15 +8,20 @@ module Codebot
     # @return [Channel] the channel to send this message to
     attr_reader :channel
 
+    # @return [Symbol] the event that caused this message to be sent
+    attr_reader :event
+
     # @return [Payload] the parsed request payload
     attr_reader :payload
 
     # Constructs a new message for delivery to an IRC channel.
     #
     # @param channel [Channel] the channel to send this message to
+    # @param event [Symbol] the event that caused this message to be sent
     # @param payload [Payload] the parsed request payload
-    def initialize(channel, payload)
+    def initialize(channel, event, payload)
       @channel = channel
+      @event   = event
       @payload = payload
     end
 
@@ -24,7 +29,7 @@ module Codebot
     #
     # @return [String] the formatted message
     def format
-      payload.to_s[0..59] # TODO
+      "Received #{event}: #{payload.to_s[0..59]}" # TODO
     end
   end
 end

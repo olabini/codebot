@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'codebot/message'
 require 'codebot/payload'
 
 module Codebot
@@ -9,6 +10,9 @@ module Codebot
     # @return [Integration] the integration to deliver this request to
     attr_reader :integration
 
+    # @return [Symbol] the event that triggered the webhook delivery
+    attr_reader :event
+
     # @return [Payload] the parsed request payload
     attr_reader :payload
 
@@ -16,9 +20,11 @@ module Codebot
     #
     # @param integration [Integration] the integration for which the request
     #                                  was made
+    # @param event [Symbol] the event that triggered the webhook delivery
     # @param payload [String] a JSON string containing the request payload
-    def initialize(integration, payload)
+    def initialize(integration, event, payload)
       @integration = integration
+      @event       = event
       @payload     = Payload.new payload
     end
 
@@ -32,6 +38,14 @@ module Codebot
       integration.channels.group_by(&:network).each do |network, channels|
         yield network, channels
       end
+    end
+
+    # Creates a message for a given channel from this request.
+    #
+    # @param channel [Channel] the channel
+    # @return [Message] the created message
+    def to_message_for(channel)
+      Message.new(channel, @event, @payload)
     end
   end
 end
