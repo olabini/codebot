@@ -24,7 +24,7 @@ module Codebot
         connection = connection_to(network)
         next if connection.nil?
         channels.each do |channel|
-          connection.dispatch(Message.new(channel, request.payload))
+          connection.enqueue(Message.new(channel, request.payload))
         end
       end
     end
@@ -79,7 +79,7 @@ module Codebot
     # @param network [Network] the network to connect to
     def connect_to(network)
       return if connected_to? network
-      @connections << IRCConnection.new(network).tap { |c| c.start(network) }
+      @connections << IRCConnection.new(@core, network).tap(&:start)
     end
 
     # Disconnects from a given network if the network is currently connected.

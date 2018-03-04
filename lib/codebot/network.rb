@@ -95,6 +95,8 @@ module Codebot
 
     def nick=(nick)
       @nick = valid! nick, valid_string(nick), :@nick,
+                     required: true,
+                     required_error: "no nickname for #{@name.inspect} given",
                      invalid_error: 'invalid nickname %s'
     end
 

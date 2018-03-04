@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'codebot/message'
 require 'codebot/thread_controller'
 require 'codebot/ext/cinch/ssl_extensions'
 require 'cinch'
@@ -7,35 +8,103 @@ require 'cinch'
 module Codebot
   # This class manages an IRC connection running in a separate thread.
   class IRCConnection < ThreadController
+    # @return [Core] the bot this connection belongs to
+    attr_reader :core
+
     # @return [Network] the connected network
     attr_reader :network
 
     # Constructs a new IRC connection.
-    def initialize(network)
+    #
+    # @param core [Core] the bot this connection belongs to
+    # @param network [Network] the network to connect to
+    def initialize(core, network)
+      @core     = core
       @network  = network
-      @requests = Queue.new
+      @messages = Queue.new
     end
 
-    # Handles a request.
+    # Schedules a message for delivery.
     #
-    # @param request [Request] the request to handle
-    def handle(request)
-      @requests << request
+    # @param message [Message] the message
+    def enqueue(message)
+      @messages << message
+    end
+
+    # Starts a new managed thread if no thread is currently running.
+    # The thread invokes the +run+ method of the class that manages it.
+    #
+    # @return [Thread, nil] the newly created thread, or +nil+ if
+    #                       there was already a running thread
+    def start(*)
+      super(self)
     end
 
     private
 
     # Starts this IRC thread.
-    def run(network)
-      create_bot(network).start
+    #
+    # @param connection [IRCConnection] the connection the thread controls
+    def run(connection)
+      @connection = connection
+      bot = create_bot(connection)
+      thread = Thread.new { bot.start }
+      loop { deliver bot, dequeue }
+    ensure
+      thread.exit unless thread.nil?
+    end
+
+    # Dequeue the next message.
+    #
+    # @return the message
+    def dequeue
+      @messages.pop
+    end
+
+    # Delivers a message to an IRC channel.
+    #
+    # @param bot [Cinch::Bot] the IRC bot
+    # @param message [Message] the message to deliver
+    def deliver(bot, message)
+      channel = bot.Channel(message.channel.name)
+      channel.send message.format
+    end
+
+    # Gets the list of channels associated with this network.
+    #
+    # @param config [Config] the configuration to search
+    # @param network [Network] the network to search for
+    # @return [Array<Channel>] the list of channels
+    def channels(config, network)
+      config.integrations.map(&:channels).flatten.select do |channel|
+        network == channel.network
+      end
+    end
+
+    # Gets the list of channel names and keys associated with this network.
+    # Each array element is a string containing either the channel name if no
+    # key is needed, or the channel name and key, separated by a space.
+    #
+    # @param config [Config] the configuration to search
+    # @param network [Network] the network to search for
+    # @return [Array<String>] the list of channel names and keys
+    def channel_array(config, network)
+      channels(config, network).map do |channel|
+        "#{channel.name} #{channel.key}".strip
+      end
     end
 
     # Constructs a new bot for the given IRC network.
-    def create_bot(net) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    #
+    # @param con [IRCConnection] the connection the thread controls
+    def create_bot(con) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      net = con.network
+      chan_ary = channel_array(con.core.config, network)
       Cinch::Bot.new do
         configure do |c|
+          c.channels      = chan_ary
           c.local_host    = net.bind
-          c.modes         = net.modes.gsub(/\A\+/, '').chars.uniq
+          c.modes         = net.modes.to_s.gsub(/\A\+/, '').chars.uniq
           c.nick          = net.nick
           c.password      = net.server_password
           c.port          = net.port || (net.secure ? 6697 : 6667)
