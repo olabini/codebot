@@ -74,6 +74,7 @@ module Codebot
       request.body.rewind
       body = request.body.read
       secret = integration.secret
+      return true if secret.nil? || secret.empty?
       request_signature = request.env['HTTP_X_HUB_SIGNATURE']
       Cryptography.valid_signature?(body, secret, request_signature)
     end
