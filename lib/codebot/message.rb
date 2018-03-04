@@ -30,7 +30,7 @@ module Codebot
     #
     # @return [String] the formatted message
     def format
-      Formatters.format(@event, @payload.to_json)
+      "\u000f" + Formatters.format(@event, @payload.to_json)
     end
   end
 end
