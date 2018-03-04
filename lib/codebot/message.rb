@@ -19,5 +19,12 @@ module Codebot
       @channel = channel
       @payload = payload
     end
+
+    # Formats this message for delivery to an IRC channel.
+    #
+    # @return [String] the formatted message
+    def format
+      payload.to_s[0..59] # TODO
+    end
   end
 end
