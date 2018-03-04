@@ -18,7 +18,7 @@ module Codebot
       payload = params['payload'] || request.body.read
       dispatch(core, request, *params['splat'], payload)
     rescue JSON::ParserError
-      [400, 'Invalid JSON Payload']
+      [400, 'Invalid JSON payload']
     end
 
     # Finds the integration associated with an endpoint.
@@ -38,10 +38,10 @@ module Codebot
     # @return [Array<Integer, String>] HTTP status code and response
     def dispatch(core, request, endpoint, payload)
       integration = integration_for(core.config, endpoint)
-      return [404, 'Endpoint Not Registered'] if integration.nil?
-      return [403, 'Invalid Signature'] unless valid?(request, integration)
+      return [404, 'Endpoint not registered'] if integration.nil?
+      return [403, 'Invalid signature'] unless valid?(request, integration)
       req = create_request(integration, request, payload)
-      return [400, 'Missing Event Header'] if req.nil?
+      return req if req.is_a? Array
       core.irc_client.dispatch(req)
       [202, 'Accepted']
     end
@@ -52,10 +52,15 @@ module Codebot
     #                                  was made
     # @param request [Sinatra::Request] the request received by the web server
     # @param payload [String] the payload that was sent to the endpoint
-    # @return [Request] the created request, or +nil+ if the request received
-    #                   by the web server was invalid
+    # @return [Request, Array<Integer, String>] the created request, or an
+    #                                           array containing HTTP status
+    #                                           code and response if the
+    #                                           request was invalid
     def create_request(integration, request, payload)
-      event = Event.symbolize(request.env['HTTP_X_GITHUB_EVENT'])
+      event = request.env['HTTP_X_GITHUB_EVENT']
+      return [400, 'Missing event header'] if event.nil? || event.empty?
+      event = Event.symbolize(event)
+      return [501, 'Event not yet supported'] if event.nil?
       Request.new(integration, event, payload) unless event.nil?
     end
 

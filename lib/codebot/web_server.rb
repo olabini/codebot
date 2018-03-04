@@ -35,7 +35,7 @@ module Codebot
         end
 
         error Sinatra::NotFound do
-          [405, 'Method Not Allowed']
+          [405, 'Method not allowed']
         end
       end
     end
