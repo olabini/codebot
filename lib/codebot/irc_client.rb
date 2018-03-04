@@ -24,7 +24,8 @@ module Codebot
         connection = connection_to(network)
         next if connection.nil?
         channels.each do |channel|
-          connection.enqueue(Message.new(channel, request.payload))
+          message = request.to_message_for channel
+          connection.enqueue message
         end
       end
     end
