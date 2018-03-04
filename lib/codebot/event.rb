@@ -5,6 +5,7 @@ module Codebot
   module Event
     # The currently supported events.
     VALID_SYMBOLS = %i[
+      ping
     ].freeze
 
     # TODO: Support for commit_comment
