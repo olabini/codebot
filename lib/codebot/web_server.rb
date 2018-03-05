@@ -30,13 +30,9 @@ module Codebot
       Sinatra.new do
         include WebListener
 
-        post '/*' do
-          handle_post(core, request, params)
-        end
-
-        error Sinatra::NotFound do
-          [405, 'Method not allowed']
-        end
+        configure { disable :traps }
+        post('/*') { handle_post(core, request, params) }
+        error(Sinatra::NotFound) { [405, 'Method not allowed'] }
       end
     end
   end

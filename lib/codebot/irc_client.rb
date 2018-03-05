@@ -41,8 +41,13 @@ module Codebot
       @active = false
       @checkpoint.clear
       @connections.each(&:stop)
-      @connections.each(&:join)
+      join
       @connections.clear
+    end
+
+    # Waits for active connections to finish.
+    def join
+      @connections.each(&:join)
     end
 
     # Connects to and disconnects from networks as necessary in order for the
