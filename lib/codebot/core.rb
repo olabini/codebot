@@ -46,10 +46,15 @@ module Codebot
       @irc_client.stop
     end
 
-    # Waits for this bot to stop.
+    # Waits for this bot to stop. If any of the managed threads finish early,
+    # the bot is shut down immediately.
     def join
-      @ipc_server.join
-      @web_server.join
+      ipc = Thread.new { @ipc_server.join && stop }
+      web = Thread.new { @web_server.join && stop }
+      irc = Thread.new { @irc_client.join && stop }
+      ipc.join
+      web.join
+      irc.join
     end
 
     # Requests that the running threads migrate to an updated configuration.
