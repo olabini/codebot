@@ -30,7 +30,52 @@ $ gem install codebot
 
 ## Usage
 
-TODO: Add instructions here
+First, add the IRC networks you want to send notifications to. Remove `--secure`
+to connect on port `6667` without TLS.
+
+```
+$ codebot network create freenode --host chat.freenode.net --nick git --secure
+```
+
+Next, create an integration to route a webhook endpoint to a set of IRC channels:
+
+```
+$ codebot integration create project-name -c freenode/#channel1 -c freenode/#channel2
+```
+
+You can then add a GitHub webhook to any repositories and organizations you'd
+like to receive notifications from.
+
+![Sample webhook configuration](webhook.png)
+
+**Payload URL** should be in the format `protocol://your-server:4567/endpoint`,
+where `protocol` is either `http` or `https`, `your-server` is the IP address
+or hostname of the server running Codebot, and `endpoint` is replaced with the
+endpoint of the integration created in the previous step.
+
+**Content type** can be set to either value, but `application/json` is
+recommended.
+
+**Secret** should be set to the secret of the integration created in the
+previous step. This value is used for verifying the integrity of payloads.
+
+You may want to choose *Let me select individual events* if you do not want to
+receive notifications for all events Codebot supports.
+
+After adding the webhook to your GitHub repository or organization, you can
+manage your Codebot instance using the following commands:
+
+```
+$ codebot core start       # Starts a new instance in the background (as a daemon)
+$ codebot core stop        # Stops an active Codebot instance
+$ codebot core interactive # Starts Codebot interactively without forking
+```
+
+For more information, see `codebot help`, `codebot network --help`,
+`codebot integration --help`, and `codebot core --help`.
+
+The configuration is stored in `~/.codebot.yml`, but it is not recommended to
+edit this file manually.
 
 ## Development
 
