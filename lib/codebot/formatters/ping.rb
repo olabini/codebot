@@ -27,7 +27,7 @@ module Codebot
                 when /\Arepository\z/i
                   extract(payload, :repository, :name)
                 end
-        "[\u000313#{scope}\u000f]" if payload
+        format_repository(scope)
       end
     end
   end

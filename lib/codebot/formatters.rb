@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'codebot/formatters/ping'
+require 'cinch'
 
 module Codebot
   # This module provides methods for formatting outgoing IRC messages.
@@ -15,6 +16,22 @@ module Codebot
       when :ping then Formatters::Ping.format payload
       else "Error: missing formatter for #{event.inspect}"
       end
+    end
+
+    # Formats a repository name.
+    #
+    # @param repository [String] the name
+    # @return [String] the formatted name
+    def format_repository(repository)
+      ::Cinch::Formatting.format(:pink, repository)
+    end
+
+    # Formats a user name.
+    #
+    # @param user [String] the name
+    # @return [String] the formatted name
+    def format_user(user)
+      ::Cinch::Formatting.format(:silver, user)
     end
 
     # Safely extracts a value from a JSON object.
