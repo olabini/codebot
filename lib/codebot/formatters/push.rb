@@ -7,8 +7,6 @@ module Codebot
   module Formatters
     # This class formats push events.
     class Push < Formatter # rubocop:disable Metrics/ClassLength
-      extend Formatters
-
       # Formats IRC messages for a push event.
       #
       # @return [Array<String>] the formatted messages
@@ -30,17 +28,17 @@ module Codebot
           if tag?
             msg << " tagged #{format_branch tag_name} at "
             msg << if base_ref
-                         format_branch(base_ref_name)
-                       else
-                         format_hash(after_sha)
-                       end
+                     format_branch(base_ref_name)
+                   else
+                     format_hash(after_sha)
+                   end
           else
             msg << " created #{format_branch branch_name}"
             msg << if base_ref
-                         " from #{format_branch base_ref_name}"
-                       else
-                         " at #{format_hash after_sha}"
-                       end
+                     " from #{format_branch base_ref_name}"
+                   else
+                     " at #{format_hash after_sha}"
+                   end
 
             len = distinct_commits.length
             msg << " (+#{format_number len, 'new commit', 'new commits'})"
@@ -71,11 +69,11 @@ module Codebot
         msg
       end
 
-      def format_commit_message(commit)
+      def format_commit_message(commit) # rubocop:disable Metrics/AbcSize
         lines = commit['message'].to_s.lines
         title = lines.first.strip
         title << '...' unless lines.one?
-        author = commit['author']&.[]('name')
+        author = commit['author']['name'] if commit['author'].is_a? Hash
         sha = commit['id'].to_s
         "#{format_repository repository_name}/#{format_branch branch_name} " \
         "#{format_hash sha[0..6]} #{format_user author}: #{title}"
@@ -105,7 +103,7 @@ module Codebot
       end
 
       def tag?
-        %r|\Arefs/tags/|.match? ref
+        %r{\Arefs/tags/}.match? ref
       end
 
       def commits

@@ -4,8 +4,6 @@ module Codebot
   module Formatters
     # This class formats ping events.
     class Ping < Formatter
-      extend Formatters
-
       # Formats IRC messages for a ping event.
       #
       # @return [Array<String>] the formatted messages
