@@ -23,6 +23,14 @@ module Codebot
       ['An unknown event occurred']
     end
 
+    # Shortens the summary URL. If this method is used, the child class must
+    # implement the +#summary_url+ method.
+    #
+    # @return [String] the shortened summary URL
+    def url
+      shorten_url summary_url
+    end
+
     # Formats a repository name.
     #
     # @param repository [String] the name

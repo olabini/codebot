@@ -16,10 +16,6 @@ module Codebot
         end
       end
 
-      def url
-        shorten_url summary_url
-      end
-
       def summary # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/LineLength
         msg = "[#{format_repository repository_name}]"
         msg << " #{format_user(pusher_name)}"
