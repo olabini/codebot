@@ -22,6 +22,7 @@ module Codebot
       @core     = core
       @network  = network
       @messages = Queue.new
+      @ready    = Queue.new
     end
 
     # Schedules a message for delivery.
@@ -29,6 +30,11 @@ module Codebot
     # @param message [Message] the message
     def enqueue(message)
       @messages << message
+    end
+
+    # Sets this connection to be available for delivering messages.
+    def set_ready!
+      @ready << true if @ready.empty?
     end
 
     # Starts a new managed thread if no thread is currently running.
@@ -49,6 +55,7 @@ module Codebot
       @connection = connection
       bot = create_bot(connection)
       thread = Thread.new { bot.start }
+      @ready.pop
       loop { deliver bot, dequeue }
     ensure
       thread.exit unless thread.nil?
@@ -116,6 +123,8 @@ module Codebot
           c.ssl.verify    = net.secure
           c.user          = Codebot::PROJECT.downcase
         end
+
+        on(:join) { con.set_ready! }
       end
     end
   end
