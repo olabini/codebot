@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'net/http'
+require 'uri'
+
 module Codebot
   # This class formats events.
   class Formatter
@@ -47,6 +50,20 @@ module Codebot
         break unless node.is_a? Hash
         node = node[sub.to_s]
       end
+    end
+
+    # Shortens a URL with GitHub's git.io URL shortener. The domain must belong
+    # to GitHub.
+    #
+    # @param url [String] the long URL
+    # @return [String] the shortened URL, or the original URL if an error
+    #                  occurred.
+    def shorten_url(url)
+      uri = URI('https://git.io')
+      res = Net::HTTP.post_form uri, 'url' => url
+      res['location'] || url
+    rescue StandardError
+      url
     end
   end
 end
