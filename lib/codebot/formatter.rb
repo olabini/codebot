@@ -91,6 +91,20 @@ module Codebot
       ::Cinch::Formatting.format(:red, text.to_s)
     end
 
+    # Extracts the repository name from the payload.
+    #
+    # @return [String, nil] the repository name
+    def repository_name
+      extract(:repository, :name)
+    end
+
+    # Extracts the repository URL from the payload.
+    #
+    # @return [String, nil] the repository URL
+    def repository_url
+      extract(:repository, :url)
+    end
+
     # Safely extracts a value from a JSON object.
     #
     # @param path [Array<#to_s>] the path to traverse
