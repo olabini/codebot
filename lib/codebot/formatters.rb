@@ -20,6 +20,7 @@ module Codebot
       messages.map! { |msg| ::Cinch::Formatting.unformat(msg) } unless color
       messages
     rescue StandardError => e
+      STDERR.puts e.message
       STDERR.puts e.backtrace
       url = ::Cinch::Formatting.format(:blue, :underline, FORMATTER_ISSUE_URL)
       ['An error occurred while formatting this message. More information ' \
