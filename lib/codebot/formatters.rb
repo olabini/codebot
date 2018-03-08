@@ -19,6 +19,11 @@ module Codebot
       messages.map! { |msg| "\x0F" + msg }
       messages.map! { |msg| ::Cinch::Formatting.unformat(msg) } unless color
       messages
+    rescue StandardError => e
+      STDERR.puts e.backtrace
+      url = ::Cinch::Formatting.format(:blue, :underline, FORMATTER_ISSUE_URL)
+      ['An error occurred while formatting this message. More information ' \
+       "has been printed to STDERR. Please report this issue to #{url}."]
     end
 
     # Formats colored IRC messages. This method should not be called directly
