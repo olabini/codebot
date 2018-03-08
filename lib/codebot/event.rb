@@ -6,6 +6,7 @@ module Codebot
     # The currently supported events.
     VALID_SYMBOLS = %i[
       ping
+      push
     ].freeze
 
     # TODO: Support for commit_comment
@@ -34,7 +35,6 @@ module Codebot
     # TODO: Support for pull_request_review_comment
     # TODO: Support for pull_request_review
     # TODO: Support for pull_request
-    # TODO: Support for push
     # TODO: Support for repository
     # TODO: Support for release
     # TODO: Support for status
