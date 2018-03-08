@@ -28,7 +28,7 @@ module Codebot
 
     # Formats this message for delivery to an IRC channel.
     #
-    # @return [String] the formatted message
+    # @return [Array<String>] the formatted IRC messages
     def format
       Formatters.format(@event, @payload.to_json)
     end

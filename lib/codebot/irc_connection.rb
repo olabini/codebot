@@ -74,7 +74,9 @@ module Codebot
     # @param message [Message] the message to deliver
     def deliver(bot, message)
       channel = bot.Channel(message.channel.name)
-      channel.send message.format
+      message.format.each do |msg|
+        channel.send msg
+      end
     end
 
     # Gets the list of channels associated with this network.

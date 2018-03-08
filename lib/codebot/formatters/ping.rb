@@ -6,11 +6,11 @@ module Codebot
     class Ping < Formatter
       extend Formatters
 
-      # Formats an IRC message for a ping event.
+      # Formats IRC messages for a ping event.
       #
-      # @return [String] the formatted message
+      # @return [Array<String>] the formatted messages
       def format
-        "#{format_scope} Received ping: #{extract :zen}"
+        ["#{format_scope} Received ping: #{extract :zen}"]
       end
 
       # Formats the name of the repository or organization the webhook belongs

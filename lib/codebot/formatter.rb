@@ -13,11 +13,11 @@ module Codebot
       @payload = payload
     end
 
-    # Formats an IRC message for an unknown event.
+    # Formats IRC messages for an unknown event.
     #
-    # @return [String] the formatted message
+    # @return [Array<String>] the formatted messages
     def format
-      'An unknown event occurred'
+      ['An unknown event occurred']
     end
 
     # Formats a repository name.
