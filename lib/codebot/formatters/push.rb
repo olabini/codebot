@@ -106,14 +106,6 @@ module Codebot
         extract(:commits)
       end
 
-      def repository_name
-        extract(:repository, :name)
-      end
-
-      def repository_url
-        extract(:repository, :url)
-      end
-
       def pusher_name
         extract(:pusher, :name) || 'somebody'
       end
