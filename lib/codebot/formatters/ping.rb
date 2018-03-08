@@ -2,32 +2,29 @@
 
 module Codebot
   module Formatters
-    # This module provides a formatter for ping events.
-    module Ping
+    # This class formats ping events.
+    class Ping < Formatter
       extend Formatters
 
       # Formats an IRC message for a ping event.
       #
-      # @param payload [Object] the JSON payload object
       # @return [String] the formatted message
-      def self.format(payload)
-        zen = extract payload, :zen
-        "#{format_scope payload} Received ping: #{zen.inspect}"
+      def format
+        "#{format_scope} Received ping: #{extract :zen}"
       end
 
       # Formats the name of the repository or organization the webhook belongs
       # to.
       #
-      # @param payload [Object] the JSON payload object
       # @return [String] the formatted scope
-      def self.format_scope(payload)
-        scope = case extract(payload, :hook, :type)
+      def format_scope
+        scope = case extract(:hook, :type)
                 when /\Aorganization\z/i
-                  extract(payload, :organization, :login)
+                  extract(:organization, :login)
                 when /\Arepository\z/i
-                  extract(payload, :repository, :name)
+                  extract(:repository, :name)
                 end
-        format_repository(scope)
+        "[#{format_repository(scope)}]"
       end
     end
   end
