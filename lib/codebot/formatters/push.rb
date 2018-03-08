@@ -146,7 +146,7 @@ module Codebot
       end
 
       def compare_url
-        payload(:compare)
+        extract(:compare)
       end
 
       def before_sha
