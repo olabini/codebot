@@ -9,4 +9,7 @@ module Codebot
 
   # The project website.
   WEBSITE = 'https://github.com/janikrabe/codebot'.freeze
+
+  # The URL to report issues with a message formatter to.
+  FORMATTER_ISSUE_URL = 'https://git.io/formatter-issue'.freeze
 end
