@@ -74,7 +74,7 @@ module Codebot
     # @param message [Message] the message to deliver
     def deliver(bot, message)
       channel = bot.Channel(message.channel.name)
-      message.format.each do |msg|
+      message.format.to_a.each do |msg|
         channel.send msg
       end
     end
