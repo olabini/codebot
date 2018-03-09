@@ -84,7 +84,7 @@ module Codebot
         elsif deleted? then before_sha_url
         elsif forced?  then branch_url
         elsif distinct_commits.length == 1
-          distinct_commits.first['url']
+          distinct_commits.first['url'].to_s
         else
           compare_url
         end
@@ -134,11 +134,11 @@ module Codebot
       end
 
       def branch_url
-        repository_url + '/commits/' + branch_name
+        "#{repository_url}/commits/#{branch_name}"
       end
 
       def compare_url
-        extract(:compare)
+        extract(:compare).to_s
       end
 
       def before_sha
@@ -146,7 +146,7 @@ module Codebot
       end
 
       def before_sha_url
-        repository_url + '/commits/' + before_sha
+        "#{repository_url}/commits/#{before_sha}"
       end
 
       def after_sha
@@ -154,7 +154,7 @@ module Codebot
       end
 
       def after_sha_url
-        repository_url + '/commits/' + after_sha
+        "#{repository_url}/commits/#{after_sha}"
       end
 
       def distinct_commits
