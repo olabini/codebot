@@ -51,10 +51,9 @@ module Codebot
     def join
       ipc = Thread.new { @ipc_server.join && stop }
       web = Thread.new { @web_server.join && stop }
-      irc = Thread.new { @irc_client.join && stop }
       ipc.join
       web.join
-      irc.join
+      @irc_client.join
     end
 
     # Requests that the running threads migrate to an updated configuration.
