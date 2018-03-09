@@ -5,13 +5,13 @@ module Codebot
   module Event
     # The currently supported events.
     VALID_SYMBOLS = %i[
+      commit_comment
       issue_comment
       issues
       ping
       push
     ].freeze
 
-    # TODO: Support for commit_comment
     # TODO: Support for create
     # TODO: Support for delete
     # TODO: Support for deployment
