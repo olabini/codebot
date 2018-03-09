@@ -60,7 +60,7 @@ module Codebot
       self.bind            = params[:bind]
       self.modes           = params[:modes]
       update_connection(params[:host], params[:port], params[:secure])
-      update_sasl(params[:no_sasl],
+      update_sasl(params[:disable_sasl],
                   params[:sasl_username], params[:sasl_password])
     end
 
