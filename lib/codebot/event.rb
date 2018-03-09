@@ -14,6 +14,7 @@ module Codebot
       pull_request
       pull_request_review_comment
       push
+      watch
     ].freeze
 
     # TODO: Support for create
@@ -40,7 +41,6 @@ module Codebot
     # TODO: Support for status
     # TODO: Support for team
     # TODO: Support for team_add
-    # TODO: Support for watch
 
     # Converts a webhook event to its corresponding symbol.
     #
