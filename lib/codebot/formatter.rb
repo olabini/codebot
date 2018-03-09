@@ -126,7 +126,7 @@ module Codebot
     #
     # @return [String, nil] the repository URL
     def repository_url
-      extract(:repository, :url)
+      extract(:repository, :html_url)
     end
 
     # Extracts the action from the payload.
