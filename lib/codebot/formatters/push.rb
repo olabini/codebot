@@ -70,9 +70,8 @@ module Codebot
         title = message.lines.first[0..199].strip
         title << '...' unless title.eql? message.strip
         author = commit['author']['name'] if commit['author'].is_a? Hash
-        sha = commit['id'].to_s
         "#{format_repository repository_name}/#{format_branch branch_name} " \
-        "#{format_hash sha[0..6]} #{format_user author}: #{title}"
+        "#{format_hash commit['id']} #{format_user author}: #{title}"
       end
 
       def full_commit_message(commit)
@@ -142,7 +141,7 @@ module Codebot
       end
 
       def before_sha
-        extract(:before).to_s[0..6]
+        extract(:before).to_s
       end
 
       def before_sha_url
@@ -150,7 +149,7 @@ module Codebot
       end
 
       def after_sha
-        extract(:after).to_s[0..6]
+        extract(:after).to_s
       end
 
       def after_sha_url

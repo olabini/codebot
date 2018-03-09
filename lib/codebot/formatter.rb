@@ -52,7 +52,7 @@ module Codebot
     # @param hash [String] the hash
     # @return [String] the formatted hash
     def format_hash(hash)
-      ::Cinch::Formatting.format(:grey, hash.to_s)
+      ::Cinch::Formatting.format(:grey, hash.to_s[0..6])
     end
 
     # Formats a user name.
