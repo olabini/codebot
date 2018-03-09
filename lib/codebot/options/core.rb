@@ -24,15 +24,12 @@ module Codebot
 
       # Starts a new Codebot instance in the background.
       def start
-        Options.with_errors do
-          unless Process.respond_to?(:fork)
-            raise CommandError, 'this feature is not available on ' \
-                                "#{RUBY_PLATFORM}; please use the " \
-                                "'interactive' command instead"
-          end
-        end
+        Options.with_errors { check_fork_supported! }
         check_not_running!(options)
-        fork { interactive }
+        fork do
+          dup2_fds
+          interactive
+        end
       end
 
       desc 'stop', 'Stop a running Codebot instance'
@@ -73,6 +70,41 @@ module Codebot
                               'Codebot instance is not already running, you ' \
                               "can delete #{ipc.pipe.inspect}"
         end
+      end
+
+      # Ensures that the current platform supports the Process::fork method,
+      # raising an error if it does not.
+      #
+      # @raise [CommandError] if forking is not supported
+      def check_fork_supported!
+        return if Process.respond_to?(:fork)
+        raise CommandError, 'this feature is not available on ' \
+                            "#{RUBY_PLATFORM}; please use the " \
+                            "'interactive' command instead"
+      end
+
+      # Reopens the standard file descriptors to prevent the forked process
+      # from inheriting the file descriptors of the parent process. This method
+      # reopens streams using a method similar to the Unix dup2 function.
+      #
+      # @param sin [File] the file to redirect into the standard input stream,
+      #                    or +nil+ to detach and immediately close the stream.
+      # @param sout [File] the file to redirect the standard output stream to,
+      #                    or +nil+ to discard any data written to the stream.
+      # @param serr [File] the file to redirect the standard error stream to,
+      #                    or +nil+ to discard any data written to the stream.
+      def dup2_fds(sin: nil, sout: nil, serr: nil)
+        $stdin.reopen(sin || null_file('r'))
+        $stdout.reopen(sout || null_file('w'))
+        $stderr.reopen(serr || null_file('w'))
+      end
+
+      # Creates a new null file.
+      #
+      # @param mode [String] the mode to open the file in
+      # @return [File] the created file
+      def null_file(mode)
+        File.new(File::NULL, mode)
       end
     end
   end
