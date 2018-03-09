@@ -54,6 +54,21 @@ module Codebot
       end
     end
 
+    # Lists all networks, or networks with names containing the given search
+    # term.
+    #
+    # @param search [String, nil] an optional search term
+    def list(search)
+      @config.transaction do
+        networks = @config.networks.dup
+        unless search.nil?
+          networks.select! { |net| net.name.downcase.include? search.downcase }
+        end
+        puts 'No networks found' if networks.empty?
+        networks.each { |net| show_network net }
+      end
+    end
+
     # Finds a network given its name.
     #
     # @param name [String] the name to search for

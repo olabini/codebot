@@ -68,6 +68,18 @@ module Codebot
         end
       end
 
+      desc 'list [SEARCH]', 'List networks'
+
+      # Lists all networks, or networks with names containing the given search
+      # term.
+      #
+      # @param search [String, nil] an optional search term
+      def list(search = nil)
+        Options.with_core(parent_options, true) do |core|
+          NetworkManager.new(core.config).list(search)
+        end
+      end
+
       desc 'destroy NAME', 'Delete an IRC network'
 
       # Destroys the network with the specified name.
