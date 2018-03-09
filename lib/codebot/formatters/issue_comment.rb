@@ -12,8 +12,7 @@ module Codebot
       end
 
       def summary
-        short = comment_body.lines.first[0..199].strip
-        short << '...' unless short.eql? comment_body.strip
+        short = abbreviate comment_body
         "[#{format_repository repository_name}] #{format_user sender_name} " \
         "commented on issue \##{issue_number}: #{short}"
       end
