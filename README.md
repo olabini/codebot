@@ -47,49 +47,79 @@ $ gem install codebot
 
 ## Usage
 
+It only takes a few minutes to get Codebot up and running.
+
+### Add a network
+
 First, add the IRC networks you want to send notifications to. Remove `--secure`
-to connect on port `6667` without TLS.
+if you need to connect without TLS.
 
 ```
-$ codebot network create freenode --host chat.freenode.net --nick git --secure
+$ codebot network create freenode --host chat.freenode.net --nick bot --secure
+  Network was successfully created
+  Network: freenode
+      Server:     chat.freenode.net:6697 (secure connection)
+      Nickname:   bot
+      SASL authentication disabled
 ```
 
-Next, create an integration to route a webhook endpoint to a set of IRC channels:
+### Add an integration
+
+Next, create an integration to route an endpoint to a set of IRC channels:
 
 ```
-$ codebot integration create project-name -c freenode/#channel1 -c freenode/#channel2
+$ codebot integration create my-project -c freenode/#chan1 freenode/#chan2
+  Integration was successfully created
+  Integration: my-project
+      Endpoint: cc5dc492-1b6a-4e13-9da9-a9cc740add1d
+      Secret:   WIcSmr6bsHmv9EmaONMQ1dViu5ziKYN3gUhXoyZBh3M=
+      Channels:
+          - #chan1 on freenode
+          - #chan2 on freenode
 ```
 
-You can then add a GitHub webhook to any repositories and organizations you'd
-like to receive notifications from.
+### Configure your webhook
+
+You can now [add a GitHub webhook][newhook] to any repositories and
+organizations you'd like to receive notifications from.
 
 ![Sample webhook configuration](webhook.png)
 
-**Payload URL** should be in the format `protocol://your-server:4567/endpoint`,
-where `protocol` is either `http` or `https`, `your-server` is the IP address
-or hostname of the server running Codebot, and `endpoint` is replaced with the
-endpoint of the integration created in the previous step.
+Unless configured otherwise, your **Payload URL** should be
+`http://server:4567/endpoint`, where `server` is the IP address or host name of
+the server Codebot is running on, and `endpoint` is the endpoint generated in
+the previous step.
 
-**Content type** can be set to either value, but `application/json` is
-recommended.
+Both possible values for **Content type** are supported, but it is recommended
+to use `application/json` instead of `application/x-www-form-encoded`.
 
 **Secret** should be set to the secret of the integration created in the
 previous step. This value is used for verifying the integrity of payloads.
 
-You may want to choose *Let me select individual events* if you do not want to
-receive notifications for all events Codebot supports.
+You may want to choose **Let me select individual events** if you do not wish
+to receive notifications for all supported events.
+
+### Start Codebot
 
 After adding the webhook to your GitHub repository or organization, you can
 manage your Codebot instance using the following commands:
 
 ```
-$ codebot core start       # Starts a new instance in the background (as a daemon)
-$ codebot core stop        # Stops an active Codebot instance
-$ codebot core interactive # Starts Codebot interactively without forking
+$ codebot core start       # Starts Codebot in the background (as a daemon)
+$ codebot core stop        # Stops the active Codebot instance
+$ codebot core interactive # Starts Codebot in the foreground (interactively)
 ```
 
-For more information, see `codebot help`, `codebot network --help`,
-`codebot integration --help`, and `codebot core --help`.
+For more information, please consult the following commands:
+
+```
+$ codebot help                      # General help
+$ codebot network --help            # Commands for managing networks
+$ codebot network update --help     # Possible settings for networks
+$ codebot integration --help        # Commands for managing integrations
+$ codebot integration update --help # Possible settings for integrations
+$ codebot core --help               # Commands for managing active instances
+```
 
 The configuration is stored in `~/.codebot.yml`, but it is not recommended to
 edit this file manually.
@@ -103,9 +133,13 @@ To install this gem onto your local machine, run `bundle exec rake install`.
 To release a new version, update the version number in `version.rb`, and then
 run `bundle exec rake release`, which will create a git tag for the version,
 push git commits and tags, and push the `.gem` file to
-[RubyGems](https://rubygems.org/gems/codebot).
+[RubyGems][rubygem].
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-[janikrabe/codebot](https://github.com/janikrabe/codebot).
+[janikrabe/codebot][github].
+
+[github]: https://github.com/janikrabe/codebot "codebot on GitHub"
+[rubygem]: https://rubygems.org/gems/codebot "codebot on RubyGems.org"
+[newhook]: https://developer.github.com/webhooks/creating/#setting-up-a-webhook
