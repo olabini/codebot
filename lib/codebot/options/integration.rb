@@ -62,7 +62,7 @@ module Codebot
       # @param name [String] the name of the integration
       def destroy(name)
         Options.with_core(parent_options, true) do |core|
-          IntegrationManager.new(core.config).destroy(name)
+          IntegrationManager.new(core.config).destroy(name, options)
         end
       end
 

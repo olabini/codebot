@@ -66,6 +66,10 @@ module Codebot
                     invalid_error: 'invalid channel key %s'
     end
 
+    def key?
+      !key.to_s.strip.empty?
+    end
+
     def send_external=(send_external)
       @send_external = valid!(send_external, valid_boolean(send_external),
                               :@send_external,
