@@ -6,6 +6,7 @@ require 'codebot/formatters/commit_comment'
 require 'codebot/formatters/issue_comment'
 require 'codebot/formatters/issues'
 require 'codebot/formatters/ping'
+require 'codebot/formatters/pull_request'
 require 'codebot/formatters/push'
 
 module Codebot
@@ -36,12 +37,13 @@ module Codebot
     # @param event [Symbol] the webhook event
     # @param payload [Object] the JSON payload object
     # @return [Array<String>] the formatted messages
-    def self.format_color(event, payload)
+    def self.format_color(event, payload) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/LineLength
       case event
       when :commit_comment then Formatters::CommitComment.new(payload).format
       when :issue_comment then Formatters::IssueComment.new(payload).format
       when :issues then Formatters::Issues.new(payload).format
       when :ping then Formatters::Ping.new(payload).format
+      when :pull_request then Formatters::PullRequest.new(payload).format
       when :push then Formatters::Push.new(payload).format
       else "Error: missing formatter for #{event.inspect}"
       end
