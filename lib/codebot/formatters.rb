@@ -7,6 +7,7 @@ require 'codebot/formatters/gollum'
 require 'codebot/formatters/issue_comment'
 require 'codebot/formatters/issues'
 require 'codebot/formatters/ping'
+require 'codebot/formatters/public'
 require 'codebot/formatters/pull_request'
 require 'codebot/formatters/pull_request_review_comment'
 require 'codebot/formatters/push'
@@ -46,6 +47,7 @@ module Codebot
       when :issue_comment then Formatters::IssueComment.new(payload).format
       when :issues then Formatters::Issues.new(payload).format
       when :ping then Formatters::Ping.new(payload).format
+      when :public then Formatters::Public.new(payload).format
       when :pull_request then Formatters::PullRequest.new(payload).format
       when :pull_request_review_comment
         Formatters::PullRequestReviewComment.new(payload).format
