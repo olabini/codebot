@@ -3,6 +3,7 @@
 require 'cinch'
 require 'codebot/formatter'
 require 'codebot/formatters/commit_comment'
+require 'codebot/formatters/fork'
 require 'codebot/formatters/gollum'
 require 'codebot/formatters/issue_comment'
 require 'codebot/formatters/issues'
@@ -44,6 +45,7 @@ module Codebot
     def self.format_color(event, payload) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/LineLength
       case event
       when :commit_comment then Formatters::CommitComment.new(payload).format
+      when :fork then Formatters::Fork.new(payload).format
       when :gollum then Formatters::Gollum.new(payload).format
       when :issue_comment then Formatters::IssueComment.new(payload).format
       when :issues then Formatters::Issues.new(payload).format
