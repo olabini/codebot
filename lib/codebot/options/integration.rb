@@ -66,6 +66,18 @@ module Codebot
         end
       end
 
+      desc 'list [SEARCH]', 'List integrations'
+
+      # Lists all integrations, or integrations with names containing the given
+      # search term.
+      #
+      # @param search [String, nil] an optional search term
+      def list(search = nil)
+        Options.with_core(parent_options, true) do |core|
+          IntegrationManager.new(core.config).list(search)
+        end
+      end
+
       # Ensures that thor uses the correct exit code.
       #
       # @return true

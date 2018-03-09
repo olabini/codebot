@@ -5,7 +5,7 @@ require 'codebot/command_error'
 
 module Codebot
   # This class manages the integrations associated with a configuration.
-  class IntegrationManager
+  class IntegrationManager # rubocop:disable Metrics/ClassLength
     # @return [Config] the configuration managed by this class
     attr_reader :config
 
@@ -55,6 +55,23 @@ module Codebot
         integration = find_integration!(name)
         @config.integrations.delete integration
         integration_feedback(integration, :destroyed) unless params[:quiet]
+      end
+    end
+
+    # Lists all integrations, or integrations with names containing the given
+    # search term.
+    #
+    # @param search [String, nil] an optional search term
+    def list(search)
+      @config.transaction do
+        integrations = @config.integrations.dup
+        unless search.nil?
+          integrations.select! do |intg|
+            intg.name.downcase.include? search.downcase
+          end
+        end
+        puts 'No integrations found' if integrations.empty?
+        integrations.each { |intg| show_integration intg }
       end
     end
 
