@@ -10,6 +10,7 @@ module Codebot
       issue_comment
       issues
       ping
+      public
       pull_request
       pull_request_review_comment
       push
@@ -33,7 +34,6 @@ module Codebot
     # TODO: Support for project_card
     # TODO: Support for project_column
     # TODO: Support for project
-    # TODO: Support for public
     # TODO: Support for pull_request_review
     # TODO: Support for repository
     # TODO: Support for release
