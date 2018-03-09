@@ -74,7 +74,7 @@ module Codebot
       # @param name [String] the name of the network
       def destroy(name)
         Options.with_core(parent_options, true) do |core|
-          NetworkManager.new(core.config).destroy(name)
+          NetworkManager.new(core.config).destroy(name, options)
         end
       end
 

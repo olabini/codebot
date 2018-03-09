@@ -116,10 +116,12 @@ module Codebot
           c.modes         = net.modes.to_s.gsub(/\A\+/, '').chars.uniq
           c.nick          = net.nick
           c.password      = net.server_password
-          c.port          = net.port || (net.secure ? 6697 : 6667)
+          c.port          = net.real_port
           c.realname      = Codebot::WEBSITE
-          c.sasl.username = net.sasl_username
-          c.sasl.password = net.sasl_password
+          if net.sasl?
+            c.sasl.username = net.sasl_username
+            c.sasl.password = net.sasl_password
+          end
           c.server        = net.host
           c.ssl.use       = net.secure
           c.ssl.verify    = net.secure

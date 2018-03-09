@@ -134,6 +134,21 @@ module Codebot
       @name.casecmp(name).zero?
     end
 
+    # Returns the port used for connecting to this network, or the default port
+    # if no port is set.
+    #
+    # @return [Integer] the port
+    def real_port
+      port || (secure ? 6697 : 6667)
+    end
+
+    # Checks whether SASL is enabled for this network.
+    #
+    # @return [Boolean] whether SASL is enabled
+    def sasl?
+      !sasl_username.to_s.empty? && !sasl_password.to_s.empty?
+    end
+
     # Checks whether this network is equal to another network.
     #
     # @param other [Object] the other network
