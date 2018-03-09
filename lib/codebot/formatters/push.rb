@@ -66,13 +66,17 @@ module Codebot
       end
 
       def format_commit_message(commit) # rubocop:disable Metrics/AbcSize
-        lines = commit['message'].to_s.lines
-        title = lines.first.strip
-        title << '...' unless lines.one?
+        message = full_commit_message(commit)
+        title = message.lines.first[0..199].strip
+        title << '...' unless title.eql? message.strip
         author = commit['author']['name'] if commit['author'].is_a? Hash
         sha = commit['id'].to_s
         "#{format_repository repository_name}/#{format_branch branch_name} " \
         "#{format_hash sha[0..6]} #{format_user author}: #{title}"
+      end
+
+      def full_commit_message(commit)
+        (commit.is_a?(Hash) ? commit['message'] : nil).to_s
       end
 
       def summary_url # rubocop:disable Metrics/AbcSize
