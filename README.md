@@ -124,6 +124,47 @@ $ codebot core --help               # Commands for managing active instances
 The configuration is stored in `~/.codebot.yml`, but it is not recommended to
 edit this file manually.
 
+## Gateway Configuration
+
+Codebot can optionally run behind a proxy, gateway server or load balancer.
+This allows webhooks to be received over HTTPS or on a custom port.
+
+For larger instances it is recommended to install `thin` before proceeding, as
+the standard `WEBrick` server is single-threaded by default.
+
+```
+$ gem install thin
+```
+
+### lighttpd
+
+lighttpd can be used as a gateway server using the `mod_proxy` module.
+
+First, make sure that the `mod_proxy` module is loaded by adding the following
+line to your `lighttpd.conf` file:
+
+```
+server.modules += ( "mod_proxy" )
+```
+
+Next, configure the module to redirect incoming requests to Codebot:
+
+```
+# Forward requests for an entire domain or subdomain to Codebot
+$HTTP["host"] == "codebot.example.com" {
+  proxy.server = ("/" => ( ( "host" => "localhost", "port" => 4567 ) ) )
+}
+
+# Alternatively, forward requests for a subdirectory to Codebot
+proxy.header = ( "map-urlpath" => ( "/codebot" => "" ) )
+proxy.server = ("/codebot" => ( ( "host" => "localhost", "port" => 4567 ) ) )
+```
+
+That's it! You'll need to reload lighttpd for your changes to take effect.
+
+If Codebot is running and lighttpd has been configured correctly, accessing the
+gateway through a browser should yield a `Method not allowed` error.
+
 ## Development
 
 After checking out the repository, run `bundle install` to install dependencies.
