@@ -23,8 +23,9 @@ module Codebot
 
       # Sets shared options for authenticating to the IRC network.
       def self.shared_authentication_options
-        option :no_sasl, type: :boolean,
-                         desc: 'Disable SASL authentication'
+        # Not a boolean to prevent thor from generating --no-disable-sasl flag
+        option :disable_sasl, type: :string, banner: '',
+                              desc: 'Disable SASL authentication'
         option :sasl_username, desc: 'Set the username for SASL authentication'
         option :sasl_password, desc: 'Set the password for SASL authentication'
       end
