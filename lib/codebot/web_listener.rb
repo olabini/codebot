@@ -37,10 +37,10 @@ module Codebot
     # @param payload [String] the payload that was sent to the endpoint
     # @return [Array<Integer, String>] HTTP status code and response
     def dispatch(core, request, endpoint, payload)
-      integration = integration_for(core.config, endpoint)
-      return [404, 'Endpoint not registered'] if integration.nil?
-      return [403, 'Invalid signature'] unless valid?(request, integration)
-      req = create_request(integration, request, payload)
+      intg = integration_for(core.config, endpoint)
+      return [404, 'Endpoint not registered'] if intg.nil?
+      return [403, 'Invalid signature'] unless valid?(request, intg, payload)
+      req = create_request(intg, request, payload)
       return req if req.is_a? Array
       core.irc_client.dispatch(req)
       [202, 'Accepted']
@@ -69,14 +69,13 @@ module Codebot
     # @param request [Sinatra::Request] the request received by the web server
     # @param integration [Integration] the integration for which the request
     #                                  was made
+    # @param payload [String] the payload that was sent to the endpoint
     # @return [Boolean] whether the signature is valid
-    def valid?(request, integration)
-      request.body.rewind
-      body = request.body.read
+    def valid?(request, integration, payload)
+      return true unless integration.verify_payloads?
       secret = integration.secret
-      return true if secret.nil? || secret.empty?
       request_signature = request.env['HTTP_X_HUB_SIGNATURE']
-      Cryptography.valid_signature?(body, secret, request_signature)
+      Cryptography.valid_signature?(payload, secret, request_signature)
     end
   end
 end

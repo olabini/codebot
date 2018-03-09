@@ -98,6 +98,13 @@ module Codebot
       end
     end
 
+    # Checks whether payloads delivered to this integration must be verified.
+    #
+    # @return [Boolean] whether verification is required
+    def verify_payloads?
+      !secret.to_s.strip.empty?
+    end
+
     # Sets the list of channels.
     #
     # @param channels [Array<Channel>] the list of channels

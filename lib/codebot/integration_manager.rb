@@ -27,6 +27,7 @@ module Codebot
         check_available!(integration.name, integration.endpoint)
         NetworkManager.new(@config).check_channels!(integration)
         @config.integrations << integration
+        integration_feedback(integration, :created) unless params[:quiet]
       end
     end
 
@@ -41,16 +42,19 @@ module Codebot
         update_channels!(integration, params)
         NetworkManager.new(@config).check_channels!(integration)
         integration.update!(params)
+        integration_feedback(integration, :updated) unless params[:quiet]
       end
     end
 
     # Destroys an integration.
     #
     # @param name [String] the name of the integration to destroy
-    def destroy(name)
+    # @param params [Hash] the command-line options
+    def destroy(name, params)
       @config.transaction do
         integration = find_integration!(name)
         @config.integrations.delete integration
+        integration_feedback(integration, :destroyed) unless params[:quiet]
       end
     end
 
@@ -119,13 +123,11 @@ module Codebot
     #
     # @param name [String] the name to check for
     # @param endpoint [String] the endpoint to check for
-    # @param integration [Integration] the integration to ignore
+    # @param intg [Integration] the integration to ignore
     # @raise [CommandError] if name or endpoint are already taken
-    def check_available_except!(name, endpoint, integration)
-      unless name.nil? || integration.name_eql?(name)
-        check_name_available!(name)
-      end
-      return if endpoint.nil? || integration.endpoint_eql?(endpoint)
+    def check_available_except!(name, endpoint, intg)
+      check_name_available!(name) unless name.nil? || intg.name_eql?(name)
+      return if endpoint.nil? || intg.endpoint_eql?(endpoint)
       check_endpoint_available!(endpoint)
     end
 
@@ -150,6 +152,51 @@ module Codebot
       return unless params[:add_channel]
       integration.add_channels!(params[:add_channel],
                                 networks: @config.networks)
+    end
+
+    # Displays feedback about a change made to an integration.
+    #
+    # @param integration [Integration] the integration
+    # @param action [#to_s] the action (+:created+, +:updated+ or +:destroyed+)
+    def integration_feedback(integration, action)
+      puts "Integration was successfully #{action}"
+      show_integration(integration)
+    end
+
+    # Prints information about an integration.
+    #
+    # @param integration [Integration] the integration
+    def show_integration(integration)
+      puts "Integration: #{integration.name}"
+      puts "\tEndpoint: #{integration.endpoint}"
+      puts "\tSecret:   #{show_integration_secret(integration)}"
+      if integration.channels.empty?
+        puts "\tChannels: (none)"
+      else
+        puts "\tChannels:"
+        show_integration_channels(integration)
+      end
+    end
+
+    # Returns an integration secret, or "(none required)" if payload integrity
+    # verification is disabled.
+    #
+    # @param integration [Integration] the integration
+    # @return [String] the secret or placeholder
+    def show_integration_secret(integration)
+      return '(none required)' unless integration.verify_payloads?
+      integration.secret.to_s
+    end
+
+    # Prints information about the channels associated with an integration.
+    #
+    # @param integration [Integration] the integration
+    def show_integration_channels(integration)
+      integration.channels.each do |channel|
+        puts "\t\t- #{channel.name} on #{channel.network.name}"
+        puts "\t\t\tKey: #{channel.key}" if channel.key?
+        puts "\t\t\tMessages are sent without joining" if channel.send_external
+      end
     end
   end
 end
