@@ -11,6 +11,7 @@ require 'codebot/formatters/public'
 require 'codebot/formatters/pull_request'
 require 'codebot/formatters/pull_request_review_comment'
 require 'codebot/formatters/push'
+require 'codebot/formatters/watch'
 
 module Codebot
   # This module provides methods for formatting outgoing IRC messages.
@@ -52,6 +53,7 @@ module Codebot
       when :pull_request_review_comment
         Formatters::PullRequestReviewComment.new(payload).format
       when :push then Formatters::Push.new(payload).format
+      when :watch then Formatters::Watch.new(payload).format
       else "Error: missing formatter for #{event.inspect}"
       end
     end
