@@ -2,6 +2,7 @@
 
 require 'cinch'
 require 'codebot/formatter'
+require 'codebot/formatters/issues'
 require 'codebot/formatters/ping'
 require 'codebot/formatters/push'
 
@@ -35,6 +36,7 @@ module Codebot
     # @return [Array<String>] the formatted messages
     def self.format_color(event, payload)
       case event
+      when :issues then Formatters::Issues.new(payload).format
       when :ping then Formatters::Ping.new(payload).format
       when :push then Formatters::Push.new(payload).format
       else "Error: missing formatter for #{event.inspect}"

@@ -105,6 +105,34 @@ module Codebot
       extract(:repository, :url)
     end
 
+    # Extracts the action from the payload.
+    #
+    # @return [String, nil] the action
+    def action
+      extract(:action).to_s
+    end
+
+    # Checks whether the action is 'opened'.
+    #
+    # @return [Boolean] whether the action is 'opened'.
+    def opened?
+      action.eql? 'opened'
+    end
+
+    # Checks whether the action is 'closed'.
+    #
+    # @return [Boolean] whether the action is 'closed'.
+    def closed?
+      action.eql? 'closed'
+    end
+
+    # Extracts the user name of the person who triggered this event.
+    #
+    # @return [String, nil] the user name
+    def sender_name
+      extract(:sender, :login)
+    end
+
     # Safely extracts a value from a JSON object.
     #
     # @param path [Array<#to_s>] the path to traverse
