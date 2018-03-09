@@ -6,19 +6,36 @@
 [![Inline Docs](https://inch-ci.org/github/janikrabe/codebot.svg?branch=master)](https://inch-ci.org/github/janikrabe/codebot)
 
 Codebot is an IRC bot that receives GitHub webhooks and forwards them to
-IRC channels. It is designed to send messages in a format identical to that
+IRC channels. It is designed to send messages in a format similar to that
 of the official GitHub IRC Service. Codebot is able to stay connected after
 sending messages. This eliminates the delays and visual clutter caused by
-reconnecting each time a new message needs to be delivered.
+reconnecting each time a new message has to be delivered.
 
-In addition, Codebot is able to handle all events not supported by the official
-service. Messages for these events are designed to be as consistent as possible
+In addition, Codebot is able to handle many events the official service does not
+support. Messages for these events are designed to be as consistent as possible
 with official messages. If these additional notifications are not desired, they
 can be disabled through the webhook settings.
 
-## Project Status
+## Features
 
-Codebot is currently under development and not ready for production use.
+* **Secure by default**: Codebot automatically generates strong random secrets
+  for each webhook to ensure the integrity of all received data.
+* **Highly configurable**: Do you use IRC over TLS or want to authenticate
+  using SASL? Do you need to send notifications to a password-protected server
+  or bind the IRC socket to a certain address? No problem!
+* **Easy to set up**: Setting up Codebot takes three minutes — no need to edit
+  configuration files or memorize complicated commands.
+* **Supports many events**: Codebot supports all events supported by GitHub's
+  official IRC integration, and a few more! Individual events can be enabled or
+  disabled through the webhook settings.
+* **Unlimited networks, channels and integrations**: a single instance can
+  receive notifications for any number of webhooks and forward them to the
+  appropriate channels on as many IRC networks as you want.
+* **On-the-fly reloading**: A running Codebot instance can automatically pick
+  up any new changes with no restart required.
+  (*Changes to channel lists currently still require a restart.*)
+* **Rack and Sinatra**: Thanks to Rack, Codebot can work with almost any web
+  server, including the default `WEBrick` server for smaller instances.
 
 ## Installation
 

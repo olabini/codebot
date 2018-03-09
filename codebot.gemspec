@@ -8,10 +8,10 @@ require 'codebot/metadata'
 def description
   text = <<-DESCRIPTION
     Codebot is an IRC bot that receives GitHub webhooks and forwards them to
-    IRC channels. It is designed to send messages in a format identical to that
+    IRC channels. It is designed to send messages in a format similar to that
     of the official GitHub IRC Service. Codebot is able to stay connected after
     sending messages. This eliminates the delays and visual clutter caused by
-    reconnecting each time a new message needs to be delivered.
+    reconnecting each time a new message has to be delivered.
   DESCRIPTION
   text.gsub(/\s+/, ' ').strip
 end
