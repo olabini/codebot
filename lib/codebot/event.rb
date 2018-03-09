@@ -5,6 +5,7 @@ module Codebot
   module Event
     # The currently supported events.
     VALID_SYMBOLS = %i[
+      issue_comment
       issues
       ping
       push
@@ -19,7 +20,6 @@ module Codebot
     # TODO: Support for gollum
     # TODO: Support for installation
     # TODO: Support for installation_repositories
-    # TODO: Support for issue_comment
     # TODO: Support for label
     # TODO: Support for marketplace_purchase
     # TODO: Support for member
