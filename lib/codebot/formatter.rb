@@ -91,6 +91,30 @@ module Codebot
       ::Cinch::Formatting.format(:red, text.to_s)
     end
 
+    # Sanitize the given text for delivery to an IRC channel. Most importantly,
+    # this method prevents attackers from injecting arbitrary commands into the
+    # bot's connection by ensuring that the text does not contain any newline
+    # characters. Any IRC formatting codes in the text are also removed.
+    #
+    # @param text [String] the text to sanitize
+    # @return [String] the sanitized text
+    def sanitize(text)
+      ::Cinch::Formatting.unformat(text.to_s.gsub(/[[:space:]]+/, ' ')).strip
+    end
+
+    # Truncates the given text, appending a suffix if it was above the allowed
+    # length.
+    #
+    # @param text [String] the text to truncate
+    # @param suffix [String] the suffix to append if the text is truncated
+    # @param length [Integer] the maximum length including the suffix
+    def abbreviate(text, suffix: ' ...', length: 200)
+      content_length = length - suffix.length
+      short = text.to_s.lines.first.to_s.strip[0...content_length].strip
+      short << suffix unless short.eql? text.to_s.strip
+      sanitize short
+    end
+
     # Extracts the repository name from the payload.
     #
     # @return [String, nil] the repository name

@@ -65,10 +65,9 @@ module Codebot
         msg
       end
 
-      def format_commit_message(commit) # rubocop:disable Metrics/AbcSize
+      def format_commit_message(commit)
         message = full_commit_message(commit)
-        title = message.lines.first[0..199].strip
-        title << '...' unless title.eql? message.strip
+        title = abbreviate message
         author = commit['author']['name'] if commit['author'].is_a? Hash
         "#{format_repository repository_name}/#{format_branch branch_name} " \
         "#{format_hash commit['id']} #{format_user author}: #{title}"
