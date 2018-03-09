@@ -9,6 +9,7 @@ module Codebot
       issue_comment
       issues
       ping
+      pull_request
       push
     ].freeze
 
@@ -34,7 +35,6 @@ module Codebot
     # TODO: Support for public
     # TODO: Support for pull_request_review_comment
     # TODO: Support for pull_request_review
-    # TODO: Support for pull_request
     # TODO: Support for repository
     # TODO: Support for release
     # TODO: Support for status
