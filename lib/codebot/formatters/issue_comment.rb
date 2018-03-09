@@ -19,7 +19,7 @@ module Codebot
       end
 
       def summary_url
-        extract(:comment, :html_url)
+        extract(:comment, :html_url).to_s
       end
 
       def comment_body
@@ -32,5 +32,3 @@ module Codebot
     end
   end
 end
-
-# action

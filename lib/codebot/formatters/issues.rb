@@ -17,7 +17,7 @@ module Codebot
       end
 
       def summary_url
-        extract(:issue, :html_url)
+        extract(:issue, :html_url).to_s
       end
 
       def issue_number
@@ -30,5 +30,3 @@ module Codebot
     end
   end
 end
-
-# action
