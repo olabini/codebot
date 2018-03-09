@@ -23,6 +23,7 @@ module Codebot
       @config.transaction do
         check_name_available!(network.name)
         @config.networks << network
+        network_feedback(network, :created) unless params[:quiet]
       end
     end
 
@@ -37,16 +38,19 @@ module Codebot
           check_name_available_except!(params[:name], network)
         end
         network.update!(params)
+        network_feedback(network, :updated) unless params[:quiet]
       end
     end
 
     # Destroys a network.
     #
     # @param name [String] the name of the network to destroy
-    def destroy(name)
+    # @param params [Hash] the command-line options
+    def destroy(name, params)
       @config.transaction do
         network = find_network!(name)
         @config.networks.delete network
+        network_feedback(network, :destroyed) unless params[:quiet]
       end
     end
 
@@ -102,6 +106,40 @@ module Codebot
       return if name.nil? || network.name_eql?(name) || !find_network(name)
       raise CommandError, "a network with the name #{name.inspect} " \
                           'already exists'
+    end
+
+    # Displays feedback about a change made to a network.
+    #
+    # @param network [Network] the network
+    # @param action [#to_s] the action (+:created+, +:updated+ or +:destroyed+)
+    def network_feedback(network, action)
+      puts "Network was successfully #{action}"
+      show_network(network)
+    end
+
+    # Prints information about a network.
+    #
+    # @param network [Network] the network
+    def show_network(network) # rubocop:disable Metrics/AbcSize
+      puts "Network: #{network.name}"
+      security = "#{network.secure ? 'secure' : 'insecure'} connection"
+      password = network.server_password
+      puts "\tServer:     #{network.host}:#{network.real_port} (#{security})"
+      puts "\tPassword:   #{'*' * password.length}" unless password.to_s.empty?
+      puts "\tNickname:   #{network.nick}"
+      puts "\tBind to:    #{network.bind}" unless network.bind.to_s.empty?
+      puts "\tUser modes: #{network.modes}" unless network.modes.to_s.empty?
+      show_network_sasl(network)
+    end
+
+    # Prints information about the SASL authentication settings for a network.
+    #
+    # @param network [Network] the network
+    def show_network_sasl(network)
+      puts "\tSASL authentication #{network.sasl? ? 'enabled' : 'disabled'}"
+      return unless network.sasl?
+      puts "\t\tUsername: #{network.sasl_username}"
+      puts "\t\tPassword: #{'*' * network.sasl_password.to_s.length}"
     end
   end
 end
