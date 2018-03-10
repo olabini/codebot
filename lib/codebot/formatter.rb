@@ -91,6 +91,14 @@ module Codebot
       ::Cinch::Formatting.format(:red, text.to_s)
     end
 
+    # Formats the name of a webhook event.
+    #
+    # @param name [String] the name to format
+    # @return [String] the formatted name
+    def format_event(name)
+      ::Cinch::Formatting.format(:bold, name.to_s)
+    end
+
     # Constructs a sentence from array elements, connecting them with commas
     # and conjunctions.
     #

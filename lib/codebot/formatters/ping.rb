@@ -8,7 +8,44 @@ module Codebot
       #
       # @return [Array<String>] the formatted messages
       def format
-        ["#{format_scope} Received ping: #{extract :zen}"]
+        ["#{summary}: #{format_url url}"]
+      end
+
+      def summary
+        "[#{format_scope}] #{format_user sender_name} added a webhook " \
+        "for #{format_events}"
+      end
+
+      def summary_url
+        extract(:repository, :html_url).to_s
+      end
+
+      def format_events
+        if hook_events.empty?
+          'no events'
+        elsif hook_events.include? '*'
+          format_event 'all events'
+        else
+          format_events_some
+        end
+      end
+
+      def format_events_some
+        if hook_events.length > 5
+          "#{format_number(hook_events.length)} events"
+        elsif hook_events.one?
+          "the #{format_event hook_events.first} event"
+        else
+          "the #{formatted_hook_events} events"
+        end
+      end
+
+      def hook_events
+        extract(:hook, :events).to_a.uniq
+      end
+
+      def formatted_hook_events
+        ary_to_sentence(hook_events.sort.map { |event| format_event event })
       end
 
       # Formats the name of the repository or organization the webhook belongs
@@ -16,13 +53,13 @@ module Codebot
       #
       # @return [String] the formatted scope
       def format_scope
-        scope = case extract(:hook, :type)
-                when /\Aorganization\z/i
-                  extract(:organization, :login)
-                when /\Arepository\z/i
-                  extract(:repository, :name)
-                end
-        "[#{format_repository(scope)}]"
+        case extract(:hook, :type)
+        when /\Aorganization\z/i
+          format_user extract(:organization, :login)
+        when /\Arepository\z/i
+          login = extract(:repository, :owner, :login)
+          "#{format_user login}/#{format_repository repository_name}"
+        end
       end
     end
   end
