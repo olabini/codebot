@@ -12,7 +12,7 @@ module Codebot
     # @param identifier [String, nil] the identifier to sanitize
     # @return [String, nil] the sanitized value or +nil+ on error
     def valid_identifier(identifier)
-      identifier.downcase if /\A[[:alnum:]_-]+\z/.match? identifier
+      identifier.downcase if /\A[[:alnum:]_-]+\z/ =~ identifier
     end
 
     # Sanitizes an endpoint name.
@@ -20,7 +20,7 @@ module Codebot
     # @param endpoint [String, nil] the endpoint name to sanitize
     # @return [String, nil] the sanitized value or +nil+ on error
     def valid_endpoint(endpoint)
-      endpoint if /\A[[:alnum:]_-]*\z/.match? endpoint
+      endpoint if /\A[[:alnum:]_-]*\z/ =~ endpoint
     end
 
     # Sanitizes a webhook secret.
@@ -28,7 +28,7 @@ module Codebot
     # @param secret [String, nil] the webhook secret to sanitize
     # @return [String, nil] the sanitized value or +nil+ on error
     def valid_secret(secret)
-      secret if /\A[[:print:]]*\z/.match? secret
+      secret if /\A[[:print:]]*\z/ =~ secret
     end
 
     # Sanitizes a hostname.
@@ -36,7 +36,7 @@ module Codebot
     # @param host [String, nil] the hostname to sanitize
     # @return [String, nil] the sanitized value or +nil+ on error
     def valid_host(host)
-      host if /\A[[:graph:]]+\z/.match? host
+      host if /\A[[:graph:]]+\z/ =~ host
     end
 
     # Sanitizes a TCP/IP port number.
@@ -44,7 +44,7 @@ module Codebot
     # @param port [#to_i, #to_s] the port number to sanitize
     # @return [Integer, nil] the sanitized value or +nil+ on error
     def valid_port(port)
-      port_number = port.to_s.to_i(10) if /\A[0-9]+\z/.match?(port.to_s)
+      port_number = port.to_s.to_i(10) if /\A[0-9]+\z/ =~ port.to_s
       port_number if (1...2**16).cover? port_number
     end
 
@@ -71,7 +71,7 @@ module Codebot
     def valid_channel_name(channel)
       # Colons are currently not considered valid characters because some IRCds
       # use them to delimit channel masks. This might change in the future.
-      channel if /\A[&#\+!][[:graph:]&&[^:,]]{,49}\z/.match? channel
+      channel if /\A[&#\+!][[:graph:]&&[^:,]]{,49}\z/ =~ channel
     end
 
     # Sanitizes a channel key.
@@ -79,7 +79,7 @@ module Codebot
     # @param key [String, nil] the channel key to sanitize
     # @return [String, nil] the sanitized value or +nil+ on error
     def valid_channel_key(key)
-      key if /\A[[:graph:]&&[^,]]*\z/.match? key
+      key if /\A[[:graph:]&&[^,]]*\z/ =~ key
     end
 
     # Sanitizes a network name.

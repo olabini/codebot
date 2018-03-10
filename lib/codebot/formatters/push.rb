@@ -89,11 +89,11 @@ module Codebot
       end
 
       def created?
-        /\A0{40}\z/.match?(extract(:before))
+        /\A0{40}\z/ =~ extract(:before)
       end
 
       def deleted?
-        /\A0{40}\z/.match?(extract(:after))
+        /\A0{40}\z/ =~ extract(:after)
       end
 
       def forced?
@@ -101,7 +101,7 @@ module Codebot
       end
 
       def tag?
-        %r{\Arefs/tags/}.match? ref
+        %r{\Arefs/tags/} =~ ref
       end
 
       def commits
