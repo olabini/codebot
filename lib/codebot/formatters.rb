@@ -24,7 +24,7 @@ module Codebot
     # @param color [Boolean] whether to use formatting codes
     # @return [Array<String>] the formatted messages
     def self.format(event, payload, color = true)
-      messages = format_color(event, payload)
+      messages = format_color(event, payload).to_a
       messages.map! { |msg| "\x0F" + msg }
       messages.map! { |msg| ::Cinch::Formatting.unformat(msg) } unless color
       messages
