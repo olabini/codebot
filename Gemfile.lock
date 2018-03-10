@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codebot (1.0.0)
+    codebot (1.0.1)
       cinch (~> 2.3)
       sinatra (~> 2.0)
       thor (~> 0.20.0)
