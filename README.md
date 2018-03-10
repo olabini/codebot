@@ -120,18 +120,18 @@ After adding the webhook to your GitHub repository or organization, you can
 manage your Codebot instance using the following commands:
 
 ```
+$ codebot core interactive # Starts Codebot in the foreground (interactively)
 $ codebot core start       # Starts Codebot in the background (as a daemon)
 $ codebot core stop        # Stops the active Codebot instance
-$ codebot core interactive # Starts Codebot in the foreground (interactively)
 ```
 
 For more information, please consult the following commands:
 
 ```
-$ codebot help                    # General help
-$ codebot help network            # Commands for managing networks
-$ codebot help integration        # Commands for managing integrations
-$ codebot help core               # Commands for managing active instances
+$ codebot help             # General help
+$ codebot help network     # Commands for managing networks
+$ codebot help integration # Commands for managing integrations
+$ codebot help core        # Commands for managing active instances
 ```
 
 The configuration is stored in `~/.codebot.yml`, but it is not recommended to
