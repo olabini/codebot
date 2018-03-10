@@ -12,7 +12,7 @@ module Codebot
     # @param identifier [String, nil] the identifier to sanitize
     # @return [String, nil] the sanitized value or +nil+ on error
     def valid_identifier(identifier)
-      identifier.downcase if /\A[[:alnum:]\-_]+\z/.match? identifier
+      identifier.downcase if /\A[[:alnum:]_-]+\z/.match? identifier
     end
 
     # Sanitizes an endpoint name.
@@ -20,7 +20,7 @@ module Codebot
     # @param endpoint [String, nil] the endpoint name to sanitize
     # @return [String, nil] the sanitized value or +nil+ on error
     def valid_endpoint(endpoint)
-      endpoint if /\A[[:alnum:]\-_]*\z/.match? endpoint
+      endpoint if /\A[[:alnum:]_-]*\z/.match? endpoint
     end
 
     # Sanitizes a webhook secret.
