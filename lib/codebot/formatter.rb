@@ -91,6 +91,24 @@ module Codebot
       ::Cinch::Formatting.format(:red, text.to_s)
     end
 
+    # Constructs a sentence from array elements, connecting them with commas
+    # and conjunctions.
+    #
+    # @param ary [Array<String>] the array
+    # @param empty_sentence [String, nil] the sentence to return if the array
+    #                                     is empty
+    # @return [String] the constructed sentence
+    def ary_to_sentence(ary, empty_sentence = nil)
+      case ary.length
+      when 0 then empty_sentence.to_s
+      when 1 then ary.first
+      when 2 then ary.join(' and ')
+      else
+        *ary, last_element = ary
+        ary_to_sentence([ary.join(', '), last_element])
+      end
+    end
+
     # Sanitize the given text for delivery to an IRC channel. Most importantly,
     # this method prevents attackers from injecting arbitrary commands into the
     # bot's connection by ensuring that the text does not contain any newline
