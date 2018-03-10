@@ -37,7 +37,10 @@ module Codebot
         actions = []
         counts = action_counts
         counts.each { |action, count| actions << "#{action} #{count}" }
-        changes = format_changes(actions)
+        changes = ary_to_sentence(
+          actions,
+          'pushed an empty commit that did not affect any'
+        )
         singular_noun = counts.last.to_a.last.to_i.eql?(1)
         " #{changes} wiki #{singular_noun ? 'page' : 'pages'}"
       end
@@ -46,17 +49,6 @@ module Codebot
         Hash.new(0).tap do |hash|
           pages.each { |page| hash[page['action']] += 1 }
         end.sort
-      end
-
-      def format_changes(actions)
-        case actions.length
-        when 0 then 'pushed an empty commit that did not affect any'
-        when 1 then actions.first
-        when 2 then actions.join(' and ')
-        else
-          *actions, last_action = actions
-          format_changes([actions.join(', '), last_action])
-        end
       end
 
       def summary_url
