@@ -5,6 +5,7 @@ require 'thor'
 require 'codebot/options/core'
 require 'codebot/options/network'
 require 'codebot/options/integration'
+require 'codebot/user_error'
 
 module Codebot
   module Options
@@ -41,6 +42,13 @@ module Codebot
       # @return true
       def self.exit_on_failure?
         true
+      end
+
+      if Process.uid.zero? || Process.euid.zero?
+        STDERR.puts 'Running Codebot as root is extremely dangerous; ' \
+                    "if you're trying to listen on a privileged port " \
+                    'please use a gateway server instead'
+        exit 1
       end
     end
   end
