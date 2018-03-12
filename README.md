@@ -103,7 +103,8 @@ Unless [otherwise configured][gateway], **Payload URL** should be in the format
 `http://server:4567/endpoint`, where `server` is the IP address or host name of
 the server Codebot is running on, and `endpoint` is the endpoint generated in
 the previous step. Please see [Gateway Configuration][gateway] for information
-on how to enable HTTPS or use a custom port.
+on how to receive webhooks over HTTPS, and [Environment Variables][environ] if
+you would like Codebot to listen on a different port.
 
 Both possible **Content type** values are supported, but it is recommended to
 use `application/json`.
@@ -137,10 +138,30 @@ $ codebot help core        # Commands for managing active instances
 The configuration is stored in `~/.codebot.yml`, but it is not recommended to
 edit this file manually.
 
+## Environment Variables
+
+Codebot supports the following environment variables:
+
+* `CODEBOT_BIND` sets the address for the web server to bind to. When running
+  Codebot behind a local [gateway server][gateway], this environment variable
+  should be set to a loopback address like `127.0.0.1`.
+* `CODEBOT_PORT` sets the port for the web server to listen on. This defaults
+  to `4567`. If you need to listen on a privileged port, please set up a
+  [gateway server][gateway] instead of trying to run Codebot as root.
+
 ## Gateway Configuration
 
 Codebot can optionally run behind a proxy, gateway server or load balancer.
-This allows webhooks to be received over HTTPS or on a custom port.
+This allows for additional configuration that would otherwise not be possible,
+such as receiving webhooks over HTTPS.
+
+When accessed through a gateway server, Codebot normally does not need to
+listen on all interfaces. It is therefore recommended to set the `CODEBOT_BIND`
+environment variable to a loopback address before starting Codebot:
+
+```
+$ export CODEBOT_BIND='127.0.0.1'
+```
 
 For larger instances it is recommended to install `thin` before proceeding, as
 the standard `WEBrick` server is single-threaded by default.
@@ -164,13 +185,19 @@ Next, configure the module to redirect incoming requests to Codebot:
 
 ```
 # Forward requests for an entire domain or subdomain to Codebot
+# Replace codebot.example.com with the subdomain to redirect to Codebot
+# If CODEBOT_BIND is set, replace 127.0.0.1 with the address Codebot listens on
+# If CODEBOT_PORT is set, replace 4567 with the port Codebot listens on
 $HTTP["host"] == "codebot.example.com" {
-  proxy.server = ("/" => ( ( "host" => "localhost", "port" => 4567 ) ) )
+  proxy.server = ("/" => ( ( "host" => "127.0.0.1", "port" => 4567 ) ) )
 }
 
 # Alternatively, forward requests for a subdirectory to Codebot
+# Replace /codebot with the subdirectory to redirect to Codebot
+# If CODEBOT_BIND is set, replace 127.0.0.1 with the address Codebot listens on
+# If CODEBOT_PORT is set, replace 4567 with the port Codebot listens on
 proxy.header = ( "map-urlpath" => ( "/codebot" => "" ) )
-proxy.server = ("/codebot" => ( ( "host" => "localhost", "port" => 4567 ) ) )
+proxy.server = ("/codebot" => ( ( "host" => "127.0.0.1", "port" => 4567 ) ) )
 ```
 
 That's it! You'll need to reload lighttpd for your changes to take effect.
@@ -182,6 +209,10 @@ gateway with a browser should yield a `Method not allowed` error.
 
 After checking out the repository, run `bundle install` to install dependencies.
 You can also run `bin/console` for an interactive prompt.
+
+During development it is recommended to set the `RACK_ENV` environment variable
+to `development`. This causes the web server to listen only on the loopback
+interface by default.
 
 To install this gem onto your local machine, run `bundle exec rake install`.
 To release a new version, update the version number in `metadata.rb`, and then
@@ -197,4 +228,5 @@ Please see the [CONTRIBUTING.md][contrib] for more information.
 [contrib]: CONTRIBUTING.md "Guidelines for Contributors"
 [rubygem]: https://rubygems.org/gems/codebot "codebot on RubyGems.org"
 [newhook]: https://developer.github.com/webhooks/creating/#setting-up-a-webhook
+[environ]: #environment-variables "Environment Variables"
 [gateway]: #gateway-configuration "Gateway Configuration"
