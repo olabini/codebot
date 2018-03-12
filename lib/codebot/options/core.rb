@@ -99,11 +99,18 @@ module Codebot
         File.new(File::NULL, mode)
       end
 
+      # Initializes any missing environment variables to their default values.
+      def initialize_environment
+        ENV['CODEBOT_PORT'] ||= 4567.to_s
+        ENV['RACK_ENV'] ||= 'production'
+      end
+
       # Starts the bot. Unless started in interactive mode, file descriptors
       # are reopened from a null file.
       #
       # @param interactive [Boolean] whether to start the bot in the foreground
       def run_core(interactive)
+        initialize_environment
         check_not_running!(options)
         dup2_fds unless interactive
         Options.with_core(options) do |core|
