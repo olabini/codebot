@@ -12,12 +12,7 @@ module Codebot
 
       # Runs Codebot interactively.
       def interactive
-        check_not_running!(options)
-        Options.with_core(options) do |core|
-          core.trap_signals
-          core.start
-          core.join
-        end
+        run_core(true)
       end
 
       desc 'start', 'Start a new Codebot instance in the background'
@@ -26,10 +21,7 @@ module Codebot
       def start
         Options.with_errors { check_fork_supported! }
         check_not_running!(options)
-        fork do
-          dup2_fds
-          interactive
-        end
+        fork { run_core(false) }
       end
 
       desc 'stop', 'Stop a running Codebot instance'
@@ -105,6 +97,20 @@ module Codebot
       # @return [File] the created file
       def null_file(mode)
         File.new(File::NULL, mode)
+      end
+
+      # Starts the bot. Unless started in interactive mode, file descriptors
+      # are reopened from a null file.
+      #
+      # @param interactive [Boolean] whether to start the bot in the foreground
+      def run_core(interactive)
+        check_not_running!(options)
+        dup2_fds unless interactive
+        Options.with_core(options) do |core|
+          core.trap_signals
+          core.start
+          core.join
+        end
       end
     end
   end
