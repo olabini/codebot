@@ -30,7 +30,7 @@ module Codebot
       server = self
       proc do
         disable :traps
-        set :bind, ENV['CODEBOT_BIND'] if ENV['CODEBOT_BIND'].is_a? String
+        set :bind, ENV['CODEBOT_BIND'] unless ENV['CODEBOT_BIND'].to_s.empty?
         port = ENV['CODEBOT_PORT']
         if port.is_a?(String) && !port.empty?
           set :port, (server.valid! port, server.valid_port(port), nil,
