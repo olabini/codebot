@@ -36,7 +36,7 @@ module Codebot
       def multi_page_summary
         actions = []
         counts = action_counts
-        counts.each { |action, count| actions << "#{action} #{count}" }
+        counts.each { |verb, num| actions << "#{verb} #{format_number num}" }
         changes = ary_to_sentence(
           actions,
           'pushed an empty commit that did not affect any'
