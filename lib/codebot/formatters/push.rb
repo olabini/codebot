@@ -67,7 +67,7 @@ module Codebot
 
       def format_commit_message(commit)
         message = full_commit_message(commit)
-        title = abbreviate message
+        title = prettify message
         author = commit['author']['name'] if commit['author'].is_a? Hash
         "#{format_repository repository_name}/#{format_branch branch_name} " \
         "#{format_hash commit['id']} #{format_user author}: #{title}"
