@@ -134,11 +134,25 @@ module Codebot
     # @param text [String] the text to truncate
     # @param suffix [String] the suffix to append if the text is truncated
     # @param length [Integer] the maximum length including the suffix
+    # @yield [String] the truncated string before the ellipsis is appended
+    # @return short [String] the abbreviated text
     def abbreviate(text, suffix: ' ...', length: 200)
       content_length = length - suffix.length
       short = text.to_s.lines.first.to_s.strip[0...content_length].strip
+      yield text if block_given?
       short << suffix unless short.eql? text.to_s.strip
-      sanitize short
+      short
+    end
+
+    # Abbreviates the given text, removes any trailing punctuation except for
+    # the ellipsis appended if the text was truncated, and sanitizes the text
+    # for delivery to IRC.
+    #
+    # @param text [String] the text to process
+    # @return [String] the processed text
+    def prettify(text)
+      pretty = abbreviate(text) { |short| short.sub!(/[[:punct:]]+\z/, '') }
+      sanitize pretty
     end
 
     # Extracts the repository name from the payload.

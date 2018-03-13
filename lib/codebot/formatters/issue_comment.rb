@@ -12,7 +12,7 @@ module Codebot
       end
 
       def summary
-        short = abbreviate comment_body
+        short = prettify comment_body
         "[#{format_repository repository_name}] #{format_user sender_name} " \
         "commented on issue \##{issue_number}: #{short}"
       end

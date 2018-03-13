@@ -28,7 +28,7 @@ module Codebot
 
       def single_page_summary
         page = pages.first.to_h
-        short = abbreviate(page['summary'])
+        short = prettify page['summary']
         suffix = ": #{short}" unless short.empty?
         " #{page['action']} wiki page #{page['title']}#{suffix}"
       end
