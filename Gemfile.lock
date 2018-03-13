@@ -60,7 +60,7 @@ DEPENDENCIES
   codebot!
   rake (~> 12.3)
   rspec (~> 3.7)
-  rubocop (~> 0.53)
+  rubocop (~> 0.53.0)
 
 BUNDLED WITH
    1.16.1
