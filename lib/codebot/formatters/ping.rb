@@ -17,7 +17,13 @@ module Codebot
       end
 
       def summary_url
-        extract(:repository, :html_url).to_s
+        case extract(:hook, :type)
+        when /\Aorganization\z/i
+          login = extract(:organization, :login).to_s
+          "https://github.com/#{login}"
+        when /\Arepository\z/i
+          extract(:repository, :html_url).to_s
+        end
       end
 
       def format_events
