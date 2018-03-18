@@ -66,11 +66,18 @@ module Codebot
       end
 
       def format_commit_message(commit)
-        message = full_commit_message(commit)
-        title = prettify message
         author = commit['author']['name'] if commit['author'].is_a? Hash
-        "#{format_repository repository_name}/#{format_branch branch_name} " \
-        "#{format_hash commit['id']} #{format_user author}: #{title}"
+        default_format % {
+          repository: format_repository(repository_name),
+          branch: format_branch(branch_name),
+          hash: format_hash(commit['id']),
+          author: format_user(author),
+          title: prettify(full_commit_message(commit))
+        }
+      end
+
+      def default_format
+        '%{repository}/%{branch} %{hash} %{author}: %{title}'
       end
 
       def full_commit_message(commit)

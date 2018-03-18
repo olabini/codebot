@@ -12,8 +12,17 @@ module Codebot
       end
 
       def summary
-        "[#{format_repository repository_name}] #{format_user sender_name} " \
-        "#{action} issue \##{issue_number}: #{issue_title}"
+        default_format % {
+          repository: format_repository(repository_name),
+          sender: format_user(sender_name),
+          action: action,
+          number: issue_number
+          title: issue_title
+        }
+      end
+
+      def default_format
+        '[%{repository}] %{sender} %{action} issue #%{number}: %{title}'
       end
 
       def summary_url

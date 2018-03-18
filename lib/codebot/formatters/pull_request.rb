@@ -15,9 +15,20 @@ module Codebot
       end
 
       def summary
-        "[#{format_repository repository_name}] #{format_user sender_name} " \
-        "#{action} pull request \##{pull_number}: #{pull_title} " \
-        "(#{format_branch pull_base_ref}...#{format_branch pull_head_title})"
+        default_format % {
+          repository: format_repository(repository_name),
+          sender: format_user(sender_name),
+          action: action,
+          number: pull_number,
+          title: pull_title,
+          base_ref: pull_base_ref,
+          head_title: pull_head_title
+        }
+      end
+
+      def default_format
+        '[%{repository}] %{sender} %{action} pull request #%{number}: ' \
+        '%{title} (%{base_ref}...%{head_title})'
       end
 
       def pull_number

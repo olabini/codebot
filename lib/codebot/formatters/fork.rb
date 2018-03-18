@@ -12,9 +12,16 @@ module Codebot
       end
 
       def summary
-        "[#{format_repository repository_name}] #{format_user sender_name} " \
-        'created fork ' \
-        "#{format_user fork_owner_login}/#{format_repository fork_name}"
+        default_format % {
+          repository: format_repository(repository_name),
+          sender: format_user(sender_name),
+          fork_owner: format_user(fork_owner_login),
+          fork_name: format_repository(fork_name)
+        }
+      end
+
+      def default_format
+        '[%{repository}] %{sender} created fork %{fork_owner}/%{fork_name}'
       end
 
       def fork_owner_login

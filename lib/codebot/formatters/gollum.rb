@@ -15,22 +15,22 @@ module Codebot
       end
 
       def summary
-        summary_prefix + if pages.one?
-                           single_page_summary
-                         else
-                           multi_page_summary
-                         end
+        default_format % {
+          repository: format_repository(repository_name),
+          sender: format_user(sender_name),
+          summary: (pages.one? ? single_page_summary : multi_page_summary)
+        }
       end
 
-      def summary_prefix
-        "[#{format_repository repository_name}] #{format_user sender_name}"
+      def default_format
+        '[%{repository}] %{sender} %{summary}'
       end
 
       def single_page_summary
         page = pages.first.to_h
         short = prettify page['summary']
         suffix = ": #{short}" unless short.empty?
-        " #{page['action']} wiki page #{page['title']}#{suffix}"
+        "#{page['action']} wiki page #{page['title']}#{suffix}"
       end
 
       def multi_page_summary
@@ -42,7 +42,7 @@ module Codebot
           'pushed an empty commit that did not affect any'
         )
         singular_noun = counts.last.to_a.last.to_i.eql?(1)
-        " #{changes} wiki #{singular_noun ? 'page' : 'pages'}"
+        "#{changes} wiki #{singular_noun ? 'page' : 'pages'}"
       end
 
       def action_counts

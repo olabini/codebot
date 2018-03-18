@@ -15,10 +15,18 @@ module Codebot
       end
 
       def summary
-        short = prettify comment_body
-        "[#{format_repository repository_name}] #{format_user sender_name} " \
-        "commented on pull request \##{pull_number} " \
-        "#{format_hash commit_id}: #{short}"
+        default_format % {
+          repository: format_repository(repository_name),
+          sender: format_user(sender_name),
+          number: pull_number,
+          hash: format_hash(commit_id),
+          short: prettify(comment_body)
+        }
+      end
+
+      def default_format
+        '[%{repository}] %{sender} commented on pull request #%{number} ' \
+        '%{hash}: %{summary}'
       end
 
       def summary_url
