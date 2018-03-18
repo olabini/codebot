@@ -12,9 +12,16 @@ module Codebot
       end
 
       def summary
-        short = prettify comment_body
-        "[#{format_repository repository_name}] #{format_user sender_name} " \
-        "commented on issue \##{issue_number}: #{short}"
+        default_format % {
+          repository: format_repository(repository_name),
+          sender: format_user(sender_name),
+          number: issue_number,
+          summary: prettify(comment_body)
+        }
+      end
+
+      def default_format
+        '[%{repository}] %{sender} commented on issue #%{number}: %{summary}'
       end
 
       def summary_url
