@@ -23,7 +23,7 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} %{summary}'
+        '[%<repository>] %<sender> %<summary>'
       end
 
       def single_page_summary

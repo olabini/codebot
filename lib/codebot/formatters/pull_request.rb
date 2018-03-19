@@ -27,8 +27,8 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} %{action} pull request #%{number}: ' \
-        '%{title} (%{base_ref}...%{head_title})'
+        '[%<repository>] %<sender> %<action> pull request #%<number>: ' \
+        '%<title> (%<base_ref>...%<head_title>)'
       end
 
       def pull_number

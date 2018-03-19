@@ -25,8 +25,8 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} commented on pull request #%{number} ' \
-        '%{hash}: %{summary}'
+        '[%<repository>] %<sender> commented on pull request #%<number> ' \
+        '%<hash>: %<summary>'
       end
 
       def summary_url

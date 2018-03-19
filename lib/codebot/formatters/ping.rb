@@ -20,7 +20,7 @@ module Codebot
       end
 
       def default_format
-        '[%{scope}] %{sender} added a webhook for %{events}'
+        '[%<scope>] %<sender> added a webhook for %<events>'
       end
 
       def summary_url

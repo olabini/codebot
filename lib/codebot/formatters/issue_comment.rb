@@ -21,7 +21,7 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} commented on issue #%{number}: %{summary}'
+        '[%<repository>] %<sender> commented on issue #%<number>: %<summary>'
       end
 
       def summary_url

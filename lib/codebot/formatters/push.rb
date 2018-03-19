@@ -65,7 +65,7 @@ module Codebot
         msg
       end
 
-      def format_commit_message(commit)
+      def format_commit_message(commit) # rubocop:disable Metrics/AbcSize
         author = commit['author']['name'] if commit['author'].is_a? Hash
         default_format.format(
           repository: format_repository(repository_name),
@@ -77,7 +77,7 @@ module Codebot
       end
 
       def default_format
-        '%{repository}/%{branch} %{hash} %{author}: %{title}'
+        '%<repository>/%<branch> %<hash> %<author>: %<title>'
       end
 
       def full_commit_message(commit)
