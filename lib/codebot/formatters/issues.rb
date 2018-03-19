@@ -22,7 +22,7 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} %{action} issue #%{number}: %{title}'
+        '[%<repository>] %<sender> %<action> issue #%<number>: %<title>'
       end
 
       def summary_url

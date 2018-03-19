@@ -19,7 +19,7 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} open-sourced the repository'
+        '[%<repository>] %<sender> open-sourced the repository'
       end
 
       def summary_url

@@ -19,7 +19,7 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} starred the repository'
+        '[%<repository>] %<sender> starred the repository'
       end
 
       def action

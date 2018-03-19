@@ -21,7 +21,7 @@ module Codebot
       end
 
       def default_format
-        '[%{repository}] %{sender} created fork %{fork_owner}/%{fork_name}'
+        '[%<repository>] %<sender> created fork %<fork_owner>/%<fork_name>'
       end
 
       def fork_owner_login
