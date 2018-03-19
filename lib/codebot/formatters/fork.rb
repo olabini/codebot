@@ -12,12 +12,12 @@ module Codebot
       end
 
       def summary
-        default_format % {
+        default_format.format(
           repository: format_repository(repository_name),
           sender: format_user(sender_name),
           fork_owner: format_user(fork_owner_login),
           fork_name: format_repository(fork_name)
-        }
+        )
       end
 
       def default_format

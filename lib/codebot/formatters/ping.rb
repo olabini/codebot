@@ -12,11 +12,11 @@ module Codebot
       end
 
       def summary
-        default_format % {
+        default_format.format(
           scope: format_scope,
           sender: format_user(sender_name),
           events: format_events
-        }
+        )
       end
 
       def default_format

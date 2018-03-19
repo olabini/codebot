@@ -15,11 +15,11 @@ module Codebot
       end
 
       def summary
-        default_format % {
+        default_format.format(
           repository: format_repository(repository_name),
           sender: format_user(sender_name),
           summary: (pages.one? ? single_page_summary : multi_page_summary)
-        }
+        )
       end
 
       def default_format

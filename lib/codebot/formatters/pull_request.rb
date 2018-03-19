@@ -15,7 +15,7 @@ module Codebot
       end
 
       def summary
-        default_format % {
+        default_format.format(
           repository: format_repository(repository_name),
           sender: format_user(sender_name),
           action: action,
@@ -23,7 +23,7 @@ module Codebot
           title: pull_title,
           base_ref: pull_base_ref,
           head_title: pull_head_title
-        }
+        )
       end
 
       def default_format
