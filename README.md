@@ -19,14 +19,14 @@ can be disabled through the webhook settings.
 ## Features
 
 * **Secure by default**. Codebot automatically generates strong random secrets
-  for each webhook to ensure the integrity of all received data.
+  for each webhook to ensure the integrity of received data.
 * **Highly configurable**. Codebot supports IRC over TLS, SASL authentication,
   password-protected IRC servers, channel keys, address binding, and more.
 * **Easy to set up**. Setting up Codebot takes three minutes — no need to edit
   configuration files or memorize complicated commands.
 * **Supports many events**. Codebot supports all events supported by GitHub's
-  official IRC integration, and some more. Individual events can be enabled or
-  disabled through the webhook settings.
+  official IRC integration, and a few more. Individual events can be enabled
+  or disabled through the webhook settings.
 * **Unlimited networks, channels and integrations**. A single instance can
   receive notifications for any number of webhooks and forward them to the
   appropriate channels on as many IRC networks as you want.
@@ -84,7 +84,7 @@ $ codebot integration create my-project -c freenode/#chan1 freenode/#chan2
           - #chan2 on freenode
 ```
 
-You can specify a custom endpoint using the `--endpoint` option, and a custom
+You can specify a custom endpoint using the `--endpoint` option and a custom
 secret using the `--secret` option. If the secret is set to an empty string,
 the integrity of payloads will not be verified. This is highly discouraged.
 
@@ -101,10 +101,10 @@ organizations you'd like to receive notifications from.
 
 Unless [otherwise configured][gateway], **Payload URL** should be in the format
 `http://server:4567/endpoint`, where `server` is the IP address or host name of
-the server Codebot is running on, and `endpoint` is the endpoint generated in
-the previous step. Please see [Gateway Configuration][gateway] for information
-on how to receive webhooks over HTTPS, and [Environment Variables][environ] if
-you would like Codebot to listen on a different port.
+the server Codebot is running on, and `endpoint` the endpoint generated in the
+previous step. Please see [Gateway Configuration][gateway] for information on
+how to receive webhooks over HTTPS, and [Environment Variables][environ] if you
+would like Codebot to listen on a different port.
 
 Both possible **Content type** values are supported, but it is recommended to
 use `application/json`.
@@ -215,9 +215,9 @@ to `development`. This causes the web server to listen only on the loopback
 interface by default.
 
 To install this gem onto your local machine, run `bundle exec rake install`.
-To release a new version, update the version number in `metadata.rb`, and then
-run `bundle exec rake release`, which will create a git tag for the version,
-push git commits and tags, and push the `.gem` file to [RubyGems][rubygem].
+To release a new version, update the version number in `metadata.rb` and run
+`bundle exec rake release`, which will create a git tag for the version, push
+git commits and tags, and push the `.gem` file to [RubyGems][rubygem].
 
 ## Contributing
 
