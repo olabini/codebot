@@ -35,6 +35,19 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   spec.require_paths = ['lib']
 
+  spec.post_install_message = <<-EOF
+*****
+  ======================
+  Discontinuation Notice
+  ======================
+
+  As of June 5, 2018, Codebot is no longer maintained.
+  For more information, please see https://git.io/codebot#.
+
+  Codebot will continue to receive security updates until May 31, 2019.
+*****
+EOF
+
   spec.required_ruby_version = '>= 2.2.0'
 
   spec.add_development_dependency 'bundler', '~> 1.16'
