@@ -1,10 +1,5 @@
 # Codebot
 
-[![Gem Version](https://badge.fury.io/rb/codebot.svg)](https://rubygems.org/gems/codebot)
-[![Gem Downloads](https://img.shields.io/gem/dt/codebot.svg)](https://rubygems.org/gems/codebot)
-[![Build Status](https://travis-ci.org/janikrabe/codebot.svg?branch=master)](https://travis-ci.org/janikrabe/codebot)
-[![Inline Docs](https://inch-ci.org/github/janikrabe/codebot.svg?branch=master)](https://inch-ci.org/github/janikrabe/codebot)
-
 Codebot is an IRC bot that receives GitHub webhooks and forwards them to
 IRC channels. It is designed to send messages in a format similar to that
 of the official GitHub IRC Service. Codebot is able to stay connected after
@@ -45,12 +40,8 @@ Codebot will continue to receive security updates until May 31, 2019.
 
 ## Installation
 
-You can install Codebot from [RubyGems][rubygem] by issuing the following
-command:
-
-```
-$ gem install codebot
-```
+Codebot has been discontinued and is no longer available from RubyGems.
+Please see the instructions in the [Development][develop] section instead.
 
 ## Usage
 
@@ -224,7 +215,7 @@ interface by default.
 To install this gem onto your local machine, run `bundle exec rake install`.
 To release a new version, update the version number in `metadata.rb` and run
 `bundle exec rake release`, which will create a git tag for the version, push
-git commits and tags, and push the `.gem` file to [RubyGems][rubygem].
+git commits and tags, and push the `.gem` file to RubyGems.
 
 ## Contributing
 
@@ -233,7 +224,7 @@ Please see the [CONTRIBUTING.md][contrib] for more information.
 
 [github]: https://github.com/janikrabe/codebot "codebot on GitHub"
 [contrib]: CONTRIBUTING.md "Guidelines for Contributors"
-[rubygem]: https://rubygems.org/gems/codebot "codebot on RubyGems.org"
 [newhook]: https://developer.github.com/webhooks/creating/#setting-up-a-webhook
 [environ]: #environment-variables "Environment Variables"
 [gateway]: #gateway-configuration "Gateway Configuration"
+[develop]: #development "Development"
