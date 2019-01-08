@@ -4,6 +4,7 @@ require 'codebot/message'
 require 'codebot/thread_controller'
 require 'codebot/ext/cinch/ssl_extensions'
 require 'cinch'
+require "cinch/plugins/identify"
 
 module Codebot
   # This class manages an IRC connection running in a separate thread.
@@ -126,8 +127,15 @@ module Codebot
           c.ssl.use       = net.secure
           c.ssl.verify    = net.secure
           c.user          = Codebot::PROJECT.downcase
+          if net.nickserv?
+            c.plugins.plugins = [Cinch::Plugins::Identify]
+            c.plugins.options[Cinch::Plugins::Identify] = {
+              :username => net.nickserv_username,
+              :password => net.nickserv_password,
+              :type     => :nickserv,
+            }          
+          end
         end
-
         on(:join) { con.set_ready! }
       end
     end

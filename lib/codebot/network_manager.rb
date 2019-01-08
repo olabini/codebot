@@ -145,6 +145,7 @@ module Codebot
       puts "\tBind to:    #{network.bind}" unless network.bind.to_s.empty?
       puts "\tUser modes: #{network.modes}" unless network.modes.to_s.empty?
       show_network_sasl(network)
+      show_network_nickserv(network)
     end
 
     # Prints information about the SASL authentication settings for a network.
@@ -155,6 +156,16 @@ module Codebot
       return unless network.sasl?
       puts "\t\tUsername: #{network.sasl_username}"
       puts "\t\tPassword: #{'*' * network.sasl_password.to_s.length}"
+    end
+
+    # Prints information about the NickServ authentication settings for a network.
+    #
+    # @param network [Network] the network
+    def show_network_nickserv(network)
+      puts "\tNickServ authentication #{network.nickserv? ? 'enabled' : 'disabled'}"
+      return unless network.nickserv?
+      puts "\t\tUsername: #{network.nickserv_username}"
+      puts "\t\tPassword: #{'*' * network.nickserv_password.to_s.length}"
     end
   end
 end
