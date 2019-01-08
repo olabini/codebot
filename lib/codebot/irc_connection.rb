@@ -130,7 +130,7 @@ module Codebot
           if net.nickserv?
             c.plugins.plugins = [Cinch::Plugins::Identify]
             c.plugins.options[Cinch::Plugins::Identify] = {
-              :username => net.nickserv_username,
+              :username => net.nickserv_username.to_s.empty? ? nil : net.nickserv_username,
               :password => net.nickserv_password,
               :type     => :nickserv,
             }          
