@@ -177,7 +177,7 @@ module Codebot
     #
     # @return [Boolean] whether NickServ is enabled
     def nickserv?
-      !nickserv_username.to_s.empty? && !nickserv_password.to_s.empty?
+      !nickserv_username.to_s.empty? || !nickserv_password.to_s.empty?
     end
 
     # Checks whether this network is equal to another network.
