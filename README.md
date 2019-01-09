@@ -16,13 +16,6 @@ support. Messages for these events are designed to be as consistent as possible
 with official messages. If these additional notifications are not desired, they
 can be disabled through the webhook settings.
 
-## Discontinuation Notice
-
-As of June 5, 2018, this project is no longer maintained. If you're interested
-in maintaining it, please contact codebot@janikrabe.com.
-
-Codebot will continue to receive security updates until May 31, 2019.
-
 ## Features
 
 * **Secure by default**. Codebot automatically generates strong random secrets
