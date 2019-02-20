@@ -169,6 +169,10 @@ module Codebot
       extract(:repository, :html_url)
     end
 
+    def gitlab_repository_url
+      extract(:repository, :homepage)
+    end
+
     # Extracts the action from the payload.
     #
     # @return [String, nil] the action

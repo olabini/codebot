@@ -16,12 +16,9 @@ module Codebot
       pull_request_review_comment
       push
       watch
-    ].freeze
 
-    # The currently supported events for gitlab.
-    VALID_SYMBOLS_GITLAB = %i[
+      gitlab_push_hook
     ].freeze
-
     # TODO: Support for create
     # TODO: Support for delete
     # TODO: Support for deployment
@@ -46,16 +43,21 @@ module Codebot
     # TODO: Support for team
     # TODO: Support for team_add
 
+    # TODO: Gitlab Tag Push Hook
+    # TODO: Gitlab Issue Hook
+    # TODO: Gitlab Note Hook
+    # TODO: Gitlab Merge Request Hook
+    # TODO: Gitlab Wiki Page Hook
+    # TODO: Gitlab Pipeline Hook
+    # TODO: Gitlab Build Hook
+
+
     # Converts a webhook event to its corresponding symbol.
     #
     # @param str [String] the event string
     # @return [Symbol, nil] the symbol, or +nil+ if the event is not supported
     def self.symbolize(str)
       VALID_SYMBOLS.find { |sym| sym.to_s.casecmp(str).zero? }
-    end
-
-    def self.symbolize_gitlab(str)
-      VALID_SYMBOLS_GITLAB.find { |sym| sym.to_s.casecmp(str).zero? }
     end
   end
 end
