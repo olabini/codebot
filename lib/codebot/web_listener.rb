@@ -57,11 +57,19 @@ module Codebot
     #                                           code and response if the
     #                                           request was invalid
     def create_request(integration, request, payload)
-      event = request.env['HTTP_X_GITHUB_EVENT']
-      return [400, 'Missing event header'] if event.nil? || event.empty?
-      event = Event.symbolize(event)
-      return [501, 'Event not yet supported'] if event.nil?
-      Request.new(integration, event, payload) unless event.nil?
+      if integration.gitlab
+        event = request.env['HTTP_X_GITLAB_EVENT']
+        return [400, 'Missing event header'] if event.nil? || event.empty?
+        event = Event.symbolize_gitlab(event)
+        return [501, 'Event not yet supported'] if event.nil?
+        Request.new(integration, event, payload) unless event.nil?
+      else
+        event = request.env['HTTP_X_GITHUB_EVENT']
+        return [400, 'Missing event header'] if event.nil? || event.empty?
+        event = Event.symbolize(event)
+        return [501, 'Event not yet supported'] if event.nil?
+        Request.new(integration, event, payload) unless event.nil?
+      end
     end
 
     # Verifies a webhook signature.
@@ -74,8 +82,12 @@ module Codebot
     def valid?(request, integration, payload)
       return true unless integration.verify_payloads?
       secret = integration.secret
-      request_signature = request.env['HTTP_X_HUB_SIGNATURE']
-      Cryptography.valid_signature?(payload, secret, request_signature)
+      if integration.gitlab
+        secret == request.env['HTTP_X_GITLAB_TOKEN']
+      else 
+        request_signature = request.env['HTTP_X_HUB_SIGNATURE']
+        Cryptography.valid_signature?(payload, secret, request_signature)
+      end
     end
   end
 end

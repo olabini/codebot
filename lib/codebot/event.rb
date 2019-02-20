@@ -18,6 +18,10 @@ module Codebot
       watch
     ].freeze
 
+    # The currently supported events for gitlab.
+    VALID_SYMBOLS = %i[
+    ].freeze
+
     # TODO: Support for create
     # TODO: Support for delete
     # TODO: Support for deployment
@@ -48,6 +52,10 @@ module Codebot
     # @return [Symbol, nil] the symbol, or +nil+ if the event is not supported
     def self.symbolize(str)
       VALID_SYMBOLS.find { |sym| sym.to_s.casecmp(str).zero? }
+    end
+
+    def self.symbolize_gitlab(str)
+      VALID_SYMBOLS_GITLAB.find { |sym| sym.to_s.casecmp(str).zero? }
     end
   end
 end

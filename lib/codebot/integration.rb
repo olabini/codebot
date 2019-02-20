@@ -24,6 +24,8 @@ module Codebot
     # @return [Array<Channel>] the channels notifications will be delivered to
     attr_reader :channels
 
+    attr_reader :gitlab
+    
     # Creates a new integration from the supplied hash.
     #
     # @param params [Hash] A hash with symbolic keys representing the instance
@@ -41,6 +43,7 @@ module Codebot
       self.name     = params[:name]
       self.endpoint = params[:endpoint]
       self.secret   = params[:secret]
+      self.gitlab   = params[:gitlab] || false
       set_channels params[:channels], params[:config]
     end
 
@@ -98,6 +101,10 @@ module Codebot
       end
     end
 
+    def gitlab=(gitlab)
+      @gitlab = gitlab
+    end
+
     # Checks whether payloads delivered to this integration must be verified.
     #
     # @return [Boolean] whether verification is required
@@ -145,6 +152,7 @@ module Codebot
       [name, {
         'endpoint' => endpoint,
         'secret'   => secret,
+        'gitlab'   => gitlab,
         'channels' => Channel.serialize_all(channels, conf)
       }]
     end
@@ -169,6 +177,7 @@ module Codebot
         name:     name,
         endpoint: data['endpoint'],
         secret:   data['secret'],
+        gitlab:   data['gitlab'],
         channels: data['channels']
       }
     end
