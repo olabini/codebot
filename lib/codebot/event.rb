@@ -18,6 +18,8 @@ module Codebot
       watch
 
       gitlab_push_hook
+      gitlab_tag_push_hook
+      gitlab_issue_hook
     ].freeze
     # TODO: Support for create
     # TODO: Support for delete
@@ -43,8 +45,6 @@ module Codebot
     # TODO: Support for team
     # TODO: Support for team_add
 
-    # TODO: Gitlab Tag Push Hook
-    # TODO: Gitlab Issue Hook
     # TODO: Gitlab Note Hook
     # TODO: Gitlab Merge Request Hook
     # TODO: Gitlab Wiki Page Hook

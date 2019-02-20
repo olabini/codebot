@@ -180,6 +180,10 @@ module Codebot
       extract(:action).to_s
     end
 
+    def gitlab_action
+      extract(:object_attributes, :action).to_s
+    end
+
     # Checks whether the action is 'opened'.
     #
     # @return [Boolean] whether the action is 'opened'.
@@ -194,6 +198,17 @@ module Codebot
       action.eql? 'closed'
     end
 
+    def gitlab_opened?
+      gitlab_action.eql? 'open'
+    end
+
+    # Checks whether the action is 'closed'.
+    #
+    # @return [Boolean] whether the action is 'closed'.
+    def gitlab_closed?
+      gitlab_action.eql? 'close'
+    end
+    
     # Extracts the user name of the person who triggered this event.
     #
     # @return [String, nil] the user name
