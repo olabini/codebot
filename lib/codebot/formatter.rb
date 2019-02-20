@@ -31,6 +31,10 @@ module Codebot
       shorten_url summary_url
     end
 
+    def gitlab_url
+      summary_url
+    end
+
     # Formats a repository name.
     #
     # @param repository [String] the name

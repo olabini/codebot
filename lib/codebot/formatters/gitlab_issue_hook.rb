@@ -5,11 +5,14 @@ module Codebot
     module Gitlab
       # This class formats issues events.
       class IssueHook < Formatter
+        # This needs a bit more work, since Gitlab issue hooks are slightly more complicated than
+        # the ones for Github.
+
         # Formats IRC messages for an issue event.
         #
         # @return [Array<String>] the formatted messages
         def format
-          ["#{summary}: #{format_url url}"] if gitlab_opened? || gitlab_closed?
+          ["#{summary}: #{format_url gitlab_url}"] if gitlab_opened? || gitlab_closed?
         end
 
         def summary
@@ -31,7 +34,7 @@ module Codebot
         end
 
         def issue_number
-          extract(:object_attributes, :id)
+          extract(:object_attributes, :iid)
         end
 
         def issue_title

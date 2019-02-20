@@ -60,7 +60,7 @@ module Codebot
       when :watch then Formatters::Watch.new(payload).format
       when :gitlab_push_hook then Formatters::Gitlab::PushHook.new(payload).format
       when :gitlab_tag_push_hook then Formatters::Gitlab::PushHook.new(payload).format
-      when :gitlab_issue_hook then Formatters::Gitlab::IssueHook.new(payload).format
+      # when :gitlab_issue_hook then Formatters::Gitlab::IssueHook.new(payload).format
       else "Error: missing formatter for #{event.inspect}"
       end
     end
