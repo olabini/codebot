@@ -19,7 +19,7 @@ module Codebot
     ].freeze
 
     # The currently supported events for gitlab.
-    VALID_SYMBOLS = %i[
+    VALID_SYMBOLS_GITLAB = %i[
     ].freeze
 
     # TODO: Support for create
