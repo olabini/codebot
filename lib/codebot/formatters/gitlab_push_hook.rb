@@ -11,9 +11,9 @@ module Codebot
           commits_count = extract(:total_commits_count).to_i
           branch = extract(:ref).split("/")[2..-1].join("/")
 
-          compare_url = shorten_url "#{repo_url}/compare/#{extract(:before)}...#{extract(:after)}"
+          compare_url = "#{repo_url}/compare/#{extract(:before)}...#{extract(:after)}"
           
-          reply = "[%s]%s pushed #{format_number commits_count, 'new commit', 'new commits'} to %s: %s" % [
+          reply = "[%s] %s pushed #{format_number commits_count, 'new commit', 'new commits'} to %s: %s" % [
             format_repository(repo_name),
             format_user(user_name),
             format_branch(branch),
