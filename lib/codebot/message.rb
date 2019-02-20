@@ -31,7 +31,7 @@ module Codebot
     #
     # @return [Array<String>] the formatted IRC messages
     def format
-      Formatters.format(@event, @payload.to_json, integration)
+      Formatters.format(@event, @payload.to_json, @integration)
     end
   end
 end
