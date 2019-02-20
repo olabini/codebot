@@ -11,7 +11,7 @@ module Codebot
           commits_count = extract(:total_commits_count).to_i
           branch = extract(:ref).split("/")[2..-1].join("/")
 
-          compare_url = "#{repo_url}/compare/#{extract(:before)}...#{extract(:after)}"
+          compare_url = shorten_url "#{repo_url}/compare/#{extract(:before)}...#{extract(:after)}"
           
           reply = "[%s] %s pushed #{format_number commits_count, 'new commit', 'new commits'} to %s: %s" % [
             format_repository(repo_name),
@@ -23,7 +23,7 @@ module Codebot
           [reply] + extract(:commits).map do |commit|
             author = commit['author']['name'] if commit['author'].is_a? Hash
             '%<repository>s/%<branch>s %<hash>s %<author>s: %<title>s' % {
-              repository: repo_name,
+              repository: format_repository(repo_name),
               branch: format_branch(branch),
               hash: format_hash(commit['id']),
               author: format_user(author),
