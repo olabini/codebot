@@ -28,7 +28,6 @@ module Codebot
               hash: format_hash(commit['id']),
               author: format_user(author),
               title: prettify(commit["message"]),
-              ,
             }
           end
         end
