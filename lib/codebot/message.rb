@@ -20,17 +20,18 @@ module Codebot
     # @param channel [Channel] the channel to send this message to
     # @param event [Symbol] the event that caused this message to be sent
     # @param payload [Payload] the parsed request payload
-    def initialize(channel, event, payload)
+    def initialize(channel, event, payload, integration)
       @channel = channel
       @event   = event
       @payload = payload
+      @integration = integration
     end
 
     # Formats this message for delivery to an IRC channel.
     #
     # @return [Array<String>] the formatted IRC messages
     def format
-      Formatters.format(@event, @payload.to_json)
+      Formatters.format(@event, @payload.to_json, integration)
     end
   end
 end

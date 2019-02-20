@@ -25,6 +25,8 @@ module Codebot
     attr_reader :channels
 
     attr_reader :gitlab
+    attr_reader :shortener_url
+    attr_reader :shortener_secret
     
     # Creates a new integration from the supplied hash.
     #
@@ -44,6 +46,8 @@ module Codebot
       self.endpoint = params[:endpoint]
       self.secret   = params[:secret]
       self.gitlab   = params[:gitlab] || false
+      self.shortener_url   = params[:shortener_url]
+      self.shortener_secret   = params[:shortener_secret]
       set_channels params[:channels], params[:config]
     end
 
@@ -105,6 +109,14 @@ module Codebot
       @gitlab = gitlab
     end
 
+    def shortener_url=(shortener_url)
+      @shortener_url = shortener_url
+    end
+
+    def shortener_secret=(shortener_secret)
+      @shortener_secret = shortener_secret
+    end
+
     # Checks whether payloads delivered to this integration must be verified.
     #
     # @return [Boolean] whether verification is required
@@ -153,6 +165,8 @@ module Codebot
         'endpoint' => endpoint,
         'secret'   => secret,
         'gitlab'   => gitlab,
+        'shortener_url'   => shortener_url,
+        'shortener_secret'   => shortener_secret,
         'channels' => Channel.serialize_all(channels, conf)
       }]
     end
@@ -178,6 +192,8 @@ module Codebot
         endpoint: data['endpoint'],
         secret:   data['secret'],
         gitlab:   data['gitlab'],
+        shortener_url:   data['shortener_url'],
+        shortener_secret:   data['shortener_secret'],
         channels: data['channels']
       }
     end
