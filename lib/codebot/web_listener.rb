@@ -60,7 +60,7 @@ module Codebot
       if integration.gitlab
         event = request.env['HTTP_X_GITLAB_EVENT']
         return [400, 'Missing event header'] if event.nil? || event.empty?
-        event = Event.symbolize("Gitlab #{event}")
+        event = Event.symbolize("Gitlab #{event}".gsub(/ /, '_')
         return [501, 'Event not yet supported'] if event.nil?
         Request.new(integration, event, payload) unless event.nil?
       else
