@@ -15,6 +15,7 @@ require 'codebot/formatters/push'
 require 'codebot/formatters/watch'
 require 'codebot/formatters/gitlab_push_hook'
 require 'codebot/formatters/gitlab_issue_hook'
+require 'codebot/formatters/gitlab_job_hook'
 require 'codebot/shortener'
 
 module Codebot
@@ -65,6 +66,8 @@ module Codebot
       when :watch then Formatters::Watch.new(payload, Shortener::Github.new).format
       when :gitlab_push_hook then Formatters::Gitlab::PushHook.new(payload, custom_shortener(integration)).format
       when :gitlab_tag_push_hook then Formatters::Gitlab::PushHook.new(payload, custom_shortener(integration)).format
+      when :gitlab_job_hook then Formatters::Gitlab::JobHook.new(payload, custom_shortener(integration)).format
+      when :gitlab_build_hook then Formatters::Gitlab::JobHook.new(payload, custom_shortener(integration)).format
       # when :gitlab_issue_hook then Formatters::Gitlab::IssueHook.new(payload).format
       else "Error: missing formatter for #{event.inspect}"
       end
