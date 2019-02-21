@@ -23,7 +23,7 @@ module Codebot
           repo_url = extract(:repository, :homepage)
           repo_name = extract(:repository, :name)
           job_url = shorten_url "#{repo_url}/-/jobs/#{extract(:build_id)}"
-          reply = "[%s] job '%s' (%s)" % [
+          reply = "[%s] job '%s' (%s) %s" % [
             format_repository(repo_name),
             extract(:build_name),
             job_url,
