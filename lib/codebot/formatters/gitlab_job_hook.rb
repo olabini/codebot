@@ -33,7 +33,7 @@ module Codebot
           if extract(:build_status) == "created"
             [reply] + [format_commit(extract(:commit))]
           else
-            reply
+            [reply]
           end
         end
 
