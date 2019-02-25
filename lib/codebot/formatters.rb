@@ -16,6 +16,7 @@ require 'codebot/formatters/watch'
 require 'codebot/formatters/gitlab_push_hook'
 require 'codebot/formatters/gitlab_issue_hook'
 require 'codebot/formatters/gitlab_job_hook'
+require 'codebot/formatters/gitlab_pipeline_hook'
 require 'codebot/shortener'
 
 module Codebot
@@ -43,7 +44,7 @@ module Codebot
     def self.custom_shortener(inte)
       Shortener::Custom.new(inte.shortener_url, inte.shortener_secret)
     end
-    
+
     # Formats colored IRC messages. This method should not be called directly
     # from outside this module.
     #
@@ -68,6 +69,7 @@ module Codebot
       when :gitlab_tag_push_hook then Formatters::Gitlab::PushHook.new(payload, custom_shortener(integration)).format
       when :gitlab_job_hook then Formatters::Gitlab::JobHook.new(payload, custom_shortener(integration)).format
       when :gitlab_build_hook then Formatters::Gitlab::JobHook.new(payload, custom_shortener(integration)).format
+      when :gitlab_pipeline_hook then Formatters::Gitlab::PipelineHook.new(payload, custom_shortener(integration)).format
       # when :gitlab_issue_hook then Formatters::Gitlab::IssueHook.new(payload).format
       else "Error: missing formatter for #{event.inspect}"
       end
