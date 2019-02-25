@@ -11,7 +11,7 @@ module Codebot
         end
 
         def format_job_status
-          case pipeline_status
+          case self.pipeline_status
           when "created"
             "was created from commit"
           when "success"
@@ -21,7 +21,7 @@ module Codebot
           when /^fail/, /^err/
             "failed: #{extract(:object_attributes, :detailed_status)}"
           else
-            "did something: #{pipeline_status}"
+            "did something: #{self.pipeline_status}"
           end
         end
 
@@ -29,14 +29,14 @@ module Codebot
           repo_url = extract(:project, :web_url)
           repo_name = extract(:project, :path_with_namespace)
 
-          pipeline_url = shorten_url "#{repo_url}/pipelines/#{extract(:object_attributes, :id}"
+          pipeline_url = shorten_url "#{repo_url}/pipelines/#{extract(:object_attributes, :id)}"
           reply = "[%s] pipeline %s (%s)" % [
             format_repository(repo_name),
             format_job_status,
             pipeline_url,
           ]
 
-          if pipeline_status == "created"
+          if self.pipeline_status == "created"
             [reply + ":"] + [format_commit(extract(:commit))]
           else
             [reply]
