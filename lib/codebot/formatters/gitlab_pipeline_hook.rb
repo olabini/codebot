@@ -37,7 +37,7 @@ module Codebot
           ]
 
           if pipeline_status == "created"
-            [reply ":"] + [format_commit(extract(:commit))]
+            [reply + ":"] + [format_commit(extract(:commit))]
           else
             [reply]
           end
