@@ -5,7 +5,7 @@ require 'codebot/serializable'
 
 module Codebot
   # This class represents an IRC network notifications can be delivered to.
-  class Network < Serializable
+  class Network < Serializable # rubocop:disable Metrics/ClassLength
     include Sanitizers
 
     # @return [String] the name of this network
@@ -65,6 +65,10 @@ module Codebot
       self.nick            = params[:nick]
       self.bind            = params[:bind]
       self.modes           = params[:modes]
+      update_complicated!(params)
+    end
+
+    def update_complicated!(params)
       update_connection(params[:host], params[:port], params[:secure])
       update_sasl(params[:disable_sasl],
                   params[:sasl_username], params[:sasl_password])
@@ -129,8 +133,10 @@ module Codebot
     #
     # @param disable [Boolean] whether to disable NickServ, or +nil+ to keep the
     #                          current value.
-    # @param user [String] the NickServ username, or +nil+ to keep the current value
-    # @param pass [String] the NickServ password, or +nil+ to keep the current value
+    # @param user [String] the NickServ username, or +nil+ to keep the
+    #                          current value
+    # @param pass [String] the NickServ password, or +nil+ to keep the
+    #                          current value
     def update_nickserv(disable, user, pass)
       @nickserv_username = valid! user, valid_string(user), :@nickserv_username,
                                   invalid_error: 'invalid NickServ username %s'
@@ -227,8 +233,8 @@ module Codebot
 
     # @return [Array<Symbol>] the fields used for serializing this network
     def self.fields
-      %i[host port secure server_password nick sasl_username sasl_password nickserv_username nickserv_password
-         bind modes]
+      %i[host port secure server_password nick sasl_username sasl_password
+         nickserv_username nickserv_password bind modes]
     end
   end
 end

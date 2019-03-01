@@ -121,7 +121,9 @@ module Codebot
       raise ValidationError, options[:required_error] if options[:required]
     end
 
-    private def fallback_exist?(fallback)
+    private
+
+    def fallback_exist?(fallback)
       !fallback.nil? && instance_variable_defined?(fallback)
     end
   end

@@ -162,11 +162,16 @@ module Codebot
       puts "\t\tPassword: #{'*' * network.sasl_password.to_s.length}"
     end
 
-    # Prints information about the NickServ authentication settings for a network.
+    def nickserv_status(network)
+      network.nickserv? ? 'enabled' : 'disabled'
+    end
+
+    # Prints information about the NickServ authentication
+    #                  settings for a network.
     #
     # @param network [Network] the network
     def show_network_nickserv(network)
-      puts "\tNickServ authentication #{network.nickserv? ? 'enabled' : 'disabled'}"
+      puts "\tNickServ authentication #{nickserv_status(network)}"
       return unless network.nickserv?
 
       puts "\t\tUsername: #{network.nickserv_username}"

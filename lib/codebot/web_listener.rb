@@ -48,6 +48,20 @@ module Codebot
       [202, 'Accepted']
     end
 
+    def create_gitlab_event(request)
+      event = request.env['HTTP_X_GITLAB_EVENT']
+      return [400, 'Missing event header'] if event.nil? || event.empty?
+
+      Event.symbolize("Gitlab #{event}".tr(' ', '_'))
+    end
+
+    def create_github_event(request)
+      event = request.env['HTTP_X_GITHUB_EVENT']
+      return [400, 'Missing event header'] if event.nil? || event.empty?
+
+      Event.symbolize(event)
+    end
+
     # Creates a new request for the webhook.
     #
     # @param integration [Integration] the integration for which the request
@@ -59,23 +73,16 @@ module Codebot
     #                                           code and response if the
     #                                           request was invalid
     def create_request(integration, request, payload)
-      if integration.gitlab
-        event = request.env['HTTP_X_GITLAB_EVENT']
-        return [400, 'Missing event header'] if event.nil? || event.empty?
+      event = if integration.gitlab
+                create_gitlab_event(request)
+              else
+                create_github_event(request)
+              end
+      return event if event.is_a? Array
 
-        event = Event.symbolize("Gitlab #{event}".gsub(/ /, '_'))
-        return [501, 'Event not yet supported'] if event.nil?
+      return [501, 'Event not yet supported'] if event.nil?
 
-        Request.new(integration, event, payload) unless event.nil?
-      else
-        event = request.env['HTTP_X_GITHUB_EVENT']
-        return [400, 'Missing event header'] if event.nil? || event.empty?
-
-        event = Event.symbolize(event)
-        return [501, 'Event not yet supported'] if event.nil?
-
-        Request.new(integration, event, payload) unless event.nil?
-      end
+      Request.new(integration, event, payload)
     end
 
     # Verifies a webhook signature.

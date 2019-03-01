@@ -16,7 +16,7 @@ def description
   text.gsub(/\s+/, ' ').strip
 end
 
-Gem::Specification.new do |spec|
+Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.name          = 'codebot'
   spec.version       = Codebot::VERSION
   spec.authors       = ['Janik Rabe']
@@ -35,8 +35,8 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   spec.require_paths = ['lib']
 
-  spec.post_install_message = <<-EOF
-*****
+  spec.post_install_message = <<-EOF_INSTALL_MESSAGE
+  *****
   ======================
   Discontinuation Notice
   ======================
@@ -45,8 +45,8 @@ Gem::Specification.new do |spec|
   For more information, please see https://git.io/codebot#.
 
   Codebot will continue to receive security updates until May 31, 2019.
-*****
-  EOF
+  *****
+  EOF_INSTALL_MESSAGE
 
   spec.required_ruby_version = '>= 2.2.0'
 

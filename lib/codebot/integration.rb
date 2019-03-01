@@ -8,7 +8,7 @@ require 'codebot/serializable'
 module Codebot
   # This class represents an integration that maps an endpoint to the
   # corresponding IRC channels.
-  class Integration < Serializable
+  class Integration < Serializable # rubocop:disable Metrics/ClassLength
     include Sanitizers
 
     # @return [String] the name of this integration
@@ -24,9 +24,9 @@ module Codebot
     # @return [Array<Channel>] the channels notifications will be delivered to
     attr_reader :channels
 
-    attr_reader :gitlab
-    attr_reader :shortener_url
-    attr_reader :shortener_secret
+    attr_accessor :gitlab
+    attr_accessor :shortener_url
+    attr_accessor :shortener_secret
 
     # Creates a new integration from the supplied hash.
     #
@@ -104,18 +104,6 @@ module Codebot
                        invalid_error: 'invalid secret %s') do
         Cryptography.generate_secret
       end
-    end
-
-    def gitlab=(gitlab)
-      @gitlab = gitlab
-    end
-
-    def shortener_url=(shortener_url)
-      @shortener_url = shortener_url
-    end
-
-    def shortener_secret=(shortener_secret)
-      @shortener_secret = shortener_secret
     end
 
     # Checks whether payloads delivered to this integration must be verified.
