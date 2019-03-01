@@ -37,13 +37,13 @@ module Codebot
         end
 
         def commit_summary(commit)
-          commit_default_format.format(
+          commit_default_format % {
             repository: format_repository(repository_name),
             branch: format_branch(branch),
             hash: format_hash(commit['id']),
             author: format_user(commit_author(commit)),
             title: prettify(commit['message'])
-          )
+          }
         end
 
         def branch
@@ -56,20 +56,20 @@ module Codebot
         end
 
         def summary_format
-          '[%<repository>s] %<user>s pushed %<num_commits>s' \
+          '[%<repository>s] %<user>s pushed %<num_commits>s ' \
             'to %<branch>s: %<url>s'
         end
 
         def default_summary
           user_name = extract(:user_name)
 
-          summary_format.format(
+          summary_format % {
             repository: format_repository(repository_name),
             user: format_user(user_name),
             num_commits: num_commits,
             branch: format_branch(branch),
             url: compare_url
-          )
+          }
         end
 
         def format

@@ -1,0 +1,106 @@
+{
+  "object_kind": "push",
+  "event_name": "push",
+  "before": "2e01949d75647f5d3ac0f76729e71c60ca79431a",
+  "after": "119f8440eb4b9895a7406097308ce5f35993a94b",
+  "ref": "refs/heads/master",
+  "checkout_sha": "119f8440eb4b9895a7406097308ce5f35993a94b",
+  "message": null,
+  "user_id": 7,
+  "user_name": "Ola Bini",
+  "user_username": "ola",
+  "user_email": "ola@autonomia.digital",
+  "user_avatar": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png",
+  "project_id": 15,
+  "project": {
+    "id": 15,
+    "name": "website-autonomia.digital",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "web_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+    "namespace": "Infrastructure",
+    "visibility_level": 0,
+    "path_with_namespace": "infrastructure/website-autonomia.digital",
+    "default_branch": "master",
+    "ci_config_path": "",
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git"
+  },
+  "commits": [
+    {
+      "id": "119f8440eb4b9895a7406097308ce5f35993a94b",
+      "message": "Remove the testing text\n",
+      "timestamp": "2019-02-19T22:30:01Z",
+      "url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/commit/119f8440eb4b9895a7406097308ce5f35993a94b",
+      "author": {
+        "name": "Ola Bini",
+        "email": "ola@olabini.se"
+      },
+      "added": [
+
+      ],
+      "modified": [
+        "index.md"
+      ],
+      "removed": [
+
+      ]
+    },
+    {
+      "id": "5ace5835bfd7fc724a5d25d27ed5587f36a20f52",
+      "message": "It's great to have rsync installed...\n",
+      "timestamp": "2019-02-19T22:08:06Z",
+      "url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/commit/5ace5835bfd7fc724a5d25d27ed5587f36a20f52",
+      "author": {
+        "name": "Ola Bini",
+        "email": "ola@olabini.se"
+      },
+      "added": [
+
+      ],
+      "modified": [
+        ".gitlab-ci.yml"
+      ],
+      "removed": [
+
+      ]
+    },
+    {
+      "id": "2e01949d75647f5d3ac0f76729e71c60ca79431a",
+      "message": "Add staging and production passes\n",
+      "timestamp": "2019-02-19T21:59:49Z",
+      "url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/commit/2e01949d75647f5d3ac0f76729e71c60ca79431a",
+      "author": {
+        "name": "Ola Bini",
+        "email": "ola@olabini.se"
+      },
+      "added": [
+
+      ],
+      "modified": [
+        ".gitlab-ci.yml",
+        "index.md"
+      ],
+      "removed": [
+
+      ]
+    }
+  ],
+  "total_commits_count": 3,
+  "push_options": [
+
+  ],
+  "repository": {
+    "name": "website-autonomia.digital",
+    "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "visibility_level": 0
+  }
+}
