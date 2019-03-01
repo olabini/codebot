@@ -1,17 +1,18 @@
-# coding: utf-8
+# frozen_string_literal: true
 
 module Codebot
   module Formatters
     module Gitlab
+      # Triggers on a Job or Build event
       class JobHook < Formatter
-        def format_job_status
+        def format_job_status # rubocop:disable Metrics/MethodLength
           case extract(:build_status)
-          when "created"
-            "was created from commit:"
-          when "success"
-            "succeeded"
-          when "skipped"
-            "was skipped"
+          when 'created'
+            'was created from commit:'
+          when 'success'
+            'succeeded'
+          when 'skipped'
+            'was skipped'
           when /^fail/, /^err/
             "failed: #{extract(:build_failure_reason)}"
           else
@@ -19,33 +20,49 @@ module Codebot
           end
         end
 
-        def format
-          repo_url = extract(:repository, :homepage)
-          repo_name = extract(:repository, :name)
-          job_url = shorten_url "#{repo_url}/-/jobs/#{extract(:build_id)}"
-          reply = "[%s] job '%s' (%s) %s" % [
-            format_repository(repo_name),
-            extract(:build_name),
-            job_url,
-            format_job_status,
-          ]
+        def repo_url
+          extract(:repository, :homepage)
+        end
 
-          if extract(:build_status) == "created"
-            [reply] + [format_commit(extract(:commit))]
+        def repo_name
+          extract(:repository, :name)
+        end
+
+        def job_url
+          shorten_url "#{repo_url}/-/jobs/#{extract(:build_id)}"
+        end
+
+        def job_description
+          '[%<repository>s] job \'%<build>s\' (%<url>s) %<status>s'.format(
+            repository: format_repository(repo_name),
+            build: extract(:build_name),
+            url: job_url,
+            status: format_job_status
+          )
+        end
+
+        def format
+          if extract(:build_status) == 'created'
+            [job_description] + [format_commit(extract(:commit))]
           else
-            [reply]
+            [job_description]
           end
         end
 
+        def author(commit)
+          return nil unless commit['author'].is_a? Hash
+
+          commit['author']['name']
+        end
+
         def format_commit(commit)
-          author = commit['author']['name'] if commit['author'].is_a? Hash
-          '%<repository>s/%<branch>s %<hash>s %<author>s: %<title>s' % {
+          '%<repository>s/%<branch>s %<hash>s %<author>s: %<title>s'.format(
             repository: format_repository(repo_name),
             branch: format_branch(branch),
             hash: format_hash(commit['id']),
             author: format_user(author),
-            title: prettify(commit["message"]),
-          }
+            title: prettify(commit['message'])
+          )
         end
       end
     end
