@@ -41,8 +41,46 @@ module Codebot
        "has been printed to STDERR. Please report this issue to #{url}."]
     end
 
-    def self.custom_shortener(inte)
+    def self.shortener(inte)
       Shortener::Custom.new(inte.shortener_url, inte.shortener_secret)
+    end
+
+    def self.create_formatter(event, payload, integration) # rubocop:disable Metrics/LineLength, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
+      case event
+      when :commit_comment
+        Formatters::CommitComment.new(payload, Shortener::Github.new)
+      when :fork
+        Formatters::Fork.new(payload, Shortener::Github.new)
+      when :gollum
+        Formatters::Gollum.new(payload, Shortener::Github.new)
+      when :issue_comment
+        Formatters::IssueComment.new(payload, Shortener::Github.new)
+      when :issues
+        Formatters::Issues.new(payload, Shortener::Github.new)
+      when :ping
+        Formatters::Ping.new(payload, Shortener::Github.new)
+      when :public
+        Formatters::Public.new(payload, Shortener::Github.new)
+      when :pull_request
+        Formatters::PullRequest.new(payload, Shortener::Github.new)
+      when :pull_request_review_comment
+        Formatters::PullRequestReviewComment.new(payload, Shortener::Github.new)
+      when :push
+        Formatters::Push.new(payload, Shortener::Github.new)
+      when :watch
+        Formatters::Watch.new(payload, Shortener::Github.new)
+      when :gitlab_push_hook
+        Formatters::Gitlab::PushHook.new(payload, shortener(integration))
+      when :gitlab_tag_push_hook
+        Formatters::Gitlab::PushHook.new(payload, shortener(integration))
+      when :gitlab_job_hook
+        Formatters::Gitlab::JobHook.new(payload, shortener(integration))
+      when :gitlab_build_hook
+        Formatters::Gitlab::JobHook.new(payload, shortener(integration))
+      when :gitlab_pipeline_hook
+        Formatters::Gitlab::PipelineHook.new(payload, shortener(integration))
+      else "Error: missing formatter for #{event.inspect}"
+      end
     end
 
     # Formats colored IRC messages. This method should not be called directly
@@ -51,28 +89,8 @@ module Codebot
     # @param event [Symbol] the webhook event
     # @param payload [Object] the JSON payload object
     # @return [Array<String>] the formatted messages
-    def self.format_color(event, payload, integration) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/LineLength
-      case event
-      when :commit_comment then Formatters::CommitComment.new(payload, Shortener::Github.new).format
-      when :fork then Formatters::Fork.new(payload, Shortener::Github.new).format
-      when :gollum then Formatters::Gollum.new(payload, Shortener::Github.new).format
-      when :issue_comment then Formatters::IssueComment.new(payload, Shortener::Github.new).format
-      when :issues then Formatters::Issues.new(payload, Shortener::Github.new).format
-      when :ping then Formatters::Ping.new(payload, Shortener::Github.new).format
-      when :public then Formatters::Public.new(payload, Shortener::Github.new).format
-      when :pull_request then Formatters::PullRequest.new(payload, Shortener::Github.new).format
-      when :pull_request_review_comment
-        Formatters::PullRequestReviewComment.new(payload, Shortener::Github.new).format
-      when :push then Formatters::Push.new(payload, Shortener::Github.new).format
-      when :watch then Formatters::Watch.new(payload, Shortener::Github.new).format
-      when :gitlab_push_hook then Formatters::Gitlab::PushHook.new(payload, custom_shortener(integration)).format
-      when :gitlab_tag_push_hook then Formatters::Gitlab::PushHook.new(payload, custom_shortener(integration)).format
-      when :gitlab_job_hook then Formatters::Gitlab::JobHook.new(payload, custom_shortener(integration)).format
-      when :gitlab_build_hook then Formatters::Gitlab::JobHook.new(payload, custom_shortener(integration)).format
-      when :gitlab_pipeline_hook then Formatters::Gitlab::PipelineHook.new(payload, custom_shortener(integration)).format
-      # when :gitlab_issue_hook then Formatters::Gitlab::IssueHook.new(payload).format
-      else "Error: missing formatter for #{event.inspect}"
-      end
+    def self.format_color(event, payload, integration) # rubocop:disable Metrics/LineLength
+      create_formatter(event, payload, integration).format
     end
   end
 end

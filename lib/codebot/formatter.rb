@@ -5,7 +5,7 @@ require 'uri'
 
 module Codebot
   # This class formats events.
-  class Formatter
+  class Formatter # rubocop:disable Metrics/ClassLength
     # @return [Object] the JSON payload object
     attr_reader :payload
 
