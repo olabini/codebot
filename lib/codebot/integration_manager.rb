@@ -99,6 +99,7 @@ module Codebot
     def find_integration!(name)
       integration = find_integration(name)
       return integration unless integration.nil?
+
       raise CommandError, "an integration with the name #{name.inspect} " \
                           'does not exist'
     end
@@ -111,6 +112,7 @@ module Codebot
     # @raise [CommandError] if the name is already taken
     def check_name_available!(name)
       return unless find_integration(name)
+
       raise CommandError, "an integration with the name #{name.inspect} " \
                           'already exists'
     end
@@ -121,6 +123,7 @@ module Codebot
     # @raise [CommandError] if the endpoint is already taken
     def check_endpoint_available!(endpoint)
       return unless find_integration_by_endpoint(endpoint)
+
       raise CommandError, 'an integration with the endpoint ' \
                           "#{endpoint.inspect} already exists"
     end
@@ -145,6 +148,7 @@ module Codebot
     def check_available_except!(name, endpoint, intg)
       check_name_available!(name) unless name.nil? || intg.name_eql?(name)
       return if endpoint.nil? || intg.endpoint_eql?(endpoint)
+
       check_endpoint_available!(endpoint)
     end
 
@@ -167,6 +171,7 @@ module Codebot
         integration.delete_channels!(params[:delete_channel])
       end
       return unless params[:add_channel]
+
       integration.add_channels!(params[:add_channel],
                                 networks: @config.networks)
     end
@@ -202,6 +207,7 @@ module Codebot
     # @return [String] the secret or placeholder
     def show_integration_secret(integration)
       return '(none required)' unless integration.verify_payloads?
+
       integration.secret.to_s
     end
 

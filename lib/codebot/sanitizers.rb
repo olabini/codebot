@@ -89,6 +89,7 @@ module Codebot
     # @return [Network, nil] the corresponding network or +nil+ on error
     def valid_network(name, conf)
       return if name.nil?
+
       conf[:networks].find { |net| net.name_eql? name }
     end
 

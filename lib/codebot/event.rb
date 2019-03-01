@@ -47,12 +47,10 @@ module Codebot
     # TODO: Support for team
     # TODO: Support for team_add
 
-
     # TODO: Gitlab Issue Hook
     # TODO: Gitlab Note Hook
     # TODO: Gitlab Merge Request Hook
     # TODO: Gitlab Wiki Page Hook
-
 
     # Converts a webhook event to its corresponding symbol.
     #

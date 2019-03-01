@@ -40,8 +40,10 @@ module Codebot
       intg = integration_for(core.config, endpoint)
       return [404, 'Endpoint not registered'] if intg.nil?
       return [403, 'Invalid signature'] unless valid?(request, intg, payload)
+
       req = create_request(intg, request, payload)
       return req if req.is_a? Array
+
       core.irc_client.dispatch(req)
       [202, 'Accepted']
     end
@@ -60,14 +62,18 @@ module Codebot
       if integration.gitlab
         event = request.env['HTTP_X_GITLAB_EVENT']
         return [400, 'Missing event header'] if event.nil? || event.empty?
+
         event = Event.symbolize("Gitlab #{event}".gsub(/ /, '_'))
         return [501, 'Event not yet supported'] if event.nil?
+
         Request.new(integration, event, payload) unless event.nil?
       else
         event = request.env['HTTP_X_GITHUB_EVENT']
         return [400, 'Missing event header'] if event.nil? || event.empty?
+
         event = Event.symbolize(event)
         return [501, 'Event not yet supported'] if event.nil?
+
         Request.new(integration, event, payload) unless event.nil?
       end
     end
@@ -81,10 +87,11 @@ module Codebot
     # @return [Boolean] whether the signature is valid
     def valid?(request, integration, payload)
       return true unless integration.verify_payloads?
+
       secret = integration.secret
       if integration.gitlab
         secret == request.env['HTTP_X_GITLAB_TOKEN']
-      else 
+      else
         request_signature = request.env['HTTP_X_HUB_SIGNATURE']
         Cryptography.valid_signature?(payload, secret, request_signature)
       end

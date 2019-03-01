@@ -44,6 +44,7 @@ module Codebot
     # Creates the named pipe.
     def create_pipe
       return if File.pipe? @pipe
+
       delete_pipe
       File.mkfifo @pipe
     end

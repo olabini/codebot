@@ -44,7 +44,6 @@ module Codebot
   end
 end
 
-
 # {
 #   "object_kind": "issue",
 #   "user": {
@@ -146,7 +145,6 @@ end
 #     }
 #   }
 # }
-
 
 # {
 #   "object_kind": "issue",

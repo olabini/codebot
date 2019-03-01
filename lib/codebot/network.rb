@@ -69,7 +69,7 @@ module Codebot
       update_sasl(params[:disable_sasl],
                   params[:sasl_username], params[:sasl_password])
       update_nickserv(params[:disable_nickserv],
-                  params[:nickserv_username], params[:nickserv_password])
+                      params[:nickserv_username], params[:nickserv_password])
     end
 
     def name=(name)
@@ -120,6 +120,7 @@ module Codebot
       @sasl_password = valid! pass, valid_string(pass), :@sasl_password,
                               invalid_error: 'invalid SASL password %s'
       return unless disable
+
       @sasl_username = nil
       @sasl_password = nil
     end
@@ -132,14 +133,15 @@ module Codebot
     # @param pass [String] the NickServ password, or +nil+ to keep the current value
     def update_nickserv(disable, user, pass)
       @nickserv_username = valid! user, valid_string(user), :@nickserv_username,
-                              invalid_error: 'invalid NickServ username %s'
+                                  invalid_error: 'invalid NickServ username %s'
       @nickserv_password = valid! pass, valid_string(pass), :@nickserv_password,
-                              invalid_error: 'invalid NickServ password %s'
+                                  invalid_error: 'invalid NickServ password %s'
       return unless disable
+
       @nickserv_username = nil
       @nickserv_password = nil
     end
-    
+
     def bind=(bind)
       @bind = valid! bind, valid_string(bind), :@bind,
                      invalid_error: 'invalid bind host %s'

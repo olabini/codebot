@@ -58,6 +58,7 @@ module Codebot
       def check_not_running!(opts)
         Options.with_ipc_client(opts) do |ipc|
           break unless ipc.pipe_exist?
+
           raise CommandError, 'named pipe already exists; if you are sure a ' \
                               'Codebot instance is not already running, you ' \
                               "can delete #{ipc.pipe.inspect}"
@@ -70,6 +71,7 @@ module Codebot
       # @raise [CommandError] if forking is not supported
       def check_fork_supported!
         return if Process.respond_to?(:fork)
+
         raise CommandError, 'this feature is not available on ' \
                             "#{RUBY_PLATFORM}; please use the " \
                             "'interactive' command instead"

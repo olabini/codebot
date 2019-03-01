@@ -1,4 +1,3 @@
-
 module Codebot
   module Shortener
     class Github
@@ -10,6 +9,7 @@ module Codebot
       #                  occurred.
       def shorten_url(url)
         return url if url.to_s.empty?
+
         uri = URI('https://git.io')
         res = Net::HTTP.post_form uri, 'url' => url.to_s
         res['location'] || url.to_s
@@ -23,9 +23,10 @@ module Codebot
         @shortener_url = URI(shortener_url)
         @shortener_secret = shortener_secret
       end
-      
+
       def shorten_url(url)
         return url if url.to_s.empty?
+
         res = Net::HTTP.post_form @shortener_url, 'url' => url.to_s, 'secret' => @shortener_secret
         res.body.strip || url.to_s
       rescue StandardError

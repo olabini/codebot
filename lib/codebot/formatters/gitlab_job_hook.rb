@@ -18,7 +18,7 @@ module Codebot
             "did something: #{extract(:build_status)}"
           end
         end
-        
+
         def format
           repo_url = extract(:repository, :homepage)
           repo_name = extract(:repository, :name)

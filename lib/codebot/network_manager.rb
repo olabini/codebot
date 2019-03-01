@@ -85,6 +85,7 @@ module Codebot
     def find_network!(name)
       network = find_network(name)
       return network unless network.nil?
+
       raise CommandError, "a network with the name #{name.inspect} " \
                           'does not exist'
     end
@@ -107,6 +108,7 @@ module Codebot
     # @raise [CommandError] if the name is already taken
     def check_name_available!(name)
       return if name.nil? || !find_network(name)
+
       raise CommandError, "a network with the name #{name.inspect} " \
                           'already exists'
     end
@@ -119,6 +121,7 @@ module Codebot
     # @raise [CommandError] if the name is already taken
     def check_name_available_except!(name, network)
       return if name.nil? || network.name_eql?(name) || !find_network(name)
+
       raise CommandError, "a network with the name #{name.inspect} " \
                           'already exists'
     end
@@ -154,6 +157,7 @@ module Codebot
     def show_network_sasl(network)
       puts "\tSASL authentication #{network.sasl? ? 'enabled' : 'disabled'}"
       return unless network.sasl?
+
       puts "\t\tUsername: #{network.sasl_username}"
       puts "\t\tPassword: #{'*' * network.sasl_password.to_s.length}"
     end
@@ -164,6 +168,7 @@ module Codebot
     def show_network_nickserv(network)
       puts "\tNickServ authentication #{network.nickserv? ? 'enabled' : 'disabled'}"
       return unless network.nickserv?
+
       puts "\t\tUsername: #{network.nickserv_username}"
       puts "\t\tPassword: #{'*' * network.nickserv_password.to_s.length}"
     end

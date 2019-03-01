@@ -213,7 +213,7 @@ module Codebot
     def gitlab_closed?
       gitlab_action.eql? 'close'
     end
-    
+
     # Extracts the user name of the person who triggered this event.
     #
     # @return [String, nil] the user name
@@ -230,6 +230,7 @@ module Codebot
       node = payload
       node if path.all? do |sub|
         break unless node.is_a? Hash
+
         node = node[sub.to_s]
       end
     end

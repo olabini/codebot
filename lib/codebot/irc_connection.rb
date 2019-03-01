@@ -4,7 +4,7 @@ require 'codebot/message'
 require 'codebot/thread_controller'
 require 'codebot/ext/cinch/ssl_extensions'
 require 'cinch'
-require "cinch/plugins/identify"
+require 'cinch/plugins/identify'
 
 module Codebot
   # This class manages an IRC connection running in a separate thread.
@@ -104,6 +104,25 @@ module Codebot
       end
     end
 
+    def nil_or_empty_string(val)
+      if val.to_s.empty?
+        nil
+      else
+        val
+      end
+    end
+
+    def configure_nickserv_identification(net, conn)
+      return unless net.nickserv?
+
+      conn.plugins.plugins = [Cinch::Plugins::Identify]
+      conn.plugins.options[Cinch::Plugins::Identify] = {
+        username: nil_or_empty_string(net.nickserv_username),
+        password: net.nickserv_password,
+        type: :nickserv
+      }
+    end
+
     # Constructs a new bot for the given IRC network.
     #
     # @param con [IRCConnection] the connection the thread controls
@@ -127,14 +146,7 @@ module Codebot
           c.ssl.use       = net.secure
           c.ssl.verify    = net.secure
           c.user          = Codebot::PROJECT.downcase
-          if net.nickserv?
-            c.plugins.plugins = [Cinch::Plugins::Identify]
-            c.plugins.options[Cinch::Plugins::Identify] = {
-              :username => net.nickserv_username.to_s.empty? ? nil : net.nickserv_username,
-              :password => net.nickserv_password,
-              :type     => :nickserv,
-            }          
-          end
+          configure_nickserv_identification(net, c)
         end
         on(:join) { con.set_ready! }
       end

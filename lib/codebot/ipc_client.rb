@@ -47,6 +47,7 @@ module Codebot
     # @return [Boolean] whether the command was sent successfully
     def command(cmd, explicit)
       return false unless check_pipe_exist(explicit)
+
       Timeout.timeout 5 do
         File.open @pipe, 'w' do |p|
           p.puts cmd
@@ -64,6 +65,7 @@ module Codebot
     # @return [Boolean] +true+ if the pipe exists, +false+ otherwise
     def check_pipe_exist(should_raise)
       return true if pipe_exist?
+
       communication_error! "missing pipe #{@pipe.inspect}" if should_raise
       false
     end

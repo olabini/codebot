@@ -30,7 +30,7 @@ module Codebot
         option :sasl_password, desc: 'Set the password for SASL authentication'
 
         option :disable_nickserv, type: :string, banner: '',
-                              desc: 'Disable NickServ authentication'
+                                  desc: 'Disable NickServ authentication'
         option :nickserv_username, desc: 'Set the username for NickServ authentication'
         option :nickserv_password, desc: 'Set the password for NickServ authentication'
       end

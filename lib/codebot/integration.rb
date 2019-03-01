@@ -27,7 +27,7 @@ module Codebot
     attr_reader :gitlab
     attr_reader :shortener_url
     attr_reader :shortener_secret
-    
+
     # Creates a new integration from the supplied hash.
     #
     # @param params [Hash] A hash with symbolic keys representing the instance
@@ -46,8 +46,8 @@ module Codebot
       self.endpoint = params[:endpoint]
       self.secret   = params[:secret]
       self.gitlab   = params[:gitlab] || false
-      self.shortener_url   = params[:shortener_url]
-      self.shortener_secret   = params[:shortener_secret]
+      self.shortener_url = params[:shortener_url]
+      self.shortener_secret = params[:shortener_secret]
       set_channels params[:channels], params[:config]
     end
 
@@ -80,6 +80,7 @@ module Codebot
         if channel.nil?
           raise CommandError, "channel #{identifier.inspect} does not exist"
         end
+
         @channels.delete channel
       end
     end
@@ -163,10 +164,10 @@ module Codebot
       check_channel_networks!(conf)
       [name, {
         'endpoint' => endpoint,
-        'secret'   => secret,
-        'gitlab'   => gitlab,
-        'shortener_url'   => shortener_url,
-        'shortener_secret'   => shortener_secret,
+        'secret' => secret,
+        'gitlab' => gitlab,
+        'shortener_url' => shortener_url,
+        'shortener_secret' => shortener_secret,
         'channels' => Channel.serialize_all(channels, conf)
       }]
     end
@@ -188,12 +189,12 @@ module Codebot
     # @return [Hash] the parameters to pass to the initializer
     def self.deserialize(name, data)
       {
-        name:     name,
+        name: name,
         endpoint: data['endpoint'],
-        secret:   data['secret'],
-        gitlab:   data['gitlab'],
-        shortener_url:   data['shortener_url'],
-        shortener_secret:   data['shortener_secret'],
+        secret: data['secret'],
+        gitlab: data['gitlab'],
+        shortener_url: data['shortener_url'],
+        shortener_secret: data['shortener_secret'],
         channels: data['channels']
       }
     end

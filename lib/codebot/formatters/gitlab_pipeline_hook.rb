@@ -47,8 +47,6 @@ module Codebot
   end
 end
 
-
-
 # {
 #   "object_kind": "pipeline",
 #   "object_attributes": {
@@ -146,7 +144,6 @@ end
 # }
 
 #----------------------------------
-
 
 # {
 #    "object_kind": "pipeline",

@@ -16,6 +16,7 @@ module Codebot
     def self.serialize_all(ary, conf)
       data = ary.map { |entry| entry.serialize(conf) }
       return data.to_h if serialize_as_hash?
+
       data
     end
 
@@ -26,6 +27,7 @@ module Codebot
     # @return [Array] the deserialized data
     def self.deserialize_all(data, conf)
       return [] if data.nil?
+
       if serialize_as_hash?
         deserialize_all_from_hash(data, conf)
       else
@@ -70,6 +72,7 @@ module Codebot
       unless data.is_a? Array
         raise ConfigurationError, "#{name}: invalid array #{data.inspect}"
       end
+
       data.map { |item| new(deserialize(item).merge(config: conf)) }
     end
 
@@ -82,10 +85,12 @@ module Codebot
       unless data.is_a? Hash
         raise ConfigurationError, "#{name}: invalid hash #{data.inspect}"
       end
+
       data.map do |item|
         unless item.length == 2
           raise ConfigurationError, "#{name}: invalid member #{item.inspect}"
         end
+
         new(deserialize(*item).merge(config: conf))
       end
     end

@@ -108,7 +108,7 @@ module Codebot
     # @return [Array, Hash] the serialized object
     def serialize(_conf)
       [identifier, {
-        'key'           => key,
+        'key' => key,
         'send_external' => send_external
       }]
     end
@@ -120,8 +120,8 @@ module Codebot
     # @return [Hash] the parameters to pass to the initializer
     def self.deserialize(identifier, data)
       {
-        identifier:    identifier,
-        key:           data['key'],
+        identifier: identifier,
+        key: data['key'],
         send_external: data['send_external']
       }
     end

@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
 
   Codebot will continue to receive security updates until May 31, 2019.
 *****
-EOF
+  EOF
 
   spec.required_ruby_version = '>= 2.2.0'
 
