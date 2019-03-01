@@ -23,4 +23,4 @@ before_install:
 install:
   - bundle install --retry=3
 script:
-  - rake check
+  - bundle exec rake check
