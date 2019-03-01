@@ -47,6 +47,17 @@ module Codebot
       super(self)
     end
 
+    def configure_nickserv_identification(net, conn)
+      return unless net.nickserv?
+
+      conn.plugins.plugins = [Cinch::Plugins::Identify]
+      conn.plugins.options[Cinch::Plugins::Identify] = {
+        username: nil_or_empty_string(net.nickserv_username),
+        password: net.nickserv_password,
+        type: :nickserv
+      }
+    end
+
     private
 
     # Starts this IRC thread.
@@ -110,17 +121,6 @@ module Codebot
       else
         val
       end
-    end
-
-    def configure_nickserv_identification(net, conn)
-      return unless net.nickserv?
-
-      conn.plugins.plugins = [Cinch::Plugins::Identify]
-      conn.plugins.options[Cinch::Plugins::Identify] = {
-        username: nil_or_empty_string(net.nickserv_username),
-        password: net.nickserv_password,
-        type: :nickserv
-      }
     end
 
     # Constructs a new bot for the given IRC network.
