@@ -33,11 +33,11 @@ module Codebot
           repo_name = extract(:project, :path_with_namespace)
 
           pipeline_url = shorten_url "#{repo_url}/pipelines/#{pipeline_id}"
-          reply = '[%<repository>s] pipeline %<status>s (%<url>s)'.format(
+          reply = '[%<repository>s] pipeline %<status>s (%<url>s)' % {
             repository: format_repository(repo_name),
             status: format_job_status,
             url: pipeline_url
-          )
+          }
 
           if pipeline_status == 'created'
             [reply + ':'] + [format_commit(extract(:commit))]

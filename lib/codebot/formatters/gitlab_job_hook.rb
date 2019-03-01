@@ -33,12 +33,12 @@ module Codebot
         end
 
         def job_description
-          '[%<repository>s] job \'%<build>s\' (%<url>s) %<status>s'.format(
+          '[%<repository>s] job \'%<build>s\' (%<url>s) %<status>s' % {
             repository: format_repository(repo_name),
             build: extract(:build_name),
             url: job_url,
             status: format_job_status
-          )
+          }
         end
 
         def format
@@ -56,13 +56,13 @@ module Codebot
         end
 
         def format_commit(commit)
-          '%<repository>s/%<branch>s %<hash>s %<author>s: %<title>s'.format(
+          '%<repository>s/%<branch>s %<hash>s %<author>s: %<title>s' % {
             repository: format_repository(repo_name),
             branch: format_branch(branch),
             hash: format_hash(commit['id']),
             author: format_user(author),
             title: prettify(commit['message'])
-          )
+          }
         end
       end
     end

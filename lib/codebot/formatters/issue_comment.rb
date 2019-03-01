@@ -12,12 +12,12 @@ module Codebot
       end
 
       def summary
-        default_format.format(
+        default_format % {
           repository: format_repository(repository_name),
           sender: format_user(sender_name),
           number: issue_number,
           summary: prettify(comment_body)
-        )
+        }
       end
 
       def default_format
