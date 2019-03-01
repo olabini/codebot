@@ -129,6 +129,7 @@ module Codebot
     def create_bot(con) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       net = con.network
       chan_ary = channel_array(con.core.config, network)
+      cc = self
       Cinch::Bot.new do
         configure do |c|
           c.channels      = chan_ary
@@ -146,7 +147,7 @@ module Codebot
           c.ssl.use       = net.secure
           c.ssl.verify    = net.secure
           c.user          = Codebot::PROJECT.downcase
-          configure_nickserv_identification(net, c)
+          cc.configure_nickserv_identification(net, c)
         end
         on(:join) { con.set_ready! }
       end
