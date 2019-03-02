@@ -22,6 +22,10 @@ module Codebot
       gitlab_job_hook
       gitlab_build_hook
       gitlab_pipeline_hook
+      gitlab_issue_hook
+      gitlab_note_hook
+      gitlab_merge_request_hook
+      gitlab_wiki_page_hook
     ].freeze
     # TODO: Support for create
     # TODO: Support for delete
@@ -46,11 +50,6 @@ module Codebot
     # TODO: Support for status
     # TODO: Support for team
     # TODO: Support for team_add
-
-    # TODO: Gitlab Issue Hook
-    # TODO: Gitlab Note Hook
-    # TODO: Gitlab Merge Request Hook
-    # TODO: Gitlab Wiki Page Hook
 
     # Converts a webhook event to its corresponding symbol.
     #
