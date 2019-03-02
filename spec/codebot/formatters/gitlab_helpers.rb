@@ -18,3 +18,8 @@ def load_formatter_from(fname, mod)
   payload = Codebot::Payload.new(File.read("#{File.dirname(__FILE__)}/fixtures/#{fname}.json"))
   mod.new(payload.json, TestShortener.new)
 end
+
+def do_format_test(fname, mod)
+  formatter = load_formatter_from(fname, mod)
+  remove_color_highlight(formatter.format)
+end

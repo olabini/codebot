@@ -17,6 +17,7 @@ require 'codebot/formatters/gitlab_push_hook'
 require 'codebot/formatters/gitlab_issue_hook'
 require 'codebot/formatters/gitlab_job_hook'
 require 'codebot/formatters/gitlab_pipeline_hook'
+require 'codebot/formatters/gitlab_note_hook'
 require 'codebot/shortener'
 
 module Codebot
