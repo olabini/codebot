@@ -79,6 +79,8 @@ module Codebot
         Formatters::Gitlab::JobHook.new(payload, shortener(integration))
       when :gitlab_pipeline_hook
         Formatters::Gitlab::PipelineHook.new(payload, shortener(integration))
+      when :gitlab_issue_hook
+        Formatters::Gitlab::IssueHook.new(payload, shortener(integration))
       else "Error: missing formatter for #{event.inspect}"
       end
     end

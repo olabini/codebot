@@ -55,12 +55,19 @@ module Codebot
           commit['author']['name']
         end
 
+        def branch
+          pieces = extract(:ref).split('/')
+          return pieces[0] if pieces.length == 1
+
+          pieces[2..-1].join('/')
+        end
+
         def format_commit(commit)
           '%<repository>s/%<branch>s %<hash>s %<author>s: %<title>s' % {
             repository: format_repository(repo_name),
             branch: format_branch(branch),
             hash: format_hash(commit['id']),
-            author: format_user(author),
+            author: format_user(author(commit)),
             title: prettify(commit['message'])
           }
         end

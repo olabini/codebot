@@ -24,5 +24,24 @@ RSpec.describe Codebot::Formatters::Gitlab::PushHook do
       expect(result[2]).to eq 'website-autonomia.digital/master 5ace583 Ola Bini: It\'s great to have rsync installed...'
       expect(result[3]).to eq 'website-autonomia.digital/master 2e01949 Ola Bini: Add staging and production passes'
     end
+
+    it 'formats correctly a tag push event' do
+      formatter = load_formatter_from('gitlab_push_hook_tag_1.json',
+                                      Codebot::Formatters::Gitlab::PushHook)
+      result = remove_color_highlight(formatter.format)
+      expect(result.length).to eq 1
+      expect(result[0]).to eq '[Example] John Smith pushed 0 new commits to v1.0.0: shortened://http://example.com/jsmith/example/compare/0000000000000000000000000000000000000000...0000000000000000000000000000000000000000'
+    end
+
+    it 'formats correctly another tag push event' do
+      formatter = load_formatter_from('gitlab_push_hook_tag_2.json',
+                                      Codebot::Formatters::Gitlab::PushHook)
+      result = remove_color_highlight(formatter.format)
+      expect(result.length).to eq 4
+      expect(result[0]).to eq '[website-autonomia.digital] Ola Bini pushed 3 new commits to master: shortened://https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/compare/2e01949d75647f5d3ac0f76729e71c60ca79431a...2e01949d75647f5d3ac0f76729e71c60ca79431a'
+      expect(result[1]).to eq 'website-autonomia.digital/master 119f844 Ola Bini: Remove the testing text'
+      expect(result[2]).to eq 'website-autonomia.digital/master 5ace583 Ola Bini: It\'s great to have rsync installed...'
+      expect(result[3]).to eq 'website-autonomia.digital/master 2e01949 Ola Bini: Add staging and production passes'
+    end
   end
 end

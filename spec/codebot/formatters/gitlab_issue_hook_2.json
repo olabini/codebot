@@ -1,0 +1,90 @@
+{
+  "object_kind": "issue",
+  "event_type": "issue",
+  "user": {
+    "name": "Ola Bini",
+    "username": "ola",
+    "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+  },
+  "project": {
+    "id": 15,
+    "name": "website-autonomia.digital",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "web_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+    "namespace": "Infrastructure",
+    "visibility_level": 0,
+    "path_with_namespace": "infrastructure/website-autonomia.digital",
+    "default_branch": "master",
+    "ci_config_path": "",
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git"
+  },
+  "object_attributes": {
+    "author_id": 7,
+    "closed_at": "2018-04-12 07:26:47 UTC",
+    "confidential": false,
+    "created_at": "2018-03-29 14:42:39 UTC",
+    "description": "email contact: contact@autonomia.digital\ntwitter: should create one",
+    "due_date": null,
+    "id": 617,
+    "iid": 1,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "milestone_id": null,
+    "moved_to_id": null,
+    "project_id": 15,
+    "relative_position": 1073742323,
+    "state": "closed",
+    "time_estimate": 0,
+    "title": "Add contact links",
+    "updated_at": "2018-07-20 19:33:57 UTC",
+    "updated_by_id": 10,
+    "url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/issues/1",
+    "total_time_spent": 0,
+    "human_total_time_spent": null,
+    "human_time_estimate": null,
+    "assignee_ids": [
+      7
+    ],
+    "assignee_id": 7
+  },
+  "labels": [
+
+  ],
+  "changes": {
+    "assignees": {
+      "previous": [
+
+      ],
+      "current": [
+        {
+          "name": "Ola Bini",
+          "username": "ola",
+          "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+        }
+      ]
+    },
+    "total_time_spent": {
+      "previous": null,
+      "current": 0
+    }
+  },
+  "repository": {
+    "name": "website-autonomia.digital",
+    "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital"
+  },
+  "assignees": [
+    {
+      "name": "Ola Bini",
+      "username": "ola",
+      "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+    }
+  ]
+}

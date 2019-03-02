@@ -1,0 +1,95 @@
+{
+  "object_kind": "pipeline",
+  "object_attributes": {
+    "id": 288,
+    "ref": "master",
+    "tag": false,
+    "sha": "93334a8bef8d5aa616c5a36043e5dacd64a39a0d",
+    "before_sha": "011dd61f7c758ea68857336af94de3a9784f16b1",
+    "status": "success",
+    "detailed_status": "passed",
+    "stages": [
+      "build",
+      "production"
+    ],
+    "created_at": "2018-11-05 13:50:03 UTC",
+    "finished_at": "2018-11-05 13:51:47 UTC",
+    "duration": 101,
+    "variables": [
+
+    ]
+  },
+  "user": {
+    "name": "Ola Bini",
+    "username": "ola",
+    "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+  },
+  "project": {
+    "id": 15,
+    "name": "website-autonomia.digital",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "web_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+    "namespace": "Infrastructure",
+    "visibility_level": 0,
+    "path_with_namespace": "infrastructure/website-autonomia.digital",
+    "default_branch": "master",
+    "ci_config_path": ""
+  },
+  "commit": {
+    "id": "93334a8bef8d5aa616c5a36043e5dacd64a39a0d",
+    "message": "Correctly check pushed branch(es)\n",
+    "timestamp": "2018-11-05T11:43:10Z",
+    "url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/commit/93334a8bef8d5aa616c5a36043e5dacd64a39a0d",
+    "author": {
+      "name": "Varac",
+      "email": "varac@varac.net"
+    }
+  },
+  "builds": [
+    {
+      "id": 527,
+      "stage": "production",
+      "name": "production",
+      "status": "success",
+      "created_at": "2018-11-05 13:50:03 UTC",
+      "started_at": "2018-11-05 13:51:00 UTC",
+      "finished_at": "2018-11-05 13:51:47 UTC",
+      "when": "on_success",
+      "manual": false,
+      "user": {
+        "name": "Ola Bini",
+        "username": "ola",
+        "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+      },
+      "runner": null,
+      "artifacts_file": {
+        "filename": null,
+        "size": 6898
+      }
+    },
+    {
+      "id": 526,
+      "stage": "build",
+      "name": "build",
+      "status": "success",
+      "created_at": "2018-11-05 13:50:03 UTC",
+      "started_at": "2018-11-05 13:50:03 UTC",
+      "finished_at": "2018-11-05 13:50:58 UTC",
+      "when": "on_success",
+      "manual": false,
+      "user": {
+        "name": "Ola Bini",
+        "username": "ola",
+        "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+      },
+      "runner": null,
+      "artifacts_file": {
+        "filename": null,
+        "size": 6167
+      }
+    }
+  ]
+}
