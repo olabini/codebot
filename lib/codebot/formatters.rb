@@ -18,6 +18,7 @@ require 'codebot/formatters/gitlab_issue_hook'
 require 'codebot/formatters/gitlab_job_hook'
 require 'codebot/formatters/gitlab_pipeline_hook'
 require 'codebot/formatters/gitlab_note_hook'
+require 'codebot/formatters/gitlab_merge_request_hook'
 require 'codebot/shortener'
 
 module Codebot
@@ -84,6 +85,9 @@ module Codebot
         Formatters::Gitlab::IssueHook.new(payload, shortener(integration))
       when :gitlab_note_hook
         Formatters::Gitlab::NoteHook.new(payload, shortener(integration))
+      when :gitlab_merge_request_hook
+        Formatters::Gitlab::MergeRequestHook.new(payload,
+                                                 shortener(integration))
       else "Error: missing formatter for #{event.inspect}"
       end
     end
