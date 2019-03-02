@@ -1,0 +1,41 @@
+{
+  "object_kind": "wiki_page",
+  "user": {
+    "name": "Ola Bini",
+    "username": "ola",
+    "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+  },
+  "project": {
+    "id": 13,
+    "name": "Management",
+    "description": "",
+    "web_url": "https://gitlab.autonomia.digital/infrastructure/management",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/management.git",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/management.git",
+    "namespace": "Infrastructure",
+    "visibility_level": 0,
+    "path_with_namespace": "infrastructure/management",
+    "default_branch": null,
+    "ci_config_path": null,
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/management",
+    "url": "git@gitlab.autonomia.digital:infrastructure/management.git",
+    "ssh_url": "git@gitlab.autonomia.digital:infrastructure/management.git",
+    "http_url": "https://gitlab.autonomia.digital/infrastructure/management.git"
+  },
+  "wiki": {
+    "web_url": "https://gitlab.autonomia.digital/infrastructure/management/wikis/home",
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/management.wiki.git",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/management.wiki.git",
+    "path_with_namespace": "infrastructure/management.wiki",
+    "default_branch": "master"
+  },
+  "object_attributes": {
+    "slug": "Infrastructure-Onboarding",
+    "title": "Infrastructure Onboarding",
+    "format": "markdown",
+    "content": "For general Onboarding to CAD go to the\n[Operations wiki](https://gitlab.com/digitalautonomy/operations/Onboarding/wikis/Home).\n\n---\n\nThis document shows how to have a smooth start with infrastructure related\nstuff. If you find something missing or some section that could get improved,\nplease contribute by editing this wiki.\n\n---\n\n[[_TOC_]]\n\n### Gitlab\nWe use our own Gitlab instance to track our work, and host many repositories as well. You are probably reading this text on the wiki in the Gitlab instace. It's hosted at [gitlab.autonomia.digital](https://gitlab.autonomia.digital).\n\nThe [infrastructure Management project](https://gitlab.autonomia.digital/infrastructure/Management)\nin there hosts a [this wiki](https://gitlab.autonomia.digital/infrastructure/Management/wikis)\nand the [infrastructure issue tracker](https://gitlab.autonomia.digital/infrastructure/Management/issues)\nthat can be displayed as a [kanban board](https://gitlab.autonomia.digital/infrastructure/Management/boards).\n\n### Dashboard\n\n(TODO: this currently is not deployed anywhere and needs revising)\n\nWe have a [CAD Dashboard](https://dashboard.autonomia.digital/dashboard),\nsee the wiki [Dashboard](infrastructure/Dashboard) page for more details.\n\n## For the infrastructure team\n\n- [ ] Mail account\n- [ ] [XMPP account](infrastructure/prosody#createmodify-user)\n- [ ] Get github account and add to the CAD organization, and potentially OTRv4 and Coyim\n- [ ] Create gitlab account and add to the proper places\n- [ ] Add shell account via ansible\n- [ ] Add GPG key to pass keyring, re-encrypt all passwords to everyone\n- [ ] Point to the [onboarding wiki page](onboarding)\n- [ ] Add to Signal group",
+    "url": "https://gitlab.autonomia.digital/infrastructure/management/wikis/Infrastructure-Onboarding",
+    "action": "create"
+  }
+}

@@ -15,6 +15,6 @@ def remove_color_highlight(result)
 end
 
 def load_formatter_from(fname, mod)
-  payload = Codebot::Payload.new(File.read("#{File.dirname(__FILE__)}/#{fname}"))
+  payload = Codebot::Payload.new(File.read("#{File.dirname(__FILE__)}/fixtures/#{fname}.json"))
   mod.new(payload.json, TestShortener.new)
 end

@@ -1,0 +1,122 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "name": "Ola Bini",
+    "username": "ola",
+    "avatar_url": "https://gitlab.autonomia.digital/uploads/-/system/user/avatar/7/avatar.png"
+  },
+  "project": {
+    "id": 15,
+    "name": "website-autonomia.digital",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "web_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+    "namespace": "Infrastructure",
+    "visibility_level": 0,
+    "path_with_namespace": "infrastructure/website-autonomia.digital",
+    "default_branch": "master",
+    "ci_config_path": "",
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 7,
+    "created_at": "2018-03-23 12:18:21 UTC",
+    "description": "",
+    "head_pipeline_id": null,
+    "id": 31,
+    "iid": 1,
+    "last_edited_at": "2018-03-23 12:44:35 UTC",
+    "last_edited_by_id": 7,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "0"
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "gitlab_ci",
+    "source_project_id": 15,
+    "state": "merged",
+    "target_branch": "master",
+    "target_project_id": 15,
+    "time_estimate": 0,
+    "title": "Build docker image from gitlab CI",
+    "updated_at": "2018-04-09 14:26:56 UTC",
+    "updated_by_id": 7,
+    "url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/merge_requests/1",
+    "source": {
+      "id": 15,
+      "name": "website-autonomia.digital",
+      "description": "This is the repository of Centro de Autonomia Digital homepage",
+      "web_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+      "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+      "namespace": "Infrastructure",
+      "visibility_level": 0,
+      "path_with_namespace": "infrastructure/website-autonomia.digital",
+      "default_branch": "master",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+      "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+      "ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+      "http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git"
+    },
+    "target": {
+      "id": 15,
+      "name": "website-autonomia.digital",
+      "description": "This is the repository of Centro de Autonomia Digital homepage",
+      "web_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+      "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+      "namespace": "Infrastructure",
+      "visibility_level": 0,
+      "path_with_namespace": "infrastructure/website-autonomia.digital",
+      "default_branch": "master",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+      "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+      "ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+      "http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git"
+    },
+    "last_commit": {
+      "id": "84b3d7431dab61a34182a2530f84729c6fd4a3ee",
+      "message": "Build docker image from gitlab CI\n",
+      "timestamp": "2018-03-23T12:40:16Z",
+      "url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/commit/84b3d7431dab61a34182a2530f84729c6fd4a3ee",
+      "author": {
+        "name": "Varac",
+        "email": "varac@leap.se"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "human_total_time_spent": null,
+    "human_time_estimate": null
+  },
+  "labels": [
+
+  ],
+  "changes": {
+    "total_time_spent": {
+      "previous": null,
+      "current": 0
+    }
+  },
+  "repository": {
+    "name": "website-autonomia.digital",
+    "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital"
+  }
+}

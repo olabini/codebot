@@ -5,7 +5,7 @@ require 'codebot/formatters/gitlab_helpers'
 RSpec.describe Codebot::Formatters::Gitlab::PushHook do
   describe '.format' do
     it 'formats correctly one entry' do
-      formatter = load_formatter_from('gitlab_push_hook_1.json',
+      formatter = load_formatter_from('gitlab_push_hook_1',
                                       Codebot::Formatters::Gitlab::PushHook)
       result = remove_color_highlight(formatter.format)
       expect(result.length).to eq 3
@@ -15,7 +15,7 @@ RSpec.describe Codebot::Formatters::Gitlab::PushHook do
     end
 
     it 'formats correctly another entry' do
-      formatter = load_formatter_from('gitlab_push_hook_2.json',
+      formatter = load_formatter_from('gitlab_push_hook_2',
                                       Codebot::Formatters::Gitlab::PushHook)
       result = remove_color_highlight(formatter.format)
       expect(result.length).to eq 4
@@ -26,7 +26,7 @@ RSpec.describe Codebot::Formatters::Gitlab::PushHook do
     end
 
     it 'formats correctly a tag push event' do
-      formatter = load_formatter_from('gitlab_push_hook_tag_1.json',
+      formatter = load_formatter_from('gitlab_push_hook_tag_1',
                                       Codebot::Formatters::Gitlab::PushHook)
       result = remove_color_highlight(formatter.format)
       expect(result.length).to eq 1
@@ -34,7 +34,7 @@ RSpec.describe Codebot::Formatters::Gitlab::PushHook do
     end
 
     it 'formats correctly another tag push event' do
-      formatter = load_formatter_from('gitlab_push_hook_tag_2.json',
+      formatter = load_formatter_from('gitlab_push_hook_tag_2',
                                       Codebot::Formatters::Gitlab::PushHook)
       result = remove_color_highlight(formatter.format)
       expect(result.length).to eq 4
