@@ -28,7 +28,7 @@ module Codebot
         end
 
         def issue_url
-          shorten_url extract(:object_attribtes, :url)
+          shorten_url extract(:object_attributes, :url)
         end
 
         def user_name
@@ -41,14 +41,14 @@ module Codebot
         end
 
         def format
-          default_format % {
+          [default_format % {
             repository: format_repository(repo_name),
             sender: format_user(user_name),
             action: format_issue_action,
             number: extract(:object_attributes, :iid),
             title: extract(:object_attributes, :title),
             url: issue_url
-          }
+          }]
         end
       end
     end

@@ -1,28 +1,12 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
-class TestShortener
-  def shorten_url(url)
-    "shortened://#{url}"
-  end
-end
-
-def remove_color_highlight(result)
-  result.map do |str|
-    ::Cinch::Formatting.unformat(str)
-  end
-end
-
-def load_formatter_from(fname)
-  payload = Codebot::Payload.new(File.read("#{File.dirname(__FILE__)}/#{fname}"))
-  Codebot::Formatters::Gitlab::PushHook.new(payload.json, TestShortener.new)
-end
+require 'codebot/formatters/gitlab_helpers'
 
 RSpec.describe Codebot::Formatters::Gitlab::PushHook do
   describe '.format' do
     it 'formats correctly one entry' do
-      formatter = load_formatter_from('gitlab_push_hook_1.json')
+      formatter = load_formatter_from('gitlab_push_hook_1.json',
+                                      Codebot::Formatters::Gitlab::PushHook)
       result = remove_color_highlight(formatter.format)
       expect(result.length).to eq 3
       expect(result[0]).to eq '[Diaspora] John Smith pushed 4 new commits to master: shortened://http://example.com/mike/diaspora/compare/95790bf891e76fee5e1747ab589903a6a1f80f22...95790bf891e76fee5e1747ab589903a6a1f80f22'
@@ -31,7 +15,8 @@ RSpec.describe Codebot::Formatters::Gitlab::PushHook do
     end
 
     it 'formats correctly another entry' do
-      formatter = load_formatter_from('gitlab_push_hook_2.json')
+      formatter = load_formatter_from('gitlab_push_hook_2.json',
+                                      Codebot::Formatters::Gitlab::PushHook)
       result = remove_color_highlight(formatter.format)
       expect(result.length).to eq 4
       expect(result[0]).to eq '[website-autonomia.digital] Ola Bini pushed 3 new commits to master: shortened://https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital/compare/2e01949d75647f5d3ac0f76729e71c60ca79431a...2e01949d75647f5d3ac0f76729e71c60ca79431a'
