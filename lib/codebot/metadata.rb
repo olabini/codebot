@@ -5,7 +5,7 @@ module Codebot
   PROJECT = 'Codebot'.freeze
 
   # The current project version.
-  VERSION = '1.1.6'.freeze
+  VERSION = '1.1.7'.freeze
 
   # The project website.
   WEBSITE = 'https://git.io/codebot'.freeze
