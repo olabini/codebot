@@ -222,7 +222,7 @@ git commits and tags, and push the `.gem` file to [RubyGems][rubygem].
 Bug reports and pull requests are welcome [on GitHub][github].
 Please see the [CONTRIBUTING.md][contrib] for more information.
 
-[github]: https://github.com/janikrabe/codebot "codebot on GitHub"
+[github]: https://github.com/olabini/codebot "codebot on GitHub"
 [contrib]: CONTRIBUTING.md "Guidelines for Contributors"
 [rubygem]: https://rubygems.org/gems/codebot "codebot on RubyGems.org"
 [newhook]: https://developer.github.com/webhooks/creating/#setting-up-a-webhook
