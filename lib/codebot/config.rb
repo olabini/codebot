@@ -91,6 +91,7 @@ module Codebot
     def run_transaction
       yield
       return false unless save!
+
       @core.migrate!
       true
     end

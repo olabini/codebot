@@ -8,7 +8,7 @@ require 'codebot/serializable'
 module Codebot
   # This class represents an integration that maps an endpoint to the
   # corresponding IRC channels.
-  class Integration < Serializable
+  class Integration < Serializable # rubocop:disable Metrics/ClassLength
     include Sanitizers
 
     # @return [String] the name of this integration
@@ -23,6 +23,10 @@ module Codebot
 
     # @return [Array<Channel>] the channels notifications will be delivered to
     attr_reader :channels
+
+    attr_accessor :gitlab
+    attr_accessor :shortener_url
+    attr_accessor :shortener_secret
 
     # Creates a new integration from the supplied hash.
     #
@@ -41,6 +45,9 @@ module Codebot
       self.name     = params[:name]
       self.endpoint = params[:endpoint]
       self.secret   = params[:secret]
+      self.gitlab   = params[:gitlab] || false
+      self.shortener_url = params[:shortener_url]
+      self.shortener_secret = params[:shortener_secret]
       set_channels params[:channels], params[:config]
     end
 
@@ -73,6 +80,7 @@ module Codebot
         if channel.nil?
           raise CommandError, "channel #{identifier.inspect} does not exist"
         end
+
         @channels.delete channel
       end
     end
@@ -144,7 +152,10 @@ module Codebot
       check_channel_networks!(conf)
       [name, {
         'endpoint' => endpoint,
-        'secret'   => secret,
+        'secret' => secret,
+        'gitlab' => gitlab,
+        'shortener_url' => shortener_url,
+        'shortener_secret' => shortener_secret,
         'channels' => Channel.serialize_all(channels, conf)
       }]
     end
@@ -166,9 +177,12 @@ module Codebot
     # @return [Hash] the parameters to pass to the initializer
     def self.deserialize(name, data)
       {
-        name:     name,
+        name: name,
         endpoint: data['endpoint'],
-        secret:   data['secret'],
+        secret: data['secret'],
+        gitlab: data['gitlab'],
+        shortener_url: data['shortener_url'],
+        shortener_secret: data['shortener_secret'],
         channels: data['channels']
       }
     end

@@ -32,6 +32,7 @@ module Codebot
     #                       there was already a running thread
     def start(arg = nil)
       return if running?
+
       @thread = Thread.new do
         Thread.current.abort_on_exception = true
         run(arg)
@@ -54,6 +55,7 @@ module Codebot
     #                       no thread was running
     def stop
       return unless running?
+
       @thread.exit
     end
 

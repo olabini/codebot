@@ -13,6 +13,14 @@ require 'codebot/formatters/pull_request'
 require 'codebot/formatters/pull_request_review_comment'
 require 'codebot/formatters/push'
 require 'codebot/formatters/watch'
+require 'codebot/formatters/gitlab_push_hook'
+require 'codebot/formatters/gitlab_issue_hook'
+require 'codebot/formatters/gitlab_job_hook'
+require 'codebot/formatters/gitlab_pipeline_hook'
+require 'codebot/formatters/gitlab_note_hook'
+require 'codebot/formatters/gitlab_merge_request_hook'
+require 'codebot/formatters/gitlab_wiki_page_hook'
+require 'codebot/shortener'
 
 module Codebot
   # This module provides methods for formatting outgoing IRC messages.
@@ -23,8 +31,8 @@ module Codebot
     # @param payload [Object] the JSON payload object
     # @param color [Boolean] whether to use formatting codes
     # @return [Array<String>] the formatted messages
-    def self.format(event, payload, color = true)
-      messages = format_color(event, payload).to_a
+    def self.format(event, payload, integration, color = true)
+      messages = format_color(event, payload, integration).to_a
       messages.map! { |msg| "\x0F" + msg }
       messages.map! { |msg| ::Cinch::Formatting.unformat(msg) } unless color
       messages
@@ -36,28 +44,66 @@ module Codebot
        "has been printed to STDERR. Please report this issue to #{url}."]
     end
 
+    def self.shortener(inte)
+      Shortener::Custom.new(inte.shortener_url, inte.shortener_secret)
+    end
+
+    def self.create_formatter(event, payload, integration) # rubocop:disable Metrics/LineLength, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
+      case event
+      when :commit_comment
+        Formatters::CommitComment.new(payload, Shortener::Github.new)
+      when :fork
+        Formatters::Fork.new(payload, Shortener::Github.new)
+      when :gollum
+        Formatters::Gollum.new(payload, Shortener::Github.new)
+      when :issue_comment
+        Formatters::IssueComment.new(payload, Shortener::Github.new)
+      when :issues
+        Formatters::Issues.new(payload, Shortener::Github.new)
+      when :ping
+        Formatters::Ping.new(payload, Shortener::Github.new)
+      when :public
+        Formatters::Public.new(payload, Shortener::Github.new)
+      when :pull_request
+        Formatters::PullRequest.new(payload, Shortener::Github.new)
+      when :pull_request_review_comment
+        Formatters::PullRequestReviewComment.new(payload, Shortener::Github.new)
+      when :push
+        Formatters::Push.new(payload, Shortener::Github.new)
+      when :watch
+        Formatters::Watch.new(payload, Shortener::Github.new)
+      when :gitlab_push_hook
+        Formatters::Gitlab::PushHook.new(payload, shortener(integration))
+      when :gitlab_tag_push_hook
+        Formatters::Gitlab::PushHook.new(payload, shortener(integration))
+      when :gitlab_job_hook
+        Formatters::Gitlab::JobHook.new(payload, shortener(integration))
+      when :gitlab_build_hook
+        Formatters::Gitlab::JobHook.new(payload, shortener(integration))
+      when :gitlab_pipeline_hook
+        Formatters::Gitlab::PipelineHook.new(payload, shortener(integration))
+      when :gitlab_issue_hook
+        Formatters::Gitlab::IssueHook.new(payload, shortener(integration))
+      when :gitlab_note_hook
+        Formatters::Gitlab::NoteHook.new(payload, shortener(integration))
+      when :gitlab_merge_request_hook
+        Formatters::Gitlab::MergeRequestHook.new(payload,
+                                                 shortener(integration))
+      when :gitlab_wiki_page_hook
+        Formatters::Gitlab::WikiPageHook.new(payload,
+                                             shortener(integration))
+      else "Error: missing formatter for #{event.inspect}"
+      end
+    end
+
     # Formats colored IRC messages. This method should not be called directly
     # from outside this module.
     #
     # @param event [Symbol] the webhook event
     # @param payload [Object] the JSON payload object
     # @return [Array<String>] the formatted messages
-    def self.format_color(event, payload) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/LineLength
-      case event
-      when :commit_comment then Formatters::CommitComment.new(payload).format
-      when :fork then Formatters::Fork.new(payload).format
-      when :gollum then Formatters::Gollum.new(payload).format
-      when :issue_comment then Formatters::IssueComment.new(payload).format
-      when :issues then Formatters::Issues.new(payload).format
-      when :ping then Formatters::Ping.new(payload).format
-      when :public then Formatters::Public.new(payload).format
-      when :pull_request then Formatters::PullRequest.new(payload).format
-      when :pull_request_review_comment
-        Formatters::PullRequestReviewComment.new(payload).format
-      when :push then Formatters::Push.new(payload).format
-      when :watch then Formatters::Watch.new(payload).format
-      else "Error: missing formatter for #{event.inspect}"
-      end
+    def self.format_color(event, payload, integration) # rubocop:disable Metrics/LineLength
+      create_formatter(event, payload, integration).format
     end
   end
 end

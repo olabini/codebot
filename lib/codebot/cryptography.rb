@@ -29,6 +29,7 @@ module Codebot
     # @return [Boolean] whether the signature is correct
     def self.valid_signature?(body, secret, signature)
       return false if signature.nil?
+
       digest = OpenSSL::Digest.new 'sha1'
       good_signature = 'sha1=' + OpenSSL::HMAC.hexdigest(digest, secret, body)
       Rack::Utils.secure_compare good_signature, signature

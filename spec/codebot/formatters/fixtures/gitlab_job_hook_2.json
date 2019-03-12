@@ -1,0 +1,44 @@
+{
+  "object_kind": "build",
+  "ref": "master",
+  "tag": false,
+  "before_sha": "011dd61f7c758ea68857336af94de3a9784f16b1",
+  "sha": "93334a8bef8d5aa616c5a36043e5dacd64a39a0d",
+  "build_id": 526,
+  "build_name": "build",
+  "build_stage": "build",
+  "build_status": "success",
+  "build_started_at": "2018-11-05 13:50:03 UTC",
+  "build_finished_at": "2018-11-05 13:50:58 UTC",
+  "build_duration": 54.475,
+  "build_allow_failure": false,
+  "build_failure_reason": "unknown_failure",
+  "project_id": 15,
+  "project_name": "Infrastructure / website-autonomia.digital",
+  "user": {
+    "id": 7,
+    "name": "Ola Bini",
+    "email": "ola@autonomia.digital"
+  },
+  "commit": {
+    "id": 288,
+    "sha": "93334a8bef8d5aa616c5a36043e5dacd64a39a0d",
+    "message": "Correctly check pushed branch(es)\n",
+    "author_name": "Varac",
+    "author_email": "varac@varac.net",
+    "author_url": "mailto:varac@varac.net",
+    "status": "success",
+    "duration": 101,
+    "started_at": "2018-11-05 13:50:04 UTC",
+    "finished_at": "2018-11-05 13:51:47 UTC"
+  },
+  "repository": {
+    "name": "website-autonomia.digital",
+    "url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "description": "This is the repository of Centro de Autonomia Digital homepage",
+    "homepage": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital",
+    "git_http_url": "https://gitlab.autonomia.digital/infrastructure/website-autonomia.digital.git",
+    "git_ssh_url": "git@gitlab.autonomia.digital:infrastructure/website-autonomia.digital.git",
+    "visibility_level": 0
+  }
+}

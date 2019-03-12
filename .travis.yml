@@ -3,7 +3,6 @@ cache: bundler
 language: ruby
 dist: trusty
 rvm:
-  - 2.2.9
   - 2.3.6
   - 2.4.3
   - 2.5.0
@@ -24,4 +23,4 @@ before_install:
 install:
   - bundle install --retry=3
 script:
-  - rake check
+  - bundle exec rake check

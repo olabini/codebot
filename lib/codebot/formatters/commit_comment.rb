@@ -15,16 +15,16 @@ module Codebot
       end
 
       def summary
-        default_format.format(
+        default_format % {
           repository: format_repository(repository_name),
           sender: format_user(sender_name),
           hash: format_hash(commit_id),
           summary: prettify(comment_body)
-        )
+        }
       end
 
       def default_format
-        '[%<repository>] %<sender> commented on commit %<hash>: %<summary>'
+        '[%<repository>s] %<sender>s commented on commit %<hash>s: %<summary>s'
       end
 
       def summary_url

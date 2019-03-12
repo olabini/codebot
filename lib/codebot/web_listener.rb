@@ -40,10 +40,26 @@ module Codebot
       intg = integration_for(core.config, endpoint)
       return [404, 'Endpoint not registered'] if intg.nil?
       return [403, 'Invalid signature'] unless valid?(request, intg, payload)
+
       req = create_request(intg, request, payload)
       return req if req.is_a? Array
+
       core.irc_client.dispatch(req)
       [202, 'Accepted']
+    end
+
+    def create_gitlab_event(request)
+      event = request.env['HTTP_X_GITLAB_EVENT']
+      return [400, 'Missing event header'] if event.nil? || event.empty?
+
+      Event.symbolize("Gitlab #{event}".tr(' ', '_'))
+    end
+
+    def create_github_event(request)
+      event = request.env['HTTP_X_GITHUB_EVENT']
+      return [400, 'Missing event header'] if event.nil? || event.empty?
+
+      Event.symbolize(event)
     end
 
     # Creates a new request for the webhook.
@@ -57,11 +73,16 @@ module Codebot
     #                                           code and response if the
     #                                           request was invalid
     def create_request(integration, request, payload)
-      event = request.env['HTTP_X_GITHUB_EVENT']
-      return [400, 'Missing event header'] if event.nil? || event.empty?
-      event = Event.symbolize(event)
+      event = if integration.gitlab
+                create_gitlab_event(request)
+              else
+                create_github_event(request)
+              end
+      return event if event.is_a? Array
+
       return [501, 'Event not yet supported'] if event.nil?
-      Request.new(integration, event, payload) unless event.nil?
+
+      Request.new(integration, event, payload)
     end
 
     # Verifies a webhook signature.
@@ -73,9 +94,14 @@ module Codebot
     # @return [Boolean] whether the signature is valid
     def valid?(request, integration, payload)
       return true unless integration.verify_payloads?
+
       secret = integration.secret
-      request_signature = request.env['HTTP_X_HUB_SIGNATURE']
-      Cryptography.valid_signature?(payload, secret, request_signature)
+      if integration.gitlab
+        secret == request.env['HTTP_X_GITLAB_TOKEN']
+      else
+        request_signature = request.env['HTTP_X_HUB_SIGNATURE']
+        Cryptography.valid_signature?(payload, secret, request_signature)
+      end
     end
   end
 end

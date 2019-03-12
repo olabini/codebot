@@ -85,6 +85,7 @@ module Codebot
     def find_network!(name)
       network = find_network(name)
       return network unless network.nil?
+
       raise CommandError, "a network with the name #{name.inspect} " \
                           'does not exist'
     end
@@ -107,6 +108,7 @@ module Codebot
     # @raise [CommandError] if the name is already taken
     def check_name_available!(name)
       return if name.nil? || !find_network(name)
+
       raise CommandError, "a network with the name #{name.inspect} " \
                           'already exists'
     end
@@ -119,6 +121,7 @@ module Codebot
     # @raise [CommandError] if the name is already taken
     def check_name_available_except!(name, network)
       return if name.nil? || network.name_eql?(name) || !find_network(name)
+
       raise CommandError, "a network with the name #{name.inspect} " \
                           'already exists'
     end
@@ -145,6 +148,7 @@ module Codebot
       puts "\tBind to:    #{network.bind}" unless network.bind.to_s.empty?
       puts "\tUser modes: #{network.modes}" unless network.modes.to_s.empty?
       show_network_sasl(network)
+      show_network_nickserv(network)
     end
 
     # Prints information about the SASL authentication settings for a network.
@@ -153,8 +157,25 @@ module Codebot
     def show_network_sasl(network)
       puts "\tSASL authentication #{network.sasl? ? 'enabled' : 'disabled'}"
       return unless network.sasl?
+
       puts "\t\tUsername: #{network.sasl_username}"
       puts "\t\tPassword: #{'*' * network.sasl_password.to_s.length}"
+    end
+
+    def nickserv_status(network)
+      network.nickserv? ? 'enabled' : 'disabled'
+    end
+
+    # Prints information about the NickServ authentication
+    #                  settings for a network.
+    #
+    # @param network [Network] the network
+    def show_network_nickserv(network)
+      puts "\tNickServ authentication #{nickserv_status(network)}"
+      return unless network.nickserv?
+
+      puts "\t\tUsername: #{network.nickserv_username}"
+      puts "\t\tPassword: #{'*' * network.nickserv_password.to_s.length}"
     end
   end
 end

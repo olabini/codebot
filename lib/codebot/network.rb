@@ -5,7 +5,7 @@ require 'codebot/serializable'
 
 module Codebot
   # This class represents an IRC network notifications can be delivered to.
-  class Network < Serializable
+  class Network < Serializable # rubocop:disable Metrics/ClassLength
     include Sanitizers
 
     # @return [String] the name of this network
@@ -34,6 +34,12 @@ module Codebot
     # @return [String] the password for SASL authentication
     attr_reader :sasl_password
 
+    # @return [String] the username for NickServ authentication
+    attr_reader :nickserv_username
+
+    # @return [String] the password for NickServ authentication
+    attr_reader :nickserv_password
+
     # @return [String] the address to bind to
     attr_reader :bind
 
@@ -59,9 +65,15 @@ module Codebot
       self.nick            = params[:nick]
       self.bind            = params[:bind]
       self.modes           = params[:modes]
+      update_complicated!(params)
+    end
+
+    def update_complicated!(params)
       update_connection(params[:host], params[:port], params[:secure])
       update_sasl(params[:disable_sasl],
                   params[:sasl_username], params[:sasl_password])
+      update_nickserv(params[:disable_nickserv],
+                      params[:nickserv_username], params[:nickserv_password])
     end
 
     def name=(name)
@@ -112,8 +124,28 @@ module Codebot
       @sasl_password = valid! pass, valid_string(pass), :@sasl_password,
                               invalid_error: 'invalid SASL password %s'
       return unless disable
+
       @sasl_username = nil
       @sasl_password = nil
+    end
+
+    # Updates the NickServ authentication details of this network.
+    #
+    # @param disable [Boolean] whether to disable NickServ, or +nil+ to keep the
+    #                          current value.
+    # @param user [String] the NickServ username, or +nil+ to keep the
+    #                          current value
+    # @param pass [String] the NickServ password, or +nil+ to keep the
+    #                          current value
+    def update_nickserv(disable, user, pass)
+      @nickserv_username = valid! user, valid_string(user), :@nickserv_username,
+                                  invalid_error: 'invalid NickServ username %s'
+      @nickserv_password = valid! pass, valid_string(pass), :@nickserv_password,
+                                  invalid_error: 'invalid NickServ password %s'
+      return unless disable
+
+      @nickserv_username = nil
+      @nickserv_password = nil
     end
 
     def bind=(bind)
@@ -147,6 +179,13 @@ module Codebot
     # @return [Boolean] whether SASL is enabled
     def sasl?
       !sasl_username.to_s.empty? && !sasl_password.to_s.empty?
+    end
+
+    # Checks whether NickServ is enabled for this network.
+    #
+    # @return [Boolean] whether NickServ is enabled
+    def nickserv?
+      !nickserv_username.to_s.empty? || !nickserv_password.to_s.empty?
     end
 
     # Checks whether this network is equal to another network.
@@ -195,7 +234,7 @@ module Codebot
     # @return [Array<Symbol>] the fields used for serializing this network
     def self.fields
       %i[host port secure server_password nick sasl_username sasl_password
-         bind modes]
+         nickserv_username nickserv_password bind modes]
     end
   end
 end

@@ -5,15 +5,16 @@ require 'uri'
 
 module Codebot
   # This class formats events.
-  class Formatter
+  class Formatter # rubocop:disable Metrics/ClassLength
     # @return [Object] the JSON payload object
     attr_reader :payload
 
     # Initializes a new formatter.
     #
     # @param payload [Object] the JSON payload object
-    def initialize(payload)
+    def initialize(payload, shortener)
       @payload = payload
+      @shortener = shortener
     end
 
     # Formats IRC messages for an unknown event.
@@ -29,6 +30,10 @@ module Codebot
     # @return [String] the shortened summary URL
     def url
       shorten_url summary_url
+    end
+
+    def gitlab_url
+      summary_url
     end
 
     # Formats a repository name.
@@ -169,11 +174,19 @@ module Codebot
       extract(:repository, :html_url)
     end
 
+    def gitlab_repository_url
+      extract(:repository, :homepage)
+    end
+
     # Extracts the action from the payload.
     #
     # @return [String, nil] the action
     def action
       extract(:action).to_s
+    end
+
+    def gitlab_action
+      extract(:object_attributes, :action).to_s
     end
 
     # Checks whether the action is 'opened'.
@@ -188,6 +201,17 @@ module Codebot
     # @return [Boolean] whether the action is 'closed'.
     def closed?
       action.eql? 'closed'
+    end
+
+    def gitlab_opened?
+      gitlab_action.eql? 'open'
+    end
+
+    # Checks whether the action is 'closed'.
+    #
+    # @return [Boolean] whether the action is 'closed'.
+    def gitlab_closed?
+      gitlab_action.eql? 'close'
     end
 
     # Extracts the user name of the person who triggered this event.
@@ -206,23 +230,13 @@ module Codebot
       node = payload
       node if path.all? do |sub|
         break unless node.is_a? Hash
+
         node = node[sub.to_s]
       end
     end
 
-    # Shortens a URL with GitHub's git.io URL shortener. The domain must belong
-    # to GitHub.
-    #
-    # @param url [String] the long URL
-    # @return [String] the shortened URL, or the original URL if an error
-    #                  occurred.
     def shorten_url(url)
-      return url if url.to_s.empty?
-      uri = URI('https://git.io')
-      res = Net::HTTP.post_form uri, 'url' => url.to_s
-      res['location'] || url.to_s
-    rescue StandardError
-      url.to_s
+      @shortener.shorten_url(url)
     end
   end
 end

@@ -16,8 +16,17 @@ module Codebot
       pull_request_review_comment
       push
       watch
-    ].freeze
 
+      gitlab_push_hook
+      gitlab_tag_push_hook
+      gitlab_job_hook
+      gitlab_build_hook
+      gitlab_pipeline_hook
+      gitlab_issue_hook
+      gitlab_note_hook
+      gitlab_merge_request_hook
+      gitlab_wiki_page_hook
+    ].freeze
     # TODO: Support for create
     # TODO: Support for delete
     # TODO: Support for deployment

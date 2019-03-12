@@ -23,6 +23,7 @@ module Codebot
       request.each_network do |network, channels|
         connection = connection_to(network)
         next if connection.nil?
+
         channels.each do |channel|
           message = request.to_message_for channel
           connection.enqueue message
@@ -55,6 +56,7 @@ module Codebot
     def migrate!
       @semaphore.synchronize do
         return unless @active
+
         networks = @core.config.networks
         (@checkpoint - networks).each { |network| disconnect_from network }
         (networks - @checkpoint).each { |network| connect_to      network }
@@ -85,6 +87,7 @@ module Codebot
     # @param network [Network] the network to connect to
     def connect_to(network)
       return if connected_to? network
+
       @connections << IRCConnection.new(@core, network).tap(&:start)
     end
 

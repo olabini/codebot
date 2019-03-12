@@ -45,7 +45,7 @@ module Codebot
     # @param channel [Channel] the channel
     # @return [Message] the created message
     def to_message_for(channel)
-      Message.new(channel, @event, @payload)
+      Message.new(channel, @event, @payload, @integration)
     end
   end
 end

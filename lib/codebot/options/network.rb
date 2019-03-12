@@ -28,6 +28,13 @@ module Codebot
                               desc: 'Disable SASL authentication'
         option :sasl_username, desc: 'Set the username for SASL authentication'
         option :sasl_password, desc: 'Set the password for SASL authentication'
+
+        option :disable_nickserv, type: :string, banner: '',
+                                  desc: 'Disable NickServ authentication'
+        option :nickserv_username,
+               desc: 'Set the username for NickServ authentication'
+        option :nickserv_password,
+               desc: 'Set the password for NickServ authentication'
       end
 
       # Sets shared options for specifying properties belonging to the
