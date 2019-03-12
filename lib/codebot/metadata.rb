@@ -5,11 +5,11 @@ module Codebot
   PROJECT = 'Codebot'.freeze
 
   # The current project version.
-  VERSION = '1.1.7'.freeze
+  VERSION = '1.2.0'.freeze
 
   # The project website.
-  WEBSITE = 'https://git.io/codebot'.freeze
+  WEBSITE = 'https://github.com/olabini/codebot'.freeze
 
   # The URL to report issues with a message formatter to.
-  FORMATTER_ISSUE_URL = 'https://git.io/formatter-issue'.freeze
+  FORMATTER_ISSUE_URL = 'https://github.com/olabini/codebot/issues/new?template=formatter_issue.md'.freeze
 end

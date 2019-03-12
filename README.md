@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/codebot.svg)](https://rubygems.org/gems/codebot)
 [![Gem Downloads](https://img.shields.io/gem/dt/codebot.svg)](https://rubygems.org/gems/codebot)
 
-Codebot is an IRC bot that receives GitHub webhooks and forwards them to
+Codebot is an IRC bot that receives GitHub and GitLab webhooks and forwards them to
 IRC channels. It is designed to send messages in a format similar to that
 of the official GitHub IRC Service. Codebot is able to stay connected after
 sending messages. This eliminates the delays and visual clutter caused by

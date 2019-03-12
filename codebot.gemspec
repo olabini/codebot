@@ -19,8 +19,8 @@ end
 Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.name          = 'codebot'
   spec.version       = Codebot::VERSION
-  spec.authors       = ['Janik Rabe']
-  spec.email         = ['codebot@janikrabe.com']
+  spec.authors       = ['Janik Rabe', 'Ola Bini']
+  spec.email         = ['codebot@olabini.se']
   spec.summary       = 'Forward GitHub webhooks to IRC channels'
   spec.description   = description
   spec.homepage      = 'https://github.com/olabini/codebot'
