@@ -12,14 +12,14 @@ module Codebot
       end
 
       def summary
-        default_format % {
+        default_format.format(
           repository: format_repository(repository_name),
           sender: format_user(sender_name)
-        }
+        )
       end
 
       def default_format
-        '[%{repository}] %{sender} starred the repository'
+        '[%<repository>] %<sender> starred the repository'
       end
 
       def action

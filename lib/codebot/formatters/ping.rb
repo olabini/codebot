@@ -12,15 +12,15 @@ module Codebot
       end
 
       def summary
-        default_format % {
+        default_format.format(
           scope: format_scope,
           sender: format_user(sender_name),
           events: format_events
-        }
+        )
       end
 
       def default_format
-        '[%{scope}] %{sender} added a webhook for %{events}'
+        '[%<scope>] %<sender> added a webhook for %<events>'
       end
 
       def summary_url
