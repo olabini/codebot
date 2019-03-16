@@ -16,7 +16,7 @@ def description
   text.gsub(/\s+/, ' ').strip
 end
 
-Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
+Gem::Specification.new do |spec|
   spec.name          = 'codebot'
   spec.version       = Codebot::VERSION
   spec.authors       = ['Janik Rabe', 'Ola Bini']
@@ -42,8 +42,8 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.add_development_dependency 'rubocop', '~> 0.65.0'
 
   spec.add_runtime_dependency 'cinch', '~> 2.3'
-  spec.add_runtime_dependency 'irb', '~> 1.0'
   spec.add_runtime_dependency 'cinch-identify', '~> 1.7'
+  spec.add_runtime_dependency 'irb', '~> 1.0'
   spec.add_runtime_dependency 'sinatra', '~> 2.0'
   spec.add_runtime_dependency 'thor', '~> 0.20.0'
 end

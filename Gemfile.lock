@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codebot (1.1.7)
+    codebot (1.2.0)
       cinch (~> 2.3)
       cinch-identify (~> 1.7)
       irb (~> 1.0)
